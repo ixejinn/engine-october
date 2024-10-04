@@ -1,5 +1,6 @@
 #include "Transform.h"
 
+#include <iostream>
 #include <glm/trigonometric.hpp>
 
 Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_() {}

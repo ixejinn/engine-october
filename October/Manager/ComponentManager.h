@@ -2,24 +2,25 @@
 #include <map>
 #include <typeindex>	// std::type_index
 #include <list>
-#include <functional>
+#include <type_traits>	// std::is_same
 
-class GameObject;
+#include "../Component/FixedUpdatable/FixedUpdatable.h"
+#include "../Component/LateUpdatable/LateUpdatable.h"
+
+#include "../GameObject/GameObject.h"
+
 class Component;
-class FixedUpdatable;
 
 class ComponentManager
 {
 private:
 	std::list<FixedUpdatable*> fixedComponents_;
+	std::list<LateUpdatable*> lateComponents_;
 
-	std::map<std::type_index, std::function<Component*(GameObject*)>> componentMap_;
-	//std::map<std::type_index, Component* (*)(GameObject* owner)> componentMap_;
-
-	void RegisterComponents();
+	std::map<std::type_index, Component* (*)(GameObject* owner)> componentMap_;
 
 	ComponentManager();
-	~ComponentManager() = default;
+	~ComponentManager();
 
 	ComponentManager(const ComponentManager&) = delete;
 	ComponentManager& operator =(const ComponentManager&) = delete;
@@ -37,6 +38,37 @@ public:
 
 	void UpdateComponent();
 
-	void DeleteComponent(std::type_index type);
+	// @tparam T: Type of component (FixedUpdatable, Updatable, LateUpdatable)
+	template <typename T>
+	void DeleteComponent(T* comp);
+
 	void Clear();
 };
+
+template<typename T>
+inline void ComponentManager::DeleteComponent(T* comp)
+{
+	if constexpr (std::is_same<T, FixedUpdatable>::value)
+	{
+		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
+		{
+			if (*it == comp)
+			{
+				fixedComponents_.erase(it);
+				return;
+			}
+		}
+	}
+	else if constexpr (std::is_same<T, LateUpdatable>::value)
+	{
+		for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
+		{
+			if (*it == comp)
+			{
+				lateComponents_.erase(it);
+				return;
+			}
+		}
+	}
+	// Updatable, LateUpdatable Ãß°¡
+}

@@ -1,5 +1,6 @@
 #include "GameStateManager.h"
 
+#include <iostream>
 #include "../State/State.h"
 #include "../Manager/ComponentManager.h"
 
@@ -27,7 +28,7 @@ void GameStateManager::Update()
 		Init();
 		preState_ = curState_;
 	}
-
+	//std::cout << "??" << std::endl;
 	if (curState_)
 	{
 		curState_->Update();

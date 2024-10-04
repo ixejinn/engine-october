@@ -108,6 +108,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,6 +125,8 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,10 +136,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Component\FixedUpdatable\FixedUpdatable.cpp" />
     <ClCompile Include="Component\FixedUpdatable\Transform.cpp" />
+    <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
+    <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\ComponentManager.cpp" />
+    <ClCompile Include="Manager\GameObjectManager.cpp" />
     <ClCompile Include="Manager\GameStateManager.cpp" />
     <ClCompile Include="State\Sample.cpp" />
     <ClCompile Include="Utils\ManagerList.cpp" />
@@ -148,6 +156,7 @@
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Manager\ComponentManager.h" />
+    <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Manager\GameStateManager.h" />
     <ClInclude Include="State\State.h" />
     <ClInclude Include="State\Sample.h" />

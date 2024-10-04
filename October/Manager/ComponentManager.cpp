@@ -3,16 +3,16 @@
 #include <iostream>
 #include <chrono>
 #include <typeindex>
-#include "../GameObject/GameObject.h"
 #include "../Component/Component.h"
 
-#include "../Component/FixedUpdatable/FixedUpdatable.h"
 #include "../Component/FixedUpdatable/Transform.h"
 
 ComponentManager::ComponentManager()
 {
 	componentMap_.insert({ typeid(Transform), Transform::CreateComponent });
 }
+
+ComponentManager::~ComponentManager() {}
 
 Component* ComponentManager::CreateComponent(std::type_index compType, GameObject* owner)
 {
@@ -25,8 +25,13 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 	Component* newComp = componentMap_[compType](owner);
 
 	FixedUpdatable* fixedComp = nullptr;
+	LateUpdatable* lateComp = nullptr;
+
 	if (fixedComp = dynamic_cast<FixedUpdatable*>(newComp))
 		fixedComponents_.push_back(fixedComp);
+	// Updatable 추가
+	else if (lateComp = dynamic_cast<LateUpdatable*>(newComp))
+		lateComponents_.push_back(lateComp);
 
 	return newComp;
 }
@@ -36,11 +41,15 @@ void ComponentManager::UpdateComponent()
 	/* FIXED Update */
 	static std::chrono::duration<long, std::milli> adder{ 0 };
 	static std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-	static std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
 
-	adder = std::chrono::duration_cast<std::chrono::milliseconds>(cur - start) + adder;
+	std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
+	adder += std::chrono::duration_cast<std::chrono::milliseconds>(cur - start);
+	if (adder >= FixedUpdatable::step)
+		start = cur;
+
 	while (adder >= FixedUpdatable::step)
 	{
+		//std::cout << adder.count() << std::endl;
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{
 			(*it)->FixedUpdate();
@@ -52,12 +61,15 @@ void ComponentManager::UpdateComponent()
 	/* Update */
 
 	/* LATE Update */
-}
-
-void ComponentManager::DeleteComponent(std::type_index type)
-{
+	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
+	{
+		(*it)->LateUpdate();
+	}
 }
 
 void ComponentManager::Clear()
 {
+	fixedComponents_.clear();
+	// Updatable 추가
+	lateComponents_.clear();
 }

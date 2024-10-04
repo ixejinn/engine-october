@@ -11,7 +11,9 @@ class GameObject
 private:
 	std::map<std::type_index, std::unique_ptr<Component>> components_;
 
-	GameObject(const std::string& name) : components_() {}
+	std::string name_;
+
+	GameObject(const std::string& name);
 
 public:
 	~GameObject();
