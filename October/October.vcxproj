@@ -74,6 +74,10 @@
     <LibraryPath>C:\OpenGL\lib;$(LibraryPath)</LibraryPath>
     <IncludePath>C:\OpenGL\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\OpenGL\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\OpenGL\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -141,6 +145,7 @@
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Graphics\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\ComponentManager.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
@@ -155,6 +160,7 @@
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="Graphics\stb_image.h" />
     <ClInclude Include="Manager\ComponentManager.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Manager\GameStateManager.h" />
