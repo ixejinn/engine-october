@@ -14,7 +14,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
     trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
     trans_->SetPosition(glm::vec2(0.5, 0.5));
     trans_->SetScale(glm::vec2(0.5, 0.5));
-    trans_->SetRotation(30);
+    trans_->SetRotation(90);
 
     std::string vs({
         #include "../../../Assets/Shaders/shader.vs"
@@ -52,7 +52,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
 
-    // link shaders
+    /* LINK SHADERS */
     shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
@@ -68,10 +68,10 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
 
     float vertices[] = {
         // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 0.0f, // top right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 1.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 1.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 0.0f  // top left 
+         0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // top right
+         0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f, // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f  // top left 
     };
     unsigned int indices[] = {
         0, 1, 3, // first triangle
@@ -113,7 +113,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
     // load image, create texture and generate mipmaps
     int width, height, nrChannels;
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    unsigned char* data = stbi_load("Assets/PlanetTexture.png", &width, &height, &nrChannels, STBI_rgb_alpha);
+    unsigned char* data = stbi_load("Assets/IMG_4166.JPEG", &width, &height, &nrChannels, STBI_rgb_alpha);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -148,11 +148,13 @@ Component* Sprite::CreateComponent(GameObject* owner)
 
 void Sprite::LateUpdate()
 {
+    glUseProgram(shaderProgram);
+
     glm::mat4 transformMatrix = glm::mat4(1.f);
     transformMatrix = glm::mat4(trans_->GetMatrix());
-    glUseProgram(shaderProgram);
     unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

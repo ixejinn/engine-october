@@ -12,7 +12,7 @@ private:
 	glm::vec2 scale_ = { 1.f, 1.f };
 	glm::vec2 localScale_ = { 1.f, 1.f };
 
-	glm::mat3 transformMatrix_;
+	glm::mat4 transformMatrix_;
 
 	void UpdateMatrix();
 	void FixedUpdate() override;
@@ -24,7 +24,7 @@ public:
 	const float& GetRotation() const { return rotation_; }
 	const glm::vec2& GetScale() const { return scale_; }
 	const glm::vec2& GetLocalScale() const { return localScale_; }
-	const glm::mat3& GetMatrix() const { return transformMatrix_; }
+	const glm::mat4& GetMatrix() const { return transformMatrix_; }
 
 	void SetPosition(const glm::vec2& pos);
 	void SetPosition(const float& x, const float& y);
