@@ -4,11 +4,13 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "../Manager/GameObjectManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Component/FixedUpdatable/Transform.h"
 
-#include "../Graphics/stb_image.h"
+#include "../Graphics/stb/stb_image.h"
 
 namespace Manager
 {
@@ -18,6 +20,49 @@ namespace Manager
 
 void Sample::Init()
 {
+    std::string vs({
+        #include "../Graphics/Shader/shader.vs"
+        });
+    vertexShaderSource = vs.c_str();
+
+    std::string fs({
+        #include "../Graphics/Shader/shader.fs"
+        });
+    fragmentShaderSource = fs.c_str();
+
+    //const char* vertexPath = "Shaders/shader.vs";
+    //const char* fragmentPath = "Shaders/shader.fs";
+
+    //std::string vertexCode;
+    //std::string fragmentCode;
+    //std::ifstream vShaderFile;
+    //std::ifstream fShaderFile;
+    //// ensure ifstream objects can throw exceptions:
+    //vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    //fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+    //try
+    //{
+    //    // open files
+    //    vShaderFile.open(vertexPath);
+    //    fShaderFile.open(fragmentPath);
+    //    std::stringstream vShaderStream, fShaderStream;
+    //    // read file's buffer contents into streams
+    //    vShaderStream << vShaderFile.rdbuf();
+    //    fShaderStream << fShaderFile.rdbuf();
+    //    // close file handlers
+    //    vShaderFile.close();
+    //    fShaderFile.close();
+    //    // convert stream into string
+    //    vertexCode = vShaderStream.str();
+    //    fragmentCode = fShaderStream.str();
+    //}
+    //catch (std::ifstream::failure& e)
+    //{
+    //    std::cout << "ERROR::SHADER::FILE_NOT_SUCCESSFULLY_READ: " << e.what() << std::endl;
+    //}
+    //const char* vShaderCode = vertexCode.c_str();
+    //const char* fShaderCode = fragmentCode.c_str();
+
     /* VERTEX SHADER */
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);

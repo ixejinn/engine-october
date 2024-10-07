@@ -145,7 +145,8 @@
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Graphics\stb_image.cpp" />
+    <ClCompile Include="Graphics\Shader\Shader.cpp" />
+    <ClCompile Include="Graphics\stb\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\ComponentManager.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
@@ -160,7 +161,8 @@
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="Graphics\stb_image.h" />
+    <ClInclude Include="Graphics\Shader\Shader.h" />
+    <ClInclude Include="Graphics\stb\stb_image.h" />
     <ClInclude Include="Manager\ComponentManager.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Manager\GameStateManager.h" />
@@ -168,6 +170,10 @@
     <ClInclude Include="State\Sample.h" />
     <ClInclude Include="Utils\Setting.h" />
     <ClInclude Include="Utils\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Shader\shader.fs" />
+    <None Include="Graphics\Shader\shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
