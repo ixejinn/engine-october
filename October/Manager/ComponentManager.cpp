@@ -6,10 +6,12 @@
 #include "../Component/Component.h"
 
 #include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/LateUpdatable/Sprite.h"
 
 ComponentManager::ComponentManager()
 {
 	componentMap_.insert({ typeid(Transform), Transform::CreateComponent });
+	componentMap_.insert({ typeid(Sprite), Sprite::CreateComponent });
 }
 
 ComponentManager::~ComponentManager() {}

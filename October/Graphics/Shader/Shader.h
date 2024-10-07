@@ -3,7 +3,11 @@
 class Shader
 {
 private:
+	const char* vertexShaderSource;
+	const char* fragmentShaderSource;
+
+	unsigned int shaderProgram;
 
 public:
-	Shader(const char* vsPath, const char* fsPath);
+	Shader();
 };

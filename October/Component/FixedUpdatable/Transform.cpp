@@ -2,18 +2,22 @@
 
 #include <iostream>
 #include <glm/trigonometric.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_() {}
 
 void Transform::UpdateMatrix()
 {
-    auto rotationRad = glm::radians(rotation_);
-
+    float rotationRad = glm::radians(rotation_);
     transformMatrix_ = glm::mat3(
         scale_.x * glm::cos(rotationRad), glm::sin(rotationRad), 0,
         -glm::sin(rotationRad), scale_.y * glm::cos(rotationRad), 0,
         position_.x, position_.y, 1
     );
+
+    //transformMatrix_ = glm::scale(glm::mat4(1.0f), glm::vec3(scale_.x, scale_.y, 0.f));
+    //transformMatrix_ = glm::rotate(transformMatrix_, glm::radians(rotation_), glm::vec3(0.f, 0.f, 1.f));
+    //transformMatrix_ = glm::translate(transformMatrix_, glm::vec3(position_.x, position_.y, 0.f));
 }
 
 void Transform::FixedUpdate()

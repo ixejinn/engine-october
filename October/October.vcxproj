@@ -143,6 +143,7 @@
     <ClCompile Include="Component\FixedUpdatable\FixedUpdatable.cpp" />
     <ClCompile Include="Component\FixedUpdatable\Transform.cpp" />
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
+    <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Graphics\Shader\Shader.cpp" />
@@ -170,10 +171,6 @@
     <ClInclude Include="State\Sample.h" />
     <ClInclude Include="Utils\Setting.h" />
     <ClInclude Include="Utils\Utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Graphics\Shader\shader.fs" />
-    <None Include="Graphics\Shader\shader.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
