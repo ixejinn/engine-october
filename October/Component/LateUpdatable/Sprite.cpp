@@ -12,9 +12,9 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
 {
     owner_->AddComponent(typeid(Transform));
     trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
-    trans_->SetPosition(glm::vec2(0.5, 0.5));
-    trans_->SetScale(glm::vec2(0.5, 0.5));
-    trans_->SetRotation(90);
+    trans_->SetPosition(glm::vec2(5, 0));
+    trans_->SetScale(glm::vec2(1.f, 1.f));
+    trans_->SetRotation(-25);
 
     std::string vs({
         #include "../../../Assets/Shaders/shader.vs"
@@ -154,6 +154,16 @@ void Sprite::LateUpdate()
     transformMatrix = glm::mat4(trans_->GetMatrix());
     unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
     glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
+
+    glm::mat4 view = glm::mat4(1.f);
+    view = glm::translate(view, glm::vec3(0.f, 0.f, -10.f));
+    unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
+    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+
+    glm::mat4 projection = glm::mat4(1.f);
+    projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
+    unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
