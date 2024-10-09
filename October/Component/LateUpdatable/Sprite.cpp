@@ -1,71 +1,79 @@
 #include "Sprite.h"
+
 #include <string>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "../../GameObject/GameObject.h"
+
 #include "../FixedUpdatable/Transform.h"
-#include "../../Graphics/stb/stb_image.h"
+#include "../../GameObject/GameObject.h"
+#include "../../Utils/stb/stb_image.h"
+#include "../../Resource/Shader.h"
 
-Sprite::Sprite(GameObject* owner) : Component(owner)
+Sprite::Sprite(GameObject* owner) : Component(owner), shader("Assets/Shaders/shader.vs", "Assets/Shaders/shader.fs")
 {
-    owner_->AddComponent(typeid(Transform));
     trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
-    trans_->SetPosition(glm::vec2(5, 0));
-    trans_->SetScale(glm::vec2(1.f, 1.f));
-    trans_->SetRotation(-25);
 
-    std::string vs({
-        #include "../../../Assets/Shaders/shader.vs"
-        });
-    vertexShaderSource = vs.c_str();
+    SetMesh();
 
-    std::string fs({
-        #include "../../../Assets/Shaders/shader.fs"
-        });
-    fragmentShaderSource = fs.c_str();
-
-    /* VERTEX SHADER */
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-    // check for shader compile errors
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load("Assets/IMG_4166.JPEG", &width, &height, &nrChannels, STBI_rgb_alpha);
+    if (data)
     {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
-
-    /* FRAGMENT SHADER */
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
-    // check for shader compile errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if (!success)
+    else
     {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+        std::cout << "Failed to load texture" << std::endl;
     }
+    stbi_image_free(data);
 
-    /* LINK SHADERS */
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    // check for linking errors
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
 
+Sprite::~Sprite()
+{
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+}
+
+Component* Sprite::CreateComponent(GameObject* owner)
+{
+    Sprite* newComp = new Sprite(owner);
+    return static_cast<Sprite*>(newComp);
+}
+
+void Sprite::LateUpdate()
+{
+    shader.Use();
+    shader.SetTextureAvailable(texture);
+
+    glm::mat4 transformMatrix = glm::mat4(1.f);
+    transformMatrix = glm::mat4(trans_->GetMatrix());
+    shader.SetUniformMat4("transform", transformMatrix);
+
+    glm::mat4 view = glm::mat4(1.f);
+    view = glm::translate(view, glm::vec3(0.f, 0.f, -10.f));
+    shader.SetUniformMat4("view", view);
+
+    glm::mat4 projection = glm::mat4(1.f);
+    projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
+    shader.SetUniformMat4("projection", projection);
+
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+}
+
+void Sprite::SetMesh()
+{
     float vertices[] = {
         // positions          // colors           // texture coords
          0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // top right
@@ -110,61 +118,4 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    unsigned char* data = stbi_load("Assets/IMG_4166.JPEG", &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glBindTexture(GL_TEXTURE_2D, texture);
-
-    
-}
-
-Sprite::~Sprite()
-{
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-}
-
-Component* Sprite::CreateComponent(GameObject* owner)
-{
-    Sprite* newComp = new Sprite(owner);
-    return static_cast<Sprite*>(newComp);
-}
-
-void Sprite::LateUpdate()
-{
-    glUseProgram(shaderProgram);
-
-    glm::mat4 transformMatrix = glm::mat4(1.f);
-    transformMatrix = glm::mat4(trans_->GetMatrix());
-    unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transformMatrix));
-
-    glm::mat4 view = glm::mat4(1.f);
-    view = glm::translate(view, glm::vec3(0.f, 0.f, -10.f));
-    unsigned int viewLoc = glGetUniformLocation(shaderProgram, "view");
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-
-    glm::mat4 projection = glm::mat4(1.f);
-    projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
-    unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-    glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

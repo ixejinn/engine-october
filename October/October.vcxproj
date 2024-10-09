@@ -146,8 +146,8 @@
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="Graphics\Shader\Shader.cpp" />
-    <ClCompile Include="Graphics\stb\stb_image.cpp" />
+    <ClCompile Include="Resource\Shader.cpp" />
+    <ClCompile Include="Utils\stb\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\ComponentManager.cpp" />
     <ClCompile Include="Manager\GameObjectManager.cpp" />
@@ -162,8 +162,8 @@
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="GameObject\GameObject.h" />
-    <ClInclude Include="Graphics\Shader\Shader.h" />
-    <ClInclude Include="Graphics\stb\stb_image.h" />
+    <ClInclude Include="Resource\Shader.h" />
+    <ClInclude Include="Utils\stb\stb_image.h" />
     <ClInclude Include="Manager\ComponentManager.h" />
     <ClInclude Include="Manager\GameObjectManager.h" />
     <ClInclude Include="Manager\GameStateManager.h" />

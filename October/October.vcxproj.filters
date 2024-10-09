@@ -45,10 +45,10 @@
     <ClCompile Include="GameObject\GameObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Shader\Shader.cpp">
+    <ClCompile Include="Resource\Shader.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\stb\stb_image.cpp">
+    <ClCompile Include="Utils\stb\stb_image.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Manager\GameObjectManager.cpp">
@@ -95,10 +95,10 @@
     <ClInclude Include="Utils\Utils.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Shader\Shader.h">
+    <ClInclude Include="Resource\Shader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\stb\stb_image.h">
+    <ClInclude Include="Utils\stb\stb_image.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Manager\GameObjectManager.h">

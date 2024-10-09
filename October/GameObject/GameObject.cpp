@@ -3,13 +3,17 @@
 #include <iostream>
 #include "../Manager/ComponentManager.h"
 #include "../Component/Component.h"
+#include "../Component/FixedUpdatable/Transform.h"
 
 namespace Manager
 {
     extern ComponentManager& compMgr;
 }
 
-GameObject::GameObject(const std::string& name) : components_(), name_(name) {}
+GameObject::GameObject(const std::string& name) : components_(), name_(name)
+{
+    AddComponent(typeid(Transform));
+}
 
 GameObject::~GameObject() {}
 

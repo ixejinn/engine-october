@@ -1,10 +1,12 @@
 #pragma once
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
+
 #include "../Component.h"
 #include "LateUpdatable.h"
+#include "../../Resource/Shader.h"
 
 class Transform;
 
@@ -19,6 +21,7 @@ public:
 	};
 
 private:
+	Shader shader;
 	AnchorPoint anchor_ = CENTER;
 	glm::vec2 localPosition_ = { 0.f, 0.f };
 
@@ -27,16 +30,17 @@ private:
 
 	unsigned int vertexShader = 0;
 
-	const char* vertexShaderSource;
-	const char* fragmentShaderSource;
+	const char* vertexShaderSource = nullptr;
+	const char* fragmentShaderSource = nullptr;
 
-	unsigned int shaderProgram;
 	unsigned int VBO, VAO, EBO;
 	unsigned int texture;
 
 	Transform* trans_ = nullptr;
 
 	void LateUpdate() override;
+
+	void SetMesh();
 
 	Sprite(GameObject* owner);
 
