@@ -24,6 +24,14 @@ void Sample::Init()
     trans->SetPosition(glm::vec2(5, 0));
     trans->SetScale(glm::vec2(1.f, 1.f));
     trans->SetRotation(-25);
+
+    GameObject* other = Manager::objMgr.CreateObject();
+    other->AddComponent(typeid(Sprite));
+
+    static_cast<Sprite*>(other->GetComponent(typeid(Sprite)))->SetTexture("Assets/PlanetTexture.png");
+    trans = static_cast<Transform*>(other->GetComponent(typeid(Transform)));
+    trans->SetPosition(glm::vec2(-5, 0));
+    trans->SetScale(glm::vec2(5.f, 5.f));
 }
 
 void Sample::Update()

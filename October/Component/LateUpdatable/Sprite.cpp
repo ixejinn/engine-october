@@ -91,7 +91,7 @@ void Sprite::LateUpdate()
     projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
     shader.SetUniformMat4("projection", projection);
 
-    //glBindVertexArray(VAO);
+    glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
