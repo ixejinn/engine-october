@@ -33,7 +33,7 @@ private:
 	const char* vertexShaderSource = nullptr;
 	const char* fragmentShaderSource = nullptr;
 
-	GLuint VBO, VAO, EBO;
+	GLuint VBO[3], VAO, EBO;
 	GLuint texture;
 
 	Transform* trans_ = nullptr;

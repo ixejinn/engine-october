@@ -50,7 +50,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner), shader("Assets/Shaders/sha
 Sprite::~Sprite()
 {
     glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(3, VBO);
     glDeleteBuffers(1, &EBO);
 }
 
@@ -83,60 +83,53 @@ void Sprite::LateUpdate()
 
 void Sprite::SetMesh()
 {
-    /*float positions[] = {
+    float positions[] = {
         0.5f,  0.5f, 0.f,
         0.5f, -0.5f, 0.f,
        -0.5f, -0.5f, 0.f,
        -0.5f,  0.5f, 0.f
     };
-
     float colors[] = {
         1.f, 1.f, 1.f,
         1.f, 1.f, 1.f,
         1.f, 1.f, 1.f,
         1.f, 1.f, 1.f
     };
-
     float textureCoords[] = {
         1.f, 0.f,
         1.f, 1.f,
         0.f, 1.f,
         0.f, 0.f
-    };*/
-
-    float vertices[] = {
-        // positions          // colors           // texture coords
-         0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // top right
-         0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 1.0f, // bottom right
-        -0.5f, -0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 1.0f, // bottom left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   0.0f, 0.0f  // top left 
     };
+
     unsigned int indices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
 
     glGenVertexArrays(1, &VAO); // VAO stores the state related to vertex attribute settings
-    glGenBuffers(1, &VBO);      // VBO stores the actual vertex data
-    glGenBuffers(1, &EBO);
+    glGenBuffers(3, VBO);       // VBO stores the actual vertex data (positions, colors, texture coords)
+    glGenBuffers(1, &EBO);      // EBO stores the indices used for element drawing (index array)
 
     // bind the Vertex Array Object first,
     glBindVertexArray(VAO);
 
-    // then bind and set vertex buffer(s),
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);     // Bind the VBO to a specific buffer target (GL_ARRAY_BUFFER)
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);  // Copy VBO to GL_ARRAY_BUFFER
+    // then bind and set vertex buffers,
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);     // Bind the VBO to a specific buffer target (GL_ARRAY_BUFFER)
+    glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+    glEnableVertexAttribArray(2);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
 }
