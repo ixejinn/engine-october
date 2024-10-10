@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -20,29 +21,6 @@ Sprite::Sprite(GameObject* owner) : Component(owner), shader("Assets/Shaders/sha
 
     SetMesh();
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-    // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load("Assets/IMG_4166.JPEG", &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else
-    {
-        std::cout << "Failed to load texture" << std::endl;
-    }
-    stbi_image_free(data);
-
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
@@ -54,6 +32,37 @@ Sprite::~Sprite()
     glDeleteBuffers(1, &EBO);
 }
 
+void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
+{
+    colors_[idx] = color;
+}
+
+void Sprite::SetTexture(const char* name)
+{
+    // load image, create texture and generate mipmaps
+    int width, height, nrChannels;
+    unsigned char* data = stbi_load(name, &width, &height, &nrChannels, STBI_rgb_alpha);
+    if (data)
+    {
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+        // set the texture wrapping parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set texture filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+}
+
 Component* Sprite::CreateComponent(GameObject* owner)
 {
     Sprite* newComp = new Sprite(owner);
@@ -62,6 +71,11 @@ Component* Sprite::CreateComponent(GameObject* owner)
 
 void Sprite::LateUpdate()
 {
+    // Change color
+    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(colors_), colors_);
+
+    // Activate shader
     shader.Use();
     shader.SetTextureAvailable(texture);
 
@@ -83,23 +97,17 @@ void Sprite::LateUpdate()
 
 void Sprite::SetMesh()
 {
-    float positions[] = {
-        0.5f,  0.5f, 0.f,
-        0.5f, -0.5f, 0.f,
-       -0.5f, -0.5f, 0.f,
-       -0.5f,  0.5f, 0.f
+    glm::vec3 positions[] = {
+        {  0.5f,  0.5f, 0.f },
+        {  0.5f, -0.5f, 0.f },
+        { -0.5f, -0.5f, 0.f },
+        { -0.5f,  0.5f, 0.f }
     };
-    float colors[] = {
-        1.f, 1.f, 1.f,
-        1.f, 1.f, 1.f,
-        1.f, 1.f, 1.f,
-        1.f, 1.f, 1.f
-    };
-    float textureCoords[] = {
-        1.f, 0.f,
-        1.f, 1.f,
-        0.f, 1.f,
-        0.f, 0.f
+    glm::vec2 textureCoords[] = {
+        { 1.f, 0.f },
+        { 1.f, 1.f },
+        { 0.f, 1.f },
+        { 0.f, 0.f }
     };
 
     unsigned int indices[] = {
@@ -121,7 +129,7 @@ void Sprite::SetMesh()
     glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(colors_), colors_, GL_STATIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(1);
 

@@ -2,9 +2,12 @@
 #include <string>
 #include "State.h"
 
+class Sprite;
+
 class Sample : public State
 {
 private:
+	Sprite* sp;
 
 public:
 	void Init() override;
