@@ -28,13 +28,13 @@ private:
 	glm::vec3 color_ = { 0.f, 0.f, 0.f };
 	GLfloat alpha_ = 1.0f;
 
-	unsigned int vertexShader = 0;
+	GLuint vertexShader = 0;
 
 	const char* vertexShaderSource = nullptr;
 	const char* fragmentShaderSource = nullptr;
 
-	unsigned int VBO, VAO, EBO;
-	unsigned int texture;
+	GLuint VBO, VAO, EBO;
+	GLuint texture;
 
 	Transform* trans_ = nullptr;
 

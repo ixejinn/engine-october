@@ -77,12 +77,33 @@ void Sprite::LateUpdate()
     projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
     shader.SetUniformMat4("projection", projection);
 
-    glBindVertexArray(VAO);
+    //glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void Sprite::SetMesh()
 {
+    /*float positions[] = {
+        0.5f,  0.5f, 0.f,
+        0.5f, -0.5f, 0.f,
+       -0.5f, -0.5f, 0.f,
+       -0.5f,  0.5f, 0.f
+    };
+
+    float colors[] = {
+        1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f,
+        1.f, 1.f, 1.f
+    };
+
+    float textureCoords[] = {
+        1.f, 0.f,
+        1.f, 1.f,
+        0.f, 1.f,
+        0.f, 0.f
+    };*/
+
     float vertices[] = {
         // positions          // colors           // texture coords
          0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 1.0f,   1.0f, 0.0f, // top right
