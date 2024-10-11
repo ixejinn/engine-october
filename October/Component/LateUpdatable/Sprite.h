@@ -25,7 +25,12 @@ private:
 	glm::vec2 localPosition_ = { 0.f, 0.f };
 
 	GLfloat alpha_ = 1.0f;
-	glm::vec3 colors_[4];
+	glm::vec3 colors_[4] = {
+		{ 1.f, 1.f, 1.f },
+		{ 1.f, 1.f, 1.f },
+		{ 1.f, 1.f, 1.f },
+		{ 1.f, 1.f, 1.f }
+	};
 
 	GLuint VBO[3], VAO, EBO;
 	GLuint texture;
