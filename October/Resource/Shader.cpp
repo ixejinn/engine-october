@@ -70,14 +70,6 @@ void Shader::Use()
     glUseProgram(shaderProgram);
 }
 
-void Shader::SetTextureAvailable(unsigned int texture)
-{
-    glUniform1i(
-        glGetUniformLocation(shaderProgram, "useTexture"),
-        texture ? GL_TRUE : GL_FALSE
-    );
-}
-
 void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
 {
     glUniformMatrix4fv(

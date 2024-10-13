@@ -22,6 +22,5 @@ public:
 
 	void Use();
 
-	void SetTextureAvailable(unsigned int texture);
 	void SetUniformMat4(const std::string& name, const glm::mat4& mat);
 };
