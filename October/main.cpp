@@ -14,9 +14,12 @@
 
 #include "State/Sample.h"
 
+#include "Editor/Editor.h"
+
 namespace Manager
 {
 	extern GameStateManager& gsMgr;
+	extern Editor& editor;
 }
 
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -78,6 +81,7 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow(); // Show demo window! :)
+		Manager::editor.Topbar();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

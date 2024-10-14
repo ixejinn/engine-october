@@ -144,6 +144,7 @@
     <ClCompile Include="Component\FixedUpdatable\Transform.cpp" />
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
+    <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Component\FixedUpdatable\Transform.h" />
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
+    <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Resource\Shader.h" />

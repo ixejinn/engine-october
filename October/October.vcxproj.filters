@@ -84,6 +84,9 @@
     <ClCompile Include="Manager\SerializationManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Editor\Editor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Manager\GameStateManager.h">
@@ -165,6 +168,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Manager\SerializationManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor\Editor.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

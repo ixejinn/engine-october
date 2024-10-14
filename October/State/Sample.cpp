@@ -16,29 +16,29 @@ namespace Manager
 
 void Sample::Init()
 {
-    //GameObject* obj = Manager::objMgr.CreateObject();
-    //obj->AddComponent(typeid(Sprite));
+    GameObject* obj = Manager::objMgr.CreateObject();
+    obj->AddComponent(typeid(Sprite));
 
-    //sp = static_cast<Sprite*>(obj->GetComponent(typeid(Sprite)));
-    ////sp->SetTexture("Assets/IMG_4166.JPEG");
+    sp = static_cast<Sprite*>(obj->GetComponent(typeid(Sprite)));
+    sp->SetTexture("Assets/Images/IMG_4166.JPEG");
 
-    //Transform* trans = static_cast<Transform*>(obj->GetComponent(typeid(Transform)));
-    //trans->SetPosition(glm::vec2(5, 0));
-    //trans->SetScale(glm::vec2(1.f, 1.f));
-    //trans->SetRotation(-25);
+    Transform* trans = static_cast<Transform*>(obj->GetComponent(typeid(Transform)));
+    trans->SetPosition(glm::vec2(5, 0));
+    trans->SetScale(glm::vec2(1.f, 1.f));
+    trans->SetRotation(-25);
 
-    //GameObject* other = Manager::objMgr.CreateObject();
-    //other->AddComponent(typeid(Sprite));
+    GameObject* other = Manager::objMgr.CreateObject();
+    other->AddComponent(typeid(Sprite));
 
-    //static_cast<Sprite*>(other->GetComponent(typeid(Sprite)))->SetTexture("Assets/PlanetTexture.png");
-    //trans = static_cast<Transform*>(other->GetComponent(typeid(Transform)));
-    //trans->SetPosition(glm::vec2(-5, 0));
-    //trans->SetScale(glm::vec2(5.f, 5.f));
+    static_cast<Sprite*>(other->GetComponent(typeid(Sprite)))->SetTexture("Assets/Images/PlanetTexture.png");
+    trans = static_cast<Transform*>(other->GetComponent(typeid(Transform)));
+    trans->SetPosition(glm::vec2(-5, 0));
+    trans->SetScale(glm::vec2(5.f, 5.f));
 
-    //Manager::serMgr.SaveState("Sample.state");
+    Manager::serMgr.SaveState("Assets/States/Sample.state");
 
 
-    Manager::serMgr.LoadState("Sample.state");
+    //Manager::serMgr.LoadState("Assets/States/Sample.state");
 }
 
 void Sample::Update()
