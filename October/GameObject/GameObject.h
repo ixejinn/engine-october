@@ -10,8 +10,9 @@ class GameObject
 {
 private:
 	std::map<std::type_index, std::unique_ptr<Component>> components_;
-
 	std::string name_;
+
+	Component* mainComp_ = nullptr;
 
 	GameObject(const std::string& name);
 
@@ -20,6 +21,10 @@ public:
 
 	Component* AddComponent(std::type_index type);
 	Component* GetComponent(std::type_index type);
+
+	const std::map<std::type_index, std::unique_ptr<Component>>& GetAllComponents() const { return components_; }
+	const std::string& GetName() const { return name_; }
+	Component* GetMainComp() const { return mainComp_; }
 
 	void DeleteComponent(std::type_index type);
 

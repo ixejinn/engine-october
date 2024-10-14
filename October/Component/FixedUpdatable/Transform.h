@@ -15,12 +15,15 @@ private:
 
 	glm::mat4 transformMatrix_;
 
-	void UpdateMatrix();
-	void FixedUpdate() override;
-
 	Transform(GameObject* owner);
 
+	void FixedUpdate() override;
+	void UpdateMatrix();
+
 public:
+	void LoadFromJson(const json& data) override;
+	json SaveToJson() override;
+
 	const glm::vec2& GetPosition() const { return position_; }
 	const float& GetRotation() const { return rotation_; }
 	const glm::vec2& GetScale() const { return scale_; }

@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <chrono>
-#include <typeindex>
+#include <typeinfo>
 #include "../Component/Component.h"
 
 #include "../Component/FixedUpdatable/Transform.h"
@@ -10,6 +10,9 @@
 
 ComponentManager::ComponentManager()
 {
+	nameToType_.insert({ typeid(Transform).name(), typeid(Transform)});
+	nameToType_.insert({ typeid(Sprite).name(), typeid(Sprite) });
+
 	componentMap_.insert({ typeid(Transform), Transform::CreateComponent });
 	componentMap_.insert({ typeid(Sprite), Sprite::CreateComponent });
 }
@@ -36,6 +39,13 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 		lateComponents_.push_back(lateComp);
 
 	return newComp;
+}
+
+Component* ComponentManager::CreateComponent(std::string compName, GameObject* owner)
+{
+	if (nameToType_.find(compName) != nameToType_.end())
+		return CreateComponent(nameToType_.find(compName)->second, owner);
+	return nullptr;
 }
 
 void ComponentManager::UpdateComponent()

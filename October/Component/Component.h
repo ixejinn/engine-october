@@ -1,8 +1,9 @@
 #pragma once
+#include "../Serializer/ComponentSerializer.h"
 
 class GameObject;
 
-class Component
+class Component : public ComponentSerializer
 {
 protected:
 	GameObject* owner_ = nullptr;

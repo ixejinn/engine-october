@@ -6,16 +6,54 @@
 
 Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_() {}
 
+void Transform::FixedUpdate()
+{
+    UpdateMatrix();
+}
+
 void Transform::UpdateMatrix()
 {
     transformMatrix_ = glm::translate(glm::mat4(1.0f), glm::vec3(position_.x, position_.y, 0.f));
     transformMatrix_ = glm::rotate(transformMatrix_, glm::radians(rotation_), glm::vec3(0.f, 0.f, 1.f));
-    transformMatrix_ = glm::scale(transformMatrix_, glm::vec3(scale_.x, scale_.y, 0.f));
+    transformMatrix_ = glm::scale(transformMatrix_, glm::vec3(localScale_.x * scale_.x, localScale_.y * scale_.y, 0.f));
 }
 
-void Transform::FixedUpdate()
+void Transform::LoadFromJson(const json& data)
 {
+    auto compData = data.find("compData");
+    if (compData != data.end())
+    {
+        auto it = compData->find("position");
+        position_.x = it->begin().value();
+        position_.y = (it->begin() + 1).value();
+
+        it = compData->find("rotation");
+        rotation_ = it.value();
+
+        it = compData->find("scale");
+        scale_.x = it->begin().value();
+        scale_.y = (it->begin() + 1).value();
+
+        it = compData->find("localScale");
+        localScale_.x = it->begin().value();
+        localScale_.y = (it->begin() + 1).value();
+    }
+
     UpdateMatrix();
+}
+
+json Transform::SaveToJson()
+{
+    json data, compData;
+    data["type"] = typeid(Transform).name();
+
+    compData["position"] = { position_.x, position_.y };
+    compData["rotation"] = rotation_;
+    compData["scale"] = { scale_.x, scale_.y };
+    compData["localScale"] = { localScale_.x, localScale_.y };
+
+    data["compData"] = compData;
+    return data;
 }
 
 void Transform::SetPosition(const glm::vec2& pos)

@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>C:\OpenGL\lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\OpenGL\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\OpenGL\include;$(SolutionDir)Extern;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\OpenGL\include;$(IncludePath)</IncludePath>
@@ -146,6 +146,7 @@
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
     <ClCompile Include="Utils\imgui\imgui.cpp" />
     <ClCompile Include="Utils\imgui\imgui_demo.cpp" />
@@ -170,7 +171,9 @@
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Resource\Shader.h" />
+    <ClInclude Include="Serializer\ComponentSerializer.h" />
     <ClInclude Include="Utils\imgui\imconfig.h" />
     <ClInclude Include="Utils\imgui\imgui.h" />
     <ClInclude Include="Utils\imgui\imgui_impl_glfw.h" />

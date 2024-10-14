@@ -20,6 +20,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner), shader("Assets/Shaders/sha
     trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 
     SetMesh();
+    SetTexture("");
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -32,6 +33,58 @@ Sprite::~Sprite()
     glDeleteBuffers(1, &EBO);
 }
 
+void Sprite::LoadFromJson(const json& data)
+{
+    auto compData = data.find("compData");
+    if (compData != data.end())
+    {
+        auto it = compData->find("anchor");
+        anchor_ = it.value();
+
+        it = compData->find("localPosition");
+        localPosition_.x = it->begin().value();
+        localPosition_.y = (it->begin() + 1).value();
+
+        it = compData->find("colors");
+        auto v = it->begin();
+        for (int i = 0; i < 4; i++)
+        {
+            colors_[i].r = v.value();
+            colors_[i].g = (v + 1).value();
+            colors_[i].b = (v + 2).value();
+
+            v = v + 3;
+        }
+
+        it = compData->find("alpha");
+        alpha_ = it.value();
+
+        it = compData->find("textureName");
+        textureName_ = it.value();
+        SetTexture(textureName_.c_str());
+    }
+}
+
+json Sprite::SaveToJson()
+{
+    json data, compData;
+    data["type"] = typeid(Sprite).name();
+
+    compData["anchor"] = anchor_;
+    compData["localPosition"] = { localPosition_.x, localPosition_.y };
+    compData["colors"] = {
+        colors_[0].r, colors_[0].g, colors_[0].b,
+        colors_[1].r, colors_[1].g, colors_[1].b,
+        colors_[2].r, colors_[2].g, colors_[2].b,
+        colors_[3].r, colors_[3].g, colors_[3].b
+    };
+    compData["alpha"] = alpha_;
+    compData["textureName"] = textureName_;
+
+    data["compData"] = compData;
+    return data;
+}
+
 void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
 {
     colors_[idx] = color;
@@ -39,6 +92,7 @@ void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
 
 void Sprite::SetTexture(const char* name)
 {
+    textureName_ = std::string(name);
     glCreateTextures(GL_TEXTURE_2D, 1, &texture);
 
     glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -17,6 +17,7 @@ private:
 	std::list<FixedUpdatable*> fixedComponents_;
 	std::list<LateUpdatable*> lateComponents_;
 
+	std::map<std::string, std::type_index> nameToType_;
 	std::map<std::type_index, Component* (*)(GameObject* owner)> componentMap_;
 
 	ComponentManager();
@@ -33,8 +34,9 @@ public:
 		static ComponentManager instance;
 		return instance;
 	}
-	
+
 	Component* CreateComponent(std::type_index compType, GameObject* owner);
+	Component* CreateComponent(std::string compName, GameObject* owner);
 
 	void UpdateComponent();
 
