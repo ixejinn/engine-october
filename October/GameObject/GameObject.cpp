@@ -23,17 +23,17 @@ Component* GameObject::AddComponent(std::type_index type)
     return components_[type].get();
 }
 
-Component* GameObject::GetComponent(std::type_index type)
+Component* GameObject::GetComponent(std::type_index compType)
 {
-    if (components_.find(type) == components_.end())
+    if (components_.find(compType) == components_.end())
     {
         std::cerr << "[ERROR] GameObject::GetComponent() " << name_ << " is missing a required component" << std::endl;
         return nullptr;
     }
-    return components_[type].get();
+    return components_[compType].get();
 }
 
-void GameObject::DeleteComponent(std::type_index type)
+void GameObject::DeleteComponent(std::type_index compType)
 {
-    components_.erase(type);
+    components_.erase(compType);
 }

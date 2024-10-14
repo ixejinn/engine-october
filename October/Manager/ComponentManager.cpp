@@ -43,9 +43,7 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 
 Component* ComponentManager::CreateComponent(std::string compName, GameObject* owner)
 {
-	if (nameToType_.find(compName) != nameToType_.end())
-		return CreateComponent(nameToType_.find(compName)->second, owner);
-	return nullptr;
+	return owner->AddComponent(nameToType_.find(compName)->second);
 }
 
 void ComponentManager::UpdateComponent()

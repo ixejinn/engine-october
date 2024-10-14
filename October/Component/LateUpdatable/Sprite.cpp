@@ -61,7 +61,7 @@ void Sprite::LoadFromJson(const json& data)
 
         it = compData->find("textureName");
         textureName_ = it.value();
-        SetTexture(textureName_.c_str());
+        SetTexture(textureName_);
     }
 }
 
@@ -90,9 +90,9 @@ void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
     colors_[idx] = color;
 }
 
-void Sprite::SetTexture(const char* name)
+void Sprite::SetTexture(const std::string& name)
 {
-    textureName_ = std::string(name);
+    textureName_ = name;
     glCreateTextures(GL_TEXTURE_2D, 1, &texture);
 
     glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -102,7 +102,7 @@ void Sprite::SetTexture(const char* name)
     glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     int width, height, nrChannels;
-    unsigned char* data = stbi_load(name, &width, &height, &nrChannels, STBI_rgb_alpha);
+    unsigned char* data = stbi_load(textureName_.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
     if (data)
     {
         glTextureStorage2D(texture, 1, GL_RGBA8, width, height);

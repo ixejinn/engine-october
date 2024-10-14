@@ -54,7 +54,7 @@ public:
 	// @param idx is vertex of rectangle
 	// (0 up right, 1 down right, 2 down left, 3 up left)
 	void SetColor(const unsigned int& idx, const glm::vec3& color);
-	void SetTexture(const char* name);
+	void SetTexture(const std::string& name);
 
 	static Component* CreateComponent(GameObject* owner);
 };

@@ -19,8 +19,8 @@ private:
 public:
 	~GameObject();
 
-	Component* AddComponent(std::type_index type);
-	Component* GetComponent(std::type_index type);
+	Component* AddComponent(std::type_index compType);
+	Component* GetComponent(std::type_index compType);
 
 	const std::map<std::type_index, std::unique_ptr<Component>>& GetAllComponents() const { return components_; }
 	const std::string& GetName() const { return name_; }
