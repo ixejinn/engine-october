@@ -30,6 +30,11 @@ public:
 	const glm::vec2& GetLocalScale() const { return localScale_; }
 	const glm::mat4& GetMatrix() const { return transformMatrix_; }
 
+	float* GetRotation() { return &rotation_; }
+	float* GetPosition() { return &position_[0]; }
+	float* GetScale() { return &scale_[0]; }
+	float* GetLocalScale() { return &localScale_[0]; }
+
 	void SetPosition(const glm::vec2& pos);
 	void SetPosition(const float& x, const float& y);
 	void SetScale(const glm::vec2& scl);

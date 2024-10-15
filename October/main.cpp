@@ -81,7 +81,7 @@ int main()
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGui::ShowDemoWindow(); // Show demo window! :)
-		Manager::editor.Topbar();
+		Manager::editor.ShowEditor();
 
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
