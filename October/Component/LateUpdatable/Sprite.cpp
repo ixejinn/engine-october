@@ -90,6 +90,11 @@ void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
     colors_[idx] = color;
 }
 
+void Sprite::SetAlpha(const float& alpha)
+{
+    alpha_ = alpha;
+}
+
 void Sprite::SetTexture(const std::string& name)
 {
     textureName_ = name;
@@ -146,6 +151,8 @@ void Sprite::LateUpdate()
     glm::mat4 projection = glm::mat4(1.f);
     projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
     shader.SetUniformMat4("projection", projection);
+
+    shader.SetUniform1f("alpha", alpha_);
 
     glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);

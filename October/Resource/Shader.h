@@ -23,4 +23,5 @@ public:
 	void Use();
 
 	void SetUniformMat4(const std::string& name, const glm::mat4& mat);
+	void SetUniform1f(const std::string& name, const float& f);
 };

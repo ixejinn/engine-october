@@ -30,7 +30,10 @@ void Sample::Init()
     GameObject* other = Manager::objMgr.CreateObject();
     other->AddComponent(typeid(Sprite));
 
-    static_cast<Sprite*>(other->GetComponent(typeid(Sprite)))->SetTexture("Assets/Images/PlanetTexture.png");
+    sp = static_cast<Sprite*>(other->GetComponent(typeid(Sprite)));
+    sp->SetTexture("Assets/Images/PlanetTexture.png");
+    sp->SetAlpha(0.5);
+
     trans = static_cast<Transform*>(other->GetComponent(typeid(Transform)));
     trans->SetPosition(glm::vec2(-5, 0));
     trans->SetScale(glm::vec2(5.f, 5.f));

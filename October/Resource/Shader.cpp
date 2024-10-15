@@ -80,6 +80,14 @@ void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
     );
 }
 
+void Shader::SetUniform1f(const std::string& name, const float& f)
+{
+    glUniform1f(
+        glGetUniformLocation(shaderProgram, name.c_str()),
+        f
+    );
+}
+
 void Shader::CheckCompileErros(unsigned int shader, Type type)
 {
     int success;
