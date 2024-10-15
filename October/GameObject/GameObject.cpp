@@ -33,6 +33,18 @@ Component* GameObject::GetComponent(std::type_index compType)
     return components_[compType].get();
 }
 
+bool GameObject::HasComponent(std::type_index compType)
+{
+    if (components_.find(compType) == components_.end())
+        return false;
+    return true;
+}
+
+void GameObject::SetName(const std::string& newName)
+{
+    name_ = newName;
+}
+
 void GameObject::DeleteComponent(std::type_index compType)
 {
     components_.erase(compType);

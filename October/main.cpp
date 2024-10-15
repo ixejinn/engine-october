@@ -5,16 +5,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "Utils/imgui/imgui.h"
-#include "Utils/imgui/imgui_impl_glfw.h"
-#include "Utils/imgui/imgui_impl_opengl3.h"
-
 #include "Manager/GameStateManager.h"
+#include "Editor/Editor.h"
 #include "Utils/Setting.h"
 
-#include "State/Sample.h"
-
-#include "Editor/Editor.h"
+#include "State/EmptyState.h"
 
 namespace Manager
 {
@@ -51,19 +46,10 @@ int main()
 		return -1;
 	}
 
-	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	// Setup Platform/Renderer backends
-	ImGui_ImplGlfw_InitForOpenGL(window, true);          // Second param install_callback=true will install GLFW callbacks and chain to existing ones.
-	ImGui_ImplOpenGL3_Init();
+	Manager::editor.Init(window);
 
 	// Set state
-	Sample* sample = new Sample();
+	EmptyState* sample = new EmptyState();
 	Manager::gsMgr.ChangeState(sample);
 
 	while (!glfwWindowShouldClose(window) || !Manager::gsMgr.ShouldExit())
@@ -77,23 +63,14 @@ int main()
 
 		glfwPollEvents();	// Check event, Update window state, Call callback function
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow(); // Show demo window! :)
 		Manager::editor.ShowEditor();
-
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 		glfwSwapBuffers(window);
 
 		bool test = Manager::gsMgr.ShouldExit();
 	}
 
-	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
+	Manager::editor.Exit();
 
 	glfwTerminate();
 	return 0;

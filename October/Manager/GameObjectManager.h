@@ -33,8 +33,11 @@ public:
 	GameObject* CreateObject();
 	GameObject* CreateObject(const std::string& name);
 
-	void RemoveObject(const GameObject* const obj);
-	void RemoveObject(const std::string& name);
+	void RenameObject(const GameObject* const obj, const std::string& newName);
+	void RenameObject(const std::string& name, const std::string& newName);
+
+	void DeleteObject(const GameObject* const obj);
+	void DeleteObject(const std::string& name);
 
 	void Clear();
 };

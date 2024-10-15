@@ -20,6 +20,8 @@ private:
 	std::map<std::string, std::type_index> nameToType_;
 	std::map<std::type_index, Component* (*)(GameObject* owner)> componentMap_;
 
+	bool skipUpdate = false;
+
 	ComponentManager();
 	~ComponentManager();
 
@@ -34,6 +36,8 @@ public:
 		static ComponentManager instance;
 		return instance;
 	}
+
+	void SetSkipUpdate() { skipUpdate = true; }
 
 	Component* CreateComponent(std::type_index compType, GameObject* owner);
 	Component* CreateComponent(std::string compName, GameObject* owner);

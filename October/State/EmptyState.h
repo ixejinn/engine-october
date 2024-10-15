@@ -1,13 +1,8 @@
 #pragma once
 #include "State.h"
 
-class Sprite;
-
-class Sample : public State
+class EmptyState : public State
 {
-private:
-	Sprite* sp;
-
 public:
 	void Init() override;
 	void Update() override;

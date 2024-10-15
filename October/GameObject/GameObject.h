@@ -26,6 +26,10 @@ public:
 	const std::string& GetName() const { return name_; }
 	Component* GetMainComp() const { return mainComp_; }
 
+	bool HasComponent(std::type_index compType);
+
+	void SetName(const std::string& newName);
+
 	void DeleteComponent(std::type_index type);
 
 	friend class GameObjectManager;

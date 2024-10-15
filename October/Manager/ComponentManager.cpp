@@ -59,7 +59,6 @@ void ComponentManager::UpdateComponent()
 
 	while (adder >= FixedUpdatable::step)
 	{
-		//std::cout << adder.count() << std::endl;
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{
 			(*it)->FixedUpdate();
@@ -69,6 +68,8 @@ void ComponentManager::UpdateComponent()
 	}
 
 	/* Update */
+	// for 문 안에 skipUpdate 확인하고 for 문 끝에 true면 break
+	skipUpdate = false;
 
 	/* LATE Update */
 	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)

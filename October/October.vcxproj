@@ -149,6 +149,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
+    <ClCompile Include="State\EmptyState.cpp" />
     <ClCompile Include="Utils\imgui\imgui.cpp" />
     <ClCompile Include="Utils\imgui\imgui_demo.cpp" />
     <ClCompile Include="Utils\imgui\imgui_draw.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Resource\Shader.h" />
     <ClInclude Include="Serializer\ComponentSerializer.h" />
+    <ClInclude Include="State\EmptyState.h" />
     <ClInclude Include="Utils\imgui\imconfig.h" />
     <ClInclude Include="Utils\imgui\imgui.h" />
     <ClInclude Include="Utils\imgui\imgui_impl_glfw.h" />

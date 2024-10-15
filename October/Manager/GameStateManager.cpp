@@ -17,18 +17,6 @@ void GameStateManager::Init()
 
 void GameStateManager::Update()
 {
-	if (curState_ != preState_)
-	{
-		if (preState_)
-		{
-			preState_->Exit();
-			delete preState_;
-		}
-
-		Init();
-		preState_ = curState_;
-	}
-	//std::cout << "??" << std::endl;
 	if (curState_)
 	{
 		curState_->Update();
@@ -48,8 +36,14 @@ void GameStateManager::Exit()
 
 void GameStateManager::ChangeState(State* newState)
 {
+	if (curState_)
+		curState_->Exit();
+
 	preState_ = curState_;
 	curState_ = newState;
+
+	if (curState_)
+		curState_->Init();
 }
 
 bool GameStateManager::ShouldExit()

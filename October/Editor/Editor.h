@@ -1,4 +1,7 @@
 #pragma once
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <string>
 
 class GameObject;
 
@@ -25,7 +28,9 @@ public:
 		return instance;
 	}
 
+	void Init(GLFWwindow* window);
 	void ShowEditor();
+	void Exit();
 
 	void Topbar();
 	void ObjectList();
