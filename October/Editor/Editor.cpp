@@ -1,5 +1,6 @@
 #include "Editor.h"
 
+#include <filesystem>
 #include <glm/vec2.hpp>
 #include "../Utils/imgui/imgui.h"
 #include "../Manager/SerializationManager.h"
@@ -32,15 +33,58 @@ void Editor::Topbar()
 
     if (ImGui::BeginMenu("File"))
     {
-        //if (ImGui::MenuItem("New State")) {}
-        //if (ImGui::MenuItem("Open State")) {}
+        static std::string stateFileName = "";
 
-        //ImGui::Separator();
+        //if (ImGui::MenuItem("New State")) {}
+        if (ImGui::BeginMenu("Open State"))
+        {
+            if (ImGui::BeginCombo("##open state", NULL))
+            {
+                std::string path = "Assets/States/";
+
+                for (const auto& state : std::filesystem::directory_iterator(path))
+                {
+                    if (ImGui::MenuItem(state.path().filename().string().c_str()))
+                    {
+                        stateFileName = state.path().filename().string();
+                        Manager::serMgr.LoadState(stateFileName);
+                    }
+                }
+
+                ImGui::EndCombo();
+            }
+
+            ImGui::EndMenu();
+        }
+
+        ImGui::Separator();
+        static bool saveNewState = false;
+
         if (ImGui::MenuItem("Save"/*, "Ctrl+S"*/))
         {
-            Manager::serMgr.SaveState("Assets/States/editorTest.state");
+            if (!stateFileName.empty())
+                Manager::serMgr.SaveState(stateFileName);
+            else
+                saveNewState = true;
         }
-        if (ImGui::MenuItem("Save As...")) {}
+        if (ImGui::MenuItem("Save As..."))
+            saveNewState = true;
+
+        if (saveNewState)
+        {
+            ImGui::Begin("Save State");
+
+            static char str[128] = "";
+            if (ImGui::InputTextWithHint("##", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
+            {
+                stateFileName = "Assets/States/" + std::string(str) + ".State";
+                Manager::serMgr.SaveState(stateFileName);
+
+                saveNewState = false;
+            }
+
+            ImGui::End();
+        }
 
         ImGui::EndMenu();
     }
@@ -131,5 +175,24 @@ void Editor::DetailSprite()
     Sprite* sp = static_cast<Sprite*>(selectedGameObject->GetComponent(typeid(Sprite)));
 
     ImGui::SeparatorText("Sprite");
+    ImGui::InputFloat2("Local Position", sp->GetLocalPosition());
+    ImGui::Text("Vertex Colors");
+    ImGui::ColorEdit3("Up Right", sp->GetColor(0));
+    ImGui::ColorEdit3("Down Right", sp->GetColor(1));
+    ImGui::ColorEdit3("Down Left", sp->GetColor(2));
+    ImGui::ColorEdit3("Up Left", sp->GetColor(3));
+    ImGui::SliderFloat("Alpha", sp->GetAlpha(), 0, 1);
+    
+    if (ImGui::BeginCombo("Texture", sp->GetTextureName().c_str()))
+    {
+        std::string path = "Assets/Images/";
 
+        for (const auto& txr : std::filesystem::directory_iterator(path))
+        {
+            if (ImGui::MenuItem(txr.path().filename().string().c_str()))
+                sp->SetTexture(path + txr.path().filename().string());
+        }
+
+        ImGui::EndCombo();
+    }
 }
