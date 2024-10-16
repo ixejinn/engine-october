@@ -147,6 +147,7 @@
     <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
     <ClCompile Include="State\EmptyState.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />

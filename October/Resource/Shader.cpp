@@ -8,8 +8,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Shader::Shader(const char* vertexPath, const char* fragmentPath)
+Shader::~Shader()
 {
+    Unload();
+}
+
+void Shader::Load(const std::string& filename)
+{
+    std::string name = filename.substr(0, filename.find_last_of('.'));
+    std::string vertexPath = name + ".vs";
+    std::string fragmentPath = name + ".fs";
+
     /* READ SHADER SOURCE FILE */
     std::string vertexSrcStr;
     std::string fragmentSrcStr;
@@ -35,7 +44,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     }
     catch (std::ifstream::failure e)
     {
-        std::cout << "[ERROR] Shader::Shader() File not successfully read" << std::endl;
+        std::cout << "[ERROR] Shader::Load() Invalid filename " << name << std::endl;
     }
 
     const char* vertexSrc = vertexSrcStr.c_str();
@@ -55,25 +64,36 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     CheckCompileErros(fragmentShader, FRAGMENT);
 
     // link shaders
-    shaderProgram = glCreateProgram();
+    unsigned int shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
     glLinkProgram(shaderProgram);
     CheckCompileErros(shaderProgram, PROGRAM);
+    data_ = static_cast<void*>(&shaderProgram);
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 }
 
+void Shader::Unload()
+{
+    glDeleteProgram(GetData());
+}
+
 void Shader::Use()
 {
-    glUseProgram(shaderProgram);
+    glUseProgram(GetData());
+}
+
+unsigned int Shader::GetData()
+{
+    return *(static_cast<unsigned int*>(data_));
 }
 
 void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
 {
     glUniformMatrix4fv(
-        glGetUniformLocation(shaderProgram, name.c_str()),
+        glGetUniformLocation(GetData(), name.c_str()),
         1,
         GL_FALSE,
         glm::value_ptr(mat)
@@ -83,7 +103,7 @@ void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
 void Shader::SetUniform1f(const std::string& name, const float& f)
 {
     glUniform1f(
-        glGetUniformLocation(shaderProgram, name.c_str()),
+        glGetUniformLocation(GetData(), name.c_str()),
         f
     );
 }
@@ -108,9 +128,9 @@ void Shader::CheckCompileErros(unsigned int shader, Type type)
         break;
 
     case PROGRAM:
-        glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+        glGetProgramiv(shader, GL_LINK_STATUS, &success);
         if (!success) {
-            glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+            glGetProgramInfoLog(shader, 512, NULL, infoLog);
             std::cout << "[ERROR] Shader::CheckCompileErrors() Program linking error\n" <<
                 infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }

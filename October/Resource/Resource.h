@@ -13,7 +13,7 @@ protected:
 public:
 	virtual ~Resource() = default;
 
-	virtual void Load(const std::string& name) = 0;
+	virtual void Load(const std::string& filename) = 0;
 	virtual void Unload() = 0;
 
 	friend class ResourceManager;
