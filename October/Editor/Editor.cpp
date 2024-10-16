@@ -23,6 +23,13 @@ namespace Manager
     extern GameStateManager& gsMgr;
 }
 
+Editor::Editor()
+{
+#ifdef _DEBUG
+    exit = false;
+#endif
+}
+
 void Editor::Init(GLFWwindow* window)
 {
     // Setup Dear ImGui context
@@ -39,6 +46,9 @@ void Editor::Init(GLFWwindow* window)
 
 void Editor::ShowEditor()
 {
+    if (exit)
+        return;
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -66,13 +76,13 @@ void Editor::Topbar()
 {
     static std::string path = "Assets/States/";
     static char str[128] = "";
+    static bool saveNewState = false;
+    static std::string stateFileName = "";
 
     ImGui::BeginMainMenuBar();
 
     if (ImGui::BeginMenu("File"))
     {
-        static std::string stateFileName = "";
-
         if (ImGui::MenuItem("New State"))
         {
             selectedGameObject = nullptr;
@@ -104,7 +114,6 @@ void Editor::Topbar()
         }
 
         ImGui::Separator();
-        static bool saveNewState = false;
 
         if (ImGui::MenuItem("Save"/*, "Ctrl+S"*/))
         {
@@ -115,30 +124,6 @@ void Editor::Topbar()
         }
         if (ImGui::MenuItem("Save As..."))
             saveNewState = true;
-
-        if (saveNewState)
-        {
-            ImGui::OpenPopup("Save State");
-            if (ImGui::BeginPopupModal("Save State", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-            {
-                if (ImGui::InputTextWithHint("##1 save state", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
-                {
-                    stateFileName = path + std::string(str) + ".State";
-                    Manager::serMgr.SaveState(stateFileName);
-
-                    saveNewState = false;
-                    ImGui::CloseCurrentPopup();
-                }
-
-                if (ImGui::Button("Cancel", ImVec2(120, 0)))
-                {
-                    saveNewState = false;
-                    ImGui::CloseCurrentPopup();
-                }
-
-                ImGui::EndPopup();
-            }
-        }
 
         ImGui::EndMenu();
     }
@@ -191,7 +176,35 @@ void Editor::Topbar()
     if (ImGui::BeginMenu("Window"))
     {
         ImGui::MenuItem("GameObject List", NULL, &showObjectList);
+        ImGui::MenuItem("GameObject Details", NULL, &showObjectDetails);
         ImGui::EndMenu();
+    }
+
+    if (saveNewState)
+        ImGui::OpenPopup("Save State");
+
+    // Always center this window when appearing
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("Save State", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+    {
+        if (ImGui::InputTextWithHint("##1 save state", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
+        {
+            stateFileName = path + std::string(str) + ".State";
+            Manager::serMgr.SaveState(stateFileName);
+
+            saveNewState = false;
+            ImGui::CloseCurrentPopup();
+        }
+
+        if (ImGui::Button("Cancel", ImVec2(120, 0)))
+        {
+            saveNewState = false;
+            ImGui::CloseCurrentPopup();
+        }
+
+        ImGui::EndPopup();
     }
 
     ImGui::EndMainMenuBar();
@@ -199,6 +212,18 @@ void Editor::Topbar()
 
 void Editor::ObjectList()
 {
+    ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
+    ImVec2 pos, size;
+
+    pos = size = viewportSize;
+    size.x *= 0.14;
+    size.y *= 0.2;
+    pos.x = size.x / 2;
+    pos.y = size.y / 2 + 20;
+
+    ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(size, ImGuiCond_Appearing);
+
     ImGui::Begin("GameObject List");
 
     for (const auto& objIt : Manager::objMgr.GetAllObjects())
@@ -218,6 +243,18 @@ void Editor::ObjectList()
 
 void Editor::ObjectDetails()
 {
+    ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
+    ImVec2 pos, size;
+
+    pos = size = viewportSize;
+    size.x *= 0.14;
+    size.y *= 0.6;
+    pos.x = size.x / 2;
+    pos.y = viewportSize.y * 0.2 + size.y / 2 + 20;
+
+    ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+    ImGui::SetNextWindowSize(size, ImGuiCond_Appearing);
+
     ImGui::Begin("GameObject Details");
 
     if (selectedGameObject)
@@ -239,10 +276,17 @@ void Editor::DetailTransform()
     Transform* trans = static_cast<Transform*>(selectedGameObject->GetComponent(typeid(Transform)));
 
     ImGui::SeparatorText("Transform");
-    ImGui::InputFloat2("Position", trans->GetPosition());
-    ImGui::SliderFloat("Rotation", trans->GetRotation(), -360, 360);
-    ImGui::InputFloat2("Scale", trans->GetScale());
-    ImGui::InputFloat2("Local Scale", trans->GetLocalScale());
+    ImGui::Text("Position");
+    ImGui::InputFloat2("##Position", trans->GetPosition());
+
+    ImGui::Text("Rotation");
+    ImGui::SliderFloat("##Rotation", trans->GetRotation(), -360, 360);
+
+    ImGui::Text("Scale");
+    ImGui::InputFloat2("##Scale", trans->GetScale());
+
+    ImGui::Text("Local Scale");
+    ImGui::InputFloat2("##Local Scale", trans->GetLocalScale());
 }
 
 void Editor::DetailSprite()
@@ -250,7 +294,9 @@ void Editor::DetailSprite()
     Sprite* sp = static_cast<Sprite*>(selectedGameObject->GetComponent(typeid(Sprite)));
 
     ImGui::SeparatorText("Sprite");
-    ImGui::InputFloat2("Local Position", sp->GetLocalPosition());
+    ImGui::Text("Local Position");
+    ImGui::InputFloat2("##local position", sp->GetLocalPosition());
+
     ImGui::Text("Vertex Colors");
     ImGui::ColorEdit3("Up Right", sp->GetColor(0));
     ImGui::ColorEdit3("Down Right", sp->GetColor(1));
@@ -258,7 +304,8 @@ void Editor::DetailSprite()
     ImGui::ColorEdit3("Up Left", sp->GetColor(3));
     ImGui::SliderFloat("Alpha", sp->GetAlpha(), 0, 1);
     
-    if (ImGui::BeginCombo("Texture", sp->GetTextureName().c_str()))
+    ImGui::Text("Texture");
+    if (ImGui::BeginCombo("##texture", sp->GetTextureName().c_str()))
     {
         std::string path = "Assets/Images/";
 

@@ -8,12 +8,13 @@ class GameObject;
 class Editor
 {
 private:
+	bool exit = true;
 	bool showObjectList = true;
 	bool showObjectDetails = true;
 
 	GameObject* selectedGameObject = nullptr;
 
-	Editor() = default;
+	Editor();
 	~Editor() = default;
 
 	Editor(const Editor&) = delete;
