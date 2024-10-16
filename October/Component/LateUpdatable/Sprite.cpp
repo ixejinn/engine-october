@@ -12,12 +12,20 @@
 
 #include "../FixedUpdatable/Transform.h"
 #include "../../GameObject/GameObject.h"
+#include "../../Manager/ResourceManager.h"
 #include "../../Utils/stb/stb_image.h"
 #include "../../Resource/Shader.h"
 
-Sprite::Sprite(GameObject* owner) : Component(owner), shader("Assets/Shaders/shader.vs", "Assets/Shaders/shader.fs")
+namespace Manager
+{
+    extern ResourceManager& rscMgr;
+}
+
+Sprite::Sprite(GameObject* owner) : Component(owner)
 {
     trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
+
+    shader = Manager::rscMgr.Load<Shader>(Shader::BasicFragmentShaderName);
 
     SetMesh();
     SetTexture("");
@@ -95,6 +103,12 @@ void Sprite::SetAlpha(const float& alpha)
     alpha_ = alpha;
 }
 
+void Sprite::SetFragmentShader(const std::string& name)
+{
+    Manager::rscMgr.Unload(shader->GetFragmentShaderName());
+    shader = Manager::rscMgr.Load<Shader>(name);
+}
+
 void Sprite::SetTexture(const std::string& name)
 {
     textureName_ = name;
@@ -138,21 +152,21 @@ void Sprite::LateUpdate()
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(colors_), colors_);
 
     // Activate shader
-    shader.Use();
+    shader->Use();
 
     glm::mat4 transformMatrix = glm::mat4(1.f);
     transformMatrix = glm::mat4(trans_->GetMatrix());
-    shader.SetUniformMat4("transform", transformMatrix);
+    shader->SetUniformMat4("transform", transformMatrix);
 
     glm::mat4 view = glm::mat4(1.f);
     view = glm::translate(view, glm::vec3(0.f, 0.f, -10.f));
-    shader.SetUniformMat4("view", view);
+    shader->SetUniformMat4("view", view);
 
     glm::mat4 projection = glm::mat4(1.f);
     projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
-    shader.SetUniformMat4("projection", projection);
+    shader->SetUniformMat4("projection", projection);
 
-    shader.SetUniform1f("alpha", alpha_);
+    shader->SetUniform1f("alpha", alpha_);
 
     glBindTexture(GL_TEXTURE_2D, texture);
     glBindVertexArray(VAO);

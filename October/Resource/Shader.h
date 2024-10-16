@@ -5,7 +5,7 @@
 
 class Shader : public Resource
 {
-public:
+private:
 	enum Type
 	{
 		VERTEX,
@@ -13,8 +13,7 @@ public:
 		PROGRAM
 	};
 
-private:
-	//unsigned int shaderProgram;
+	std::string fsName_ = "";
 
 	Shader() = default;
 
@@ -23,13 +22,20 @@ private:
 public:
 	~Shader();
 
-	void Load(const std::string& filename) override;
+	// The vertex shaders are all the same
+	void Load(const std::string& fsName) override;
 	void Unload() override;
 
 	void Use();
 
 	unsigned int GetData();
 
+	const std::string& GetFragmentShaderName() { return fsName_; }
+
 	void SetUniformMat4(const std::string& name, const glm::mat4& mat);
 	void SetUniform1f(const std::string& name, const float& f);
+
+	static constexpr const char* BasicFragmentShaderName = "Assets/Shaders/shader.fs";
+
+	friend class ResourceManager;
 };

@@ -13,11 +13,10 @@ Shader::~Shader()
     Unload();
 }
 
-void Shader::Load(const std::string& filename)
+void Shader::Load(const std::string& fsName)
 {
-    std::string name = filename.substr(0, filename.find_last_of('.'));
-    std::string vertexPath = name + ".vs";
-    std::string fragmentPath = name + ".fs";
+    std::string vsName = "Assets/Shaders/shader.vs";
+    fsName_ = fsName;
 
     /* READ SHADER SOURCE FILE */
     std::string vertexSrcStr;
@@ -29,8 +28,8 @@ void Shader::Load(const std::string& filename)
     fragmentFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try
     {
-        vertexFile.open(vertexPath);
-        fragmentFile.open(fragmentPath);
+        vertexFile.open(vsName);
+        fragmentFile.open(fsName);
 
         std::stringstream vertexStream, fragmentStream;
         vertexStream << vertexFile.rdbuf();
@@ -44,7 +43,7 @@ void Shader::Load(const std::string& filename)
     }
     catch (std::ifstream::failure e)
     {
-        std::cout << "[ERROR] Shader::Load() Invalid filename " << name << std::endl;
+        std::cout << "[ERROR] Shader::Load() Invalid filename " << fsName << std::endl;
     }
 
     const char* vertexSrc = vertexSrcStr.c_str();
@@ -82,6 +81,9 @@ void Shader::Unload()
 
 void Shader::Use()
 {
+    if (data_ == nullptr)
+        Load(BasicFragmentShaderName);   // basic fragment shader
+
     glUseProgram(GetData());
 }
 

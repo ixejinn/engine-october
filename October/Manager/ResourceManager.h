@@ -3,8 +3,7 @@
 #include <string>
 #include <memory>
 #include "../Resource/Resource.h"
-
-// resources ...
+#include "../Resource/Shader.h"
 
 class ResourceManager
 {
@@ -17,7 +16,7 @@ private:
 	};
 	std::map<std::string, Extension> stringToExtension_ =
 	{
-		{ "shader", SHADER },
+		{ "fs", SHADER },
 		{ "png", PNG },
 		{ "jpeg", JPEG }
 	};
@@ -63,5 +62,5 @@ inline T* ResourceManager::Load(const std::string& filename)
 	Resource* resource = resources_[ext][filename].get();
 	resource->counter_++;
 
-	return static_cast<T*>(resource.get());
+	return static_cast<T*>(resource);
 }

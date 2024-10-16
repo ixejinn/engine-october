@@ -6,9 +6,9 @@
 #include <string>
 #include "../Component.h"
 #include "LateUpdatable.h"
-#include "../../Resource/Shader.h"
 
 class Transform;
+class Shader;
 
 class Sprite : public Component, public LateUpdatable
 {
@@ -33,7 +33,7 @@ private:
 	GLfloat alpha_ = 1.0f;
 
 	GLuint VBO[3], VAO, EBO;
-	Shader shader;
+	Shader* shader = nullptr;
 	GLuint texture;
 	std::string textureName_;
 
@@ -61,6 +61,7 @@ public:
 	// (0 up right, 1 down right, 2 down left, 3 up left)
 	void SetColor(const unsigned int& idx, const glm::vec3& color);
 	void SetAlpha(const float& alpha);
+	void SetFragmentShader(const std::string& name);
 	void SetTexture(const std::string& name);
 
 	static Component* CreateComponent(GameObject* owner);
