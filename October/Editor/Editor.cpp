@@ -259,11 +259,11 @@ void Editor::ObjectDetails()
 
     if (selectedGameObject)
     {
+        DetailTransform();
+
         for (const auto& compIt : selectedGameObject->GetAllComponents())
         {
-            if (compIt.first == typeid(Transform))
-                DetailTransform();
-            else if (compIt.first == typeid(Sprite))
+            if (compIt.first == typeid(Sprite))
                 DetailSprite();
         }
     }

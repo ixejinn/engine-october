@@ -175,6 +175,7 @@
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
+    <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />
     <ClInclude Include="Serializer\ComponentSerializer.h" />
     <ClInclude Include="State\EmptyState.h" />

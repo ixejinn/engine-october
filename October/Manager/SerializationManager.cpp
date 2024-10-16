@@ -65,14 +65,14 @@ void SerializationManager::SaveState(const std::string& filename)
 
 		objData["object"] = obj->GetName();
 
+		Component* trans = obj->GetComponent(typeid(Transform));
+		compData.push_back(trans->SaveToJson());
+
 		Component* comp = obj->GetMainComp();
 		if (comp)
 			compData.push_back(comp->SaveToJson());
 		else
 		{
-			Component* trans = obj->GetComponent(typeid(Transform));
-			compData.push_back(trans->SaveToJson());
-
 			for (const auto& compIt : obj->GetAllComponents())
 			{
 				comp = compIt.second.get();
