@@ -63,12 +63,13 @@ void Shader::Load(const std::string& fsName)
     CheckCompileErros(fragmentShader, FRAGMENT);
 
     // link shaders
-    unsigned int shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    CheckCompileErros(shaderProgram, PROGRAM);
-    data_ = static_cast<void*>(&shaderProgram);
+    unsigned int* shaderProgram = new unsigned int();
+    *shaderProgram = glCreateProgram();
+    glAttachShader(*shaderProgram, vertexShader);
+    glAttachShader(*shaderProgram, fragmentShader);
+    glLinkProgram(*shaderProgram);
+    CheckCompileErros(*shaderProgram, PROGRAM);
+    data_ = shaderProgram;
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
