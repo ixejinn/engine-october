@@ -51,19 +51,20 @@ void Shader::Load(const std::string& fsName)
 
     /* COMPILE SHADER */
     // vertex shader
-    unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    //unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexSrc, NULL);
     glCompileShader(vertexShader);
     CheckCompileErros(vertexShader, VERTEX);
 
     // fragment shader
-    unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentSrc, NULL);
     glCompileShader(fragmentShader);
     CheckCompileErros(fragmentShader, FRAGMENT);
 
     // link shaders
-    unsigned int* shaderProgram = new unsigned int();
+    GLuint* shaderProgram = new GLuint();
     *shaderProgram = glCreateProgram();
     glAttachShader(*shaderProgram, vertexShader);
     glAttachShader(*shaderProgram, fragmentShader);
@@ -77,7 +78,10 @@ void Shader::Load(const std::string& fsName)
 
 void Shader::Unload()
 {
-    glDeleteProgram(GetData());
+    if (data_ != nullptr)
+        glDeleteProgram(GetData());
+
+    data_ = nullptr;
 }
 
 void Shader::Use()
@@ -90,7 +94,7 @@ void Shader::Use()
 
 unsigned int Shader::GetData()
 {
-    return *(static_cast<unsigned int*>(data_));
+    return *(static_cast<GLuint*>(data_));
 }
 
 void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
@@ -103,7 +107,7 @@ void Shader::SetUniformMat4(const std::string& name, const glm::mat4& mat)
     );
 }
 
-void Shader::SetUniform1f(const std::string& name, const float& f)
+void Shader::SetUniform1f(const std::string& name, const GLfloat& f)
 {
     glUniform1f(
         glGetUniformLocation(GetData(), name.c_str()),
@@ -111,7 +115,7 @@ void Shader::SetUniform1f(const std::string& name, const float& f)
     );
 }
 
-void Shader::CheckCompileErros(unsigned int shader, Type type)
+void Shader::CheckCompileErros(GLuint shader, Type type)
 {
     int success;
     char infoLog[512];

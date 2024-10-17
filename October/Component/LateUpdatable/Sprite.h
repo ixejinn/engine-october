@@ -9,6 +9,7 @@
 
 class Transform;
 class Shader;
+class Texture;
 
 class Sprite : public Component, public LateUpdatable
 {
@@ -34,8 +35,7 @@ private:
 
 	GLuint VBO[3], VAO, EBO;
 	Shader* shader = nullptr;
-	GLuint texture;
-	std::string textureName_;
+	Texture* texture = nullptr;
 
 	Transform* trans_ = nullptr;
 
@@ -51,7 +51,7 @@ public:
 	void LoadFromJson(const json& data) override;
 	json SaveToJson() override;
 
-	const std::string& GetTextureName() { return textureName_; }
+	const std::string& GetTextureName();
 
 	float* GetLocalPosition() { return &localPosition_[0]; }
 	float* GetColor(const unsigned int& idx) { return &colors_[idx][0]; }

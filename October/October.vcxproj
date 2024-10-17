@@ -150,6 +150,7 @@
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
+    <ClCompile Include="Resource\Texture.cpp" />
     <ClCompile Include="State\EmptyState.cpp" />
     <ClCompile Include="Utils\imgui\imgui.cpp" />
     <ClCompile Include="Utils\imgui\imgui_demo.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />
+    <ClInclude Include="Resource\Texture.h" />
     <ClInclude Include="Serializer\ComponentSerializer.h" />
     <ClInclude Include="State\EmptyState.h" />
     <ClInclude Include="Utils\imgui\imconfig.h" />

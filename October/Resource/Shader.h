@@ -1,5 +1,5 @@
 #pragma once
-#include <string>
+#include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 #include "Resource.h"
 
@@ -17,7 +17,7 @@ private:
 
 	Shader() = default;
 
-	void CheckCompileErros(unsigned int shader, Type type);
+	void CheckCompileErros(GLuint shader, Type type);
 
 public:
 	~Shader();
@@ -28,12 +28,12 @@ public:
 
 	void Use();
 
-	unsigned int GetData();
+	GLuint GetData();
 
 	const std::string& GetFragmentShaderName() { return fsName_; }
 
 	void SetUniformMat4(const std::string& name, const glm::mat4& mat);
-	void SetUniform1f(const std::string& name, const float& f);
+	void SetUniform1f(const std::string& name, const GLfloat& f);
 
 	static constexpr const char* BasicFragmentShaderName = "Assets/Shaders/shader.fs";
 

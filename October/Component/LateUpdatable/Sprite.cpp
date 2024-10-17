@@ -15,6 +15,7 @@
 #include "../../Manager/ResourceManager.h"
 #include "../../Utils/stb/stb_image.h"
 #include "../../Resource/Shader.h"
+#include "../../Resource/Texture.h"
 
 namespace Manager
 {
@@ -28,7 +29,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
     shader = Manager::rscMgr.Load<Shader>(Shader::BasicFragmentShaderName);
 
     SetMesh();
-    SetTexture("");
+    SetTexture(Texture::BasicTexturename);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -68,8 +69,8 @@ void Sprite::LoadFromJson(const json& data)
         alpha_ = it.value();
 
         it = compData->find("textureName");
-        textureName_ = it.value();
-        SetTexture(textureName_);
+        std::string textureName = it.value();
+        SetTexture(textureName);
     }
 }
 
@@ -87,10 +88,15 @@ json Sprite::SaveToJson()
         colors_[3].r, colors_[3].g, colors_[3].b
     };
     compData["alpha"] = alpha_;
-    compData["textureName"] = textureName_;
+    compData["textureName"] = texture->GetName();
 
     data["compData"] = compData;
     return data;
+}
+
+const std::string& Sprite::GetTextureName()
+{
+    return texture->GetName();
 }
 
 void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
@@ -111,32 +117,9 @@ void Sprite::SetFragmentShader(const std::string& name)
 
 void Sprite::SetTexture(const std::string& name)
 {
-    textureName_ = name;
-    glCreateTextures(GL_TEXTURE_2D, 1, &texture);
-
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTextureParameteri(texture, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    glTextureParameteri(texture, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTextureParameteri(texture, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(textureName_.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
-    if (data)
-    {
-        glTextureStorage2D(texture, 1, GL_RGBA8, width, height);
-        glTextureSubImage2D(texture, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
-        glGenerateTextureMipmap(texture);
-
-        stbi_image_free(data);
-    }
-    else
-    {
-        GLubyte white[4] = { 255, 255, 255, 255 };
-        glTextureStorage2D(texture, 1, GL_RGBA8, 1, 1);
-        glTextureSubImage2D(texture, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, white);
-    }
+    if (texture != nullptr && !texture->GetName().empty())
+        Manager::rscMgr.Unload(texture->GetName());
+    texture = Manager::rscMgr.Load<Texture>(name);
 }
 
 Component* Sprite::CreateComponent(GameObject* owner)
@@ -168,7 +151,7 @@ void Sprite::LateUpdate()
 
     shader->SetUniform1f("alpha", alpha_);
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, texture->GetData());
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
