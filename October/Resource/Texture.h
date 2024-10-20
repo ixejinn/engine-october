@@ -5,9 +5,11 @@
 class Texture : public Resource
 {
 private:
-	std::string textureName_ = "";
+	std::string textureName_;
 
-	Texture() = default;
+	Texture();
+
+	static void CreateBasicTexture(Texture* basicTexture);
 
 public:
 	~Texture();
@@ -19,7 +21,7 @@ public:
 
 	const std::string& GetName() { return textureName_; }
 
-	static constexpr const char* BasicTexturename = "virtual.png";
+	static Texture* BasicTexture();
 
 	friend class ResourceManager;
 };

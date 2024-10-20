@@ -305,6 +305,7 @@ void Editor::DetailSprite()
     ImGui::SliderFloat("Alpha", sp->GetAlpha(), 0, 1);
     
     ImGui::Text("Texture");
+    std::string test = sp->GetTextureName();
     if (ImGui::BeginCombo("##texture", sp->GetTextureName().c_str()))
     {
         std::string path = "Assets/Images/";

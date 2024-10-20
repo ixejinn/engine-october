@@ -29,7 +29,7 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
     shader = Manager::rscMgr.Load<Shader>(Shader::BasicFragmentShaderName);
 
     SetMesh();
-    SetTexture(Texture::BasicTexturename);
+    texture = Texture::BasicTexture();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -70,7 +70,8 @@ void Sprite::LoadFromJson(const json& data)
 
         it = compData->find("textureName");
         std::string textureName = it.value();
-        SetTexture(textureName);
+        if (!textureName.empty())
+            SetTexture(textureName);
     }
 }
 
@@ -117,7 +118,7 @@ void Sprite::SetFragmentShader(const std::string& name)
 
 void Sprite::SetTexture(const std::string& name)
 {
-    if (texture != nullptr && !texture->GetName().empty())
+    if (texture != nullptr && texture != Texture::BasicTexture())
         Manager::rscMgr.Unload(texture->GetName());
     texture = Manager::rscMgr.Load<Texture>(name);
 }

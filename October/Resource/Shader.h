@@ -13,9 +13,9 @@ private:
 		PROGRAM
 	};
 
-	std::string fsName_ = "";
+	std::string fsName_;
 
-	Shader() = default;
+	Shader();
 
 	void CheckCompileErros(GLuint shader, Type type);
 

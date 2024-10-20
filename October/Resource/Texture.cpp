@@ -2,6 +2,8 @@
 
 #include "../Utils/stb/stb_image.h"
 
+Texture::Texture() : textureName_() {}
+
 Texture::~Texture()
 {
 	Unload();
@@ -33,9 +35,8 @@ void Texture::Load(const std::string& filename)
     }
     else
     {
-        GLubyte white[4] = { 255, 255, 255, 255 };
-        glTextureStorage2D(*texture, 1, GL_RGBA8, 1, 1);
-        glTextureSubImage2D(*texture, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, white);
+        delete texture;
+        texture = nullptr;
     }
 
     data_ = texture;
@@ -52,4 +53,25 @@ void Texture::Unload()
 GLuint Texture::GetData()
 {
     return *(static_cast<GLuint*>(data_));
+}
+
+Texture* Texture::BasicTexture()
+{
+    static Texture basicTexture;
+    if (basicTexture.data_ == nullptr)
+        CreateBasicTexture(&basicTexture);
+
+    return &basicTexture;
+}
+
+void Texture::CreateBasicTexture(Texture* basicTexture)
+{
+    GLuint* texture = new GLuint();
+    glCreateTextures(GL_TEXTURE_2D, 1, texture);
+
+    GLubyte white[4] = { 255, 255, 255, 255 };
+    glTextureStorage2D(*texture, 1, GL_RGBA8, 1, 1);
+    glTextureSubImage2D(*texture, 0, 0, 0, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, white);
+
+    basicTexture->data_ = texture;
 }

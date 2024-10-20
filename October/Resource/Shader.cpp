@@ -8,6 +8,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+Shader::Shader() : fsName_() {}
+
 Shader::~Shader()
 {
     Unload();
@@ -86,9 +88,6 @@ void Shader::Unload()
 
 void Shader::Use()
 {
-    if (data_ == nullptr)
-        Load(BasicFragmentShaderName);   // basic fragment shader
-
     glUseProgram(GetData());
 }
 

@@ -1,6 +1,5 @@
 #include "ResourceManager.h"
 
-#include <iostream>
 #include <algorithm>
 
 ResourceManager::~ResourceManager()
@@ -49,6 +48,6 @@ ResourceManager::Extension ResourceManager::StringToExtension(const std::string&
 	std::transform(extStr.begin(), extStr.end(), extStr.begin(), ::tolower);
 
 	if (stringToExtension_.find(extStr) == stringToExtension_.end())
-		std::cerr << "[ERROR] ResourceManager::StringToExtension Invalid file name " + filename << std::endl;
+		std::cerr << "ResourceManager::StringToExtension() Invalid filename: " << filename << std::endl;
 	return stringToExtension_[extStr];
 }

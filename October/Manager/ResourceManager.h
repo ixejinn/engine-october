@@ -2,8 +2,12 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <iostream>
+#include <type_traits>	// std::is_same
+
 #include "../Resource/Resource.h"
 #include "../Resource/Shader.h"
+#include "../Resource/Texture.h"
 
 class ResourceManager
 {
@@ -46,6 +50,7 @@ public:
 	void Unload(const std::string& filename);
 	void UnloadAll(bool unloadAll);
 };
+
 
 template<typename T>
 inline T* ResourceManager::Load(const std::string& filename)
