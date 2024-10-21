@@ -28,7 +28,7 @@ void GameStateManager::Update()
 
 void GameStateManager::Exit()
 {
-	// Clear managers
+	ClearManagers();
 
 	preState_->Exit();
 	delete preState_;
@@ -44,6 +44,11 @@ void GameStateManager::ChangeState(State* newState)
 
 	if (curState_)
 		curState_->Init();
+}
+
+void GameStateManager::ClearManagers()
+{
+	// Clear manager
 }
 
 bool GameStateManager::ShouldExit()

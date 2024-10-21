@@ -29,5 +29,7 @@ public:
 
 	void ChangeState(State* newState);
 
+	void ClearManagers();
+
 	bool ShouldExit();
 };

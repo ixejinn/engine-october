@@ -67,7 +67,7 @@ void ComponentManager::UpdateComponent()
 	{
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{
-			if (Manager::editor.mode_ && !(*it)->updateInEditmode_)
+			if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
 				continue;
 
 			(*it)->FixedUpdate();
@@ -83,7 +83,7 @@ void ComponentManager::UpdateComponent()
 	/* LATE Update */
 	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
 	{
-		if (Manager::editor.mode_ && !(*it)->updateInEditmode_)
+		if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
 			continue;
 
 		(*it)->LateUpdate();

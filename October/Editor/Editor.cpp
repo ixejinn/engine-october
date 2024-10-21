@@ -30,6 +30,17 @@ Editor::Editor()
 #endif
 }
 
+void Editor::ToggleMode()
+{
+    mode_ = !mode_;
+
+    if (mode_ == true)
+    {
+        Manager::gsMgr.ClearManagers();
+        Manager::gsMgr.Init();
+    }
+}
+
 void Editor::Init(GLFWwindow* window)
 {
     // Setup Dear ImGui context
@@ -46,20 +57,22 @@ void Editor::Init(GLFWwindow* window)
 
 void Editor::ShowEditor()
 {
-    if (!mode_)
-        return;
-
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    Topbar();
+    EditmodeButton();
+    
+    if (mode_)
+    {
+        Topbar();
 
-    if (showObjectList_)
-        ObjectList();
+        if (showObjectList_)
+            ObjectList();
 
-    if (showObjectDetails_)
-        ObjectDetails();
+        if (showObjectDetails_)
+            ObjectDetails();
+    }
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -74,7 +87,7 @@ void Editor::Exit()
 
 void Editor::Topbar()
 {
-    static std::string path = "Assets/States/";
+    static const std::string path = "Assets/States/";
     static char str[128] = "";
     static bool saveNewState = false;
     static std::string stateFileName = "";
@@ -92,7 +105,7 @@ void Editor::Topbar()
 
         if (ImGui::BeginMenu("Open State"))
         {
-            if (ImGui::BeginCombo("##0 open state", stateFileName.c_str()))
+            if (ImGui::BeginCombo("##open state", stateFileName.c_str()))
             {
                 for (const auto& state : std::filesystem::directory_iterator(path))
                 {
@@ -141,7 +154,7 @@ void Editor::Topbar()
 
         if (ImGui::BeginMenu("Rename", selectedGameObject_ != nullptr))
         {
-            if (ImGui::InputTextWithHint("##2 rename", "Enter new name", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
+            if (ImGui::InputTextWithHint("##rename", "Enter new name", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
             {
                 Manager::objMgr.RenameObject(selectedGameObject_, std::string(str));
                 str[0] = '\0';
@@ -189,7 +202,7 @@ void Editor::Topbar()
 
     if (ImGui::BeginPopupModal("Save State", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        if (ImGui::InputTextWithHint("##1 save state", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
+        if (ImGui::InputTextWithHint("##save state", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
         {
             stateFileName = path + std::string(str) + ".State";
             Manager::serMgr.SaveState(stateFileName);
@@ -215,7 +228,7 @@ void Editor::ObjectList()
     ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
     ImVec2 pos, size;
 
-    pos = size = viewportSize;
+    size = viewportSize;
     size.x *= 0.14f;
     size.y *= 0.2f;
     pos.x = size.x / 2.f;
@@ -246,7 +259,7 @@ void Editor::ObjectDetails()
     ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
     ImVec2 pos, size;
 
-    pos = size = viewportSize;
+    size = viewportSize;
     size.x *= 0.14f;
     size.y *= 0.6f;
     pos.x = size.x / 2;
@@ -271,22 +284,44 @@ void Editor::ObjectDetails()
     ImGui::End();
 }
 
+void Editor::EditmodeButton()
+{
+    ImVec2 viewportSize = ImGui::GetMainViewport()->Size;
+    ImVec2 pos, size;
+
+    pos = viewportSize;
+    pos.x += 15;
+    pos.y = 15;
+    size.x = 80;
+    size.y = 80;
+
+    ImGui::SetNextWindowPos(pos, ImGuiCond_Once, ImVec2(1.f, 0.f));
+    ImGui::SetNextWindowSize(size);
+
+    ImGui::Begin("##edit mode", nullptr, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+
+    if (ImGui::Button((mode_ ? "Play" : "Edit"), ImVec2(size.x - 30, size.y - 30)))
+        ToggleMode();
+
+    ImGui::End();
+}
+
 void Editor::DetailTransform()
 {
     Transform* trans = static_cast<Transform*>(selectedGameObject_->GetComponent(typeid(Transform)));
 
     ImGui::SeparatorText("Transform");
     ImGui::Text("Position");
-    ImGui::InputFloat2("##Position", trans->GetPosition());
+    ImGui::InputFloat2("##position", trans->GetPosition());
 
     ImGui::Text("Rotation");
-    ImGui::SliderFloat("##Rotation", trans->GetRotation(), -360, 360);
+    ImGui::SliderFloat("##rotation", trans->GetRotation(), -360, 360);
 
     ImGui::Text("Scale");
-    ImGui::InputFloat2("##Scale", trans->GetScale());
+    ImGui::InputFloat2("##scale", trans->GetScale());
 
     ImGui::Text("Local Scale");
-    ImGui::InputFloat2("##Local Scale", trans->GetLocalScale());
+    ImGui::InputFloat2("##local scale", trans->GetLocalScale());
 }
 
 void Editor::DetailSprite()

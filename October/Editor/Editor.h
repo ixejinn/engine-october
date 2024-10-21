@@ -8,6 +8,8 @@ class GameObject;
 class Editor
 {
 private:
+	bool mode_ = false;
+
 	bool showObjectList_ = true;
 	bool showObjectDetails_ = true;
 
@@ -22,13 +24,15 @@ private:
 	Editor& operator =(Editor&&) = delete;
 
 public:
-	bool mode_ = false;
-
 	static Editor& GetInstance()
 	{
 		static Editor instance;
 		return instance;
 	}
+
+	bool GetMode() const { return mode_; }
+
+	void ToggleMode();
 
 	void Init(GLFWwindow* window);
 	void ShowEditor();
@@ -37,6 +41,7 @@ public:
 	void Topbar();
 	void ObjectList();
 	void ObjectDetails();
+	void EditmodeButton();
 
 	void DetailTransform();
 	void DetailSprite();
