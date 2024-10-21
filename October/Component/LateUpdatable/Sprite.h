@@ -33,9 +33,9 @@ private:
 	};
 	GLfloat alpha_ = 1.0f;
 
-	GLuint VBO[3], VAO, EBO;
-	Shader* shader = nullptr;
-	Texture* texture = nullptr;
+	GLuint vbo_[3], vao_, ebo_;
+	Shader* shader_ = nullptr;
+	Texture* texture_ = nullptr;
 
 	Transform* trans_ = nullptr;
 

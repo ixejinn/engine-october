@@ -8,11 +8,10 @@ class GameObject;
 class Editor
 {
 private:
-	bool exit = true;
-	bool showObjectList = true;
-	bool showObjectDetails = true;
+	bool showObjectList_ = true;
+	bool showObjectDetails_ = true;
 
-	GameObject* selectedGameObject = nullptr;
+	GameObject* selectedGameObject_ = nullptr;
 
 	Editor();
 	~Editor() = default;
@@ -23,6 +22,8 @@ private:
 	Editor& operator =(Editor&&) = delete;
 
 public:
+	bool mode_ = false;
+
 	static Editor& GetInstance()
 	{
 		static Editor instance;

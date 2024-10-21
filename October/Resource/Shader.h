@@ -35,7 +35,7 @@ public:
 	void SetUniformMat4(const std::string& name, const glm::mat4& mat);
 	void SetUniform1f(const std::string& name, const GLfloat& f);
 
-	static constexpr const char* BasicFragmentShaderName = "Assets/Shaders/shader.fs";
+	static constexpr const char* BasicFragmentShaderName_ = "Assets/Shaders/shader.fs";
 
 	friend class ResourceManager;
 };

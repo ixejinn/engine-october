@@ -3,10 +3,16 @@
 #include <iostream>
 #include <chrono>
 #include <typeinfo>
+#include "../Editor/Editor.h"
 #include "../Component/Component.h"
 
 #include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/LateUpdatable/Sprite.h"
+
+namespace Manager
+{
+	extern Editor& editor;
+}
 
 ComponentManager::ComponentManager()
 {
@@ -54,26 +60,32 @@ void ComponentManager::UpdateComponent()
 
 	std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
 	adder += std::chrono::duration_cast<std::chrono::milliseconds>(cur - start);
-	if (adder >= FixedUpdatable::step)
+	if (adder >= FixedUpdatable::Step_)
 		start = cur;
 
-	while (adder >= FixedUpdatable::step)
+	while (adder >= FixedUpdatable::Step_)
 	{
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{
+			if (Manager::editor.mode_ && !(*it)->updateInEditmode_)
+				continue;
+
 			(*it)->FixedUpdate();
 		}
 
-		adder -= FixedUpdatable::step;
+		adder -= FixedUpdatable::Step_;
 	}
 
 	/* Update */
 	// for 문 안에 skipUpdate 확인하고 for 문 끝에 true면 break
-	skipUpdate = false;
+	skipUpdate_ = false;
 
 	/* LATE Update */
 	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
 	{
+		if (Manager::editor.mode_ && !(*it)->updateInEditmode_)
+			continue;
+
 		(*it)->LateUpdate();
 	}
 }

@@ -5,6 +5,9 @@ class State;
 class GameStateManager
 {
 private:
+	State* preState_ = nullptr;
+	State* curState_ = nullptr;
+
 	GameStateManager() = default;
 	~GameStateManager() = default;
 
@@ -12,9 +15,6 @@ private:
 	GameStateManager& operator =(const GameStateManager&) = delete;
 	GameStateManager(GameStateManager&&) = delete;
 	GameStateManager& operator =(GameStateManager&&) = delete;
-
-	State* preState_ = nullptr;
-	State* curState_ = nullptr;
 
 public:
 	static GameStateManager& GetInstance()

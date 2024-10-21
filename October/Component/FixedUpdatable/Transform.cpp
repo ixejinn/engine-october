@@ -4,7 +4,10 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_() {}
+Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_()
+{
+    updateInEditmode_ = true;
+}
 
 void Transform::FixedUpdate()
 {

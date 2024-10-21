@@ -1,6 +1,7 @@
 #pragma once
+#include "../EditmodeUpdatable.h"
 
-class LateUpdatable
+class LateUpdatable : public EditmodeUpdatable
 {
 protected:
 	virtual void LateUpdate() = 0;

@@ -24,12 +24,14 @@ namespace Manager
 
 Sprite::Sprite(GameObject* owner) : Component(owner)
 {
+    updateInEditmode_ = true;
+
     trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 
-    shader = Manager::rscMgr.Load<Shader>(Shader::BasicFragmentShaderName);
+    shader_ = Manager::rscMgr.Load<Shader>(Shader::BasicFragmentShaderName_);
 
     SetMesh();
-    texture = Texture::BasicTexture();
+    texture_ = Texture::BasicTexture();
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -37,9 +39,9 @@ Sprite::Sprite(GameObject* owner) : Component(owner)
 
 Sprite::~Sprite()
 {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(3, VBO);
-    glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &vao_);
+    glDeleteBuffers(3, vbo_);
+    glDeleteBuffers(1, &ebo_);
 }
 
 void Sprite::LoadFromJson(const json& data)
@@ -89,7 +91,7 @@ json Sprite::SaveToJson()
         colors_[3].r, colors_[3].g, colors_[3].b
     };
     compData["alpha"] = alpha_;
-    compData["textureName"] = texture->GetName();
+    compData["textureName"] = texture_->GetName();
 
     data["compData"] = compData;
     return data;
@@ -97,7 +99,7 @@ json Sprite::SaveToJson()
 
 const std::string& Sprite::GetTextureName()
 {
-    return texture->GetName();
+    return texture_->GetName();
 }
 
 void Sprite::SetColor(const unsigned int& idx, const glm::vec3& color)
@@ -112,15 +114,15 @@ void Sprite::SetAlpha(const float& alpha)
 
 void Sprite::SetFragmentShader(const std::string& name)
 {
-    Manager::rscMgr.Unload(shader->GetFragmentShaderName());
-    shader = Manager::rscMgr.Load<Shader>(name);
+    Manager::rscMgr.Unload(shader_->GetFragmentShaderName());
+    shader_ = Manager::rscMgr.Load<Shader>(name);
 }
 
 void Sprite::SetTexture(const std::string& name)
 {
-    if (texture != nullptr && texture != Texture::BasicTexture())
-        Manager::rscMgr.Unload(texture->GetName());
-    texture = Manager::rscMgr.Load<Texture>(name);
+    if (texture_ != nullptr && texture_ != Texture::BasicTexture())
+        Manager::rscMgr.Unload(texture_->GetName());
+    texture_ = Manager::rscMgr.Load<Texture>(name);
 }
 
 Component* Sprite::CreateComponent(GameObject* owner)
@@ -132,28 +134,28 @@ Component* Sprite::CreateComponent(GameObject* owner)
 void Sprite::LateUpdate()
 {
     // Change color
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_[1]);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(colors_), colors_);
 
     // Activate shader
-    shader->Use();
+    shader_->Use();
 
     glm::mat4 transformMatrix = glm::mat4(1.f);
     transformMatrix = glm::mat4(trans_->GetMatrix());
-    shader->SetUniformMat4("transform", transformMatrix);
+    shader_->SetUniformMat4("transform", transformMatrix);
 
     glm::mat4 view = glm::mat4(1.f);
     view = glm::translate(view, glm::vec3(0.f, 0.f, -10.f));
-    shader->SetUniformMat4("view", view);
+    shader_->SetUniformMat4("view", view);
 
     glm::mat4 projection = glm::mat4(1.f);
     projection = glm::perspective(glm::radians(45.f), 1500 / 1000.f, 0.1f, 100.f);
-    shader->SetUniformMat4("projection", projection);
+    shader_->SetUniformMat4("projection", projection);
 
-    shader->SetUniform1f("alpha", alpha_);
+    shader_->SetUniform1f("alpha", alpha_);
 
-    glBindTexture(GL_TEXTURE_2D, texture->GetData());
-    glBindVertexArray(VAO);
+    glBindTexture(GL_TEXTURE_2D, texture_->GetData());
+    glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
@@ -177,31 +179,31 @@ void Sprite::SetMesh()
         1, 2, 3  // second triangle
     };
 
-    glGenVertexArrays(1, &VAO); // VAO stores the state related to vertex attribute settings
-    glGenBuffers(3, VBO);       // VBO stores the actual vertex data (positions, colors, texture coords)
-    glGenBuffers(1, &EBO);      // EBO stores the indices used for element drawing (index array)
+    glGenVertexArrays(1, &vao_); // VAO stores the state related to vertex attribute settings
+    glGenBuffers(3, vbo_);       // VBO stores the actual vertex data (positions, colors, texture coords)
+    glGenBuffers(1, &ebo_);      // EBO stores the indices used for element drawing (index array)
 
     // Bind the Vertex Array Object first,
-    glBindVertexArray(VAO);
+    glBindVertexArray(vao_);
 
     // Bind and set Vertex Buffer Object (GL_ARRAY_BUFFER)
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);    // Allocate memory and insert data(or NULL)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(colors_), colors_, GL_DYNAMIC_DRAW);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(1);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO[2]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_[2]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(textureCoords), textureCoords, GL_STATIC_DRAW);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
     glEnableVertexAttribArray(2);
 
     // Bind the Element Buffer Object
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glBindVertexArray(0);

@@ -26,7 +26,7 @@ namespace Manager
 Editor::Editor()
 {
 #ifdef _DEBUG
-    exit = false;
+    mode_ = true;
 #endif
 }
 
@@ -46,7 +46,7 @@ void Editor::Init(GLFWwindow* window)
 
 void Editor::ShowEditor()
 {
-    if (exit)
+    if (!mode_)
         return;
 
     ImGui_ImplOpenGL3_NewFrame();
@@ -55,10 +55,10 @@ void Editor::ShowEditor()
 
     Topbar();
 
-    if (showObjectList)
+    if (showObjectList_)
         ObjectList();
 
-    if (showObjectDetails)
+    if (showObjectDetails_)
         ObjectDetails();
 
     ImGui::Render();
@@ -85,7 +85,7 @@ void Editor::Topbar()
     {
         if (ImGui::MenuItem("New State"))
         {
-            selectedGameObject = nullptr;
+            selectedGameObject_ = nullptr;
             EmptyState* newState = new EmptyState();
             Manager::gsMgr.ChangeState(newState);
         }
@@ -98,7 +98,7 @@ void Editor::Topbar()
                 {
                     if (ImGui::MenuItem(state.path().filename().string().c_str()))
                     {
-                        selectedGameObject = nullptr;
+                        selectedGameObject_ = nullptr;
                         EmptyState* newState = new EmptyState();
                         Manager::gsMgr.ChangeState(newState);
 
@@ -133,17 +133,17 @@ void Editor::Topbar()
         if (ImGui::MenuItem("Create Empty"))
             Manager::objMgr.CreateObject();
 
-        if (ImGui::MenuItem("Delete", NULL, false, selectedGameObject != nullptr))
+        if (ImGui::MenuItem("Delete", NULL, false, selectedGameObject_ != nullptr))
         {
-            Manager::objMgr.DeleteObject(selectedGameObject);
-            selectedGameObject = nullptr;
+            Manager::objMgr.DeleteObject(selectedGameObject_);
+            selectedGameObject_ = nullptr;
         }
 
-        if (ImGui::BeginMenu("Rename", selectedGameObject != nullptr))
+        if (ImGui::BeginMenu("Rename", selectedGameObject_ != nullptr))
         {
             if (ImGui::InputTextWithHint("##2 rename", "Enter new name", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
             {
-                Manager::objMgr.RenameObject(selectedGameObject, std::string(str));
+                Manager::objMgr.RenameObject(selectedGameObject_, std::string(str));
                 str[0] = '\0';
             }
 
@@ -157,16 +157,16 @@ void Editor::Topbar()
     {
         if (ImGui::BeginMenu("Add..."))
         {
-            if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject != nullptr && !selectedGameObject->HasComponent(typeid(Sprite))))
-                selectedGameObject->AddComponent(typeid(Sprite));
+            if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject_ != nullptr && !selectedGameObject_->HasComponent(typeid(Sprite))))
+                selectedGameObject_->AddComponent(typeid(Sprite));
 
             ImGui::EndMenu();
         }
        
-        if (ImGui::BeginMenu("Delete...", selectedGameObject != nullptr))
+        if (ImGui::BeginMenu("Delete...", selectedGameObject_ != nullptr))
         {
-            if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject->HasComponent(typeid(Sprite))))
-                selectedGameObject->DeleteComponent(typeid(Sprite));
+            if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject_->HasComponent(typeid(Sprite))))
+                selectedGameObject_->DeleteComponent(typeid(Sprite));
 
             ImGui::EndMenu();
         }
@@ -175,8 +175,8 @@ void Editor::Topbar()
 
     if (ImGui::BeginMenu("Window"))
     {
-        ImGui::MenuItem("GameObject List", NULL, &showObjectList);
-        ImGui::MenuItem("GameObject Details", NULL, &showObjectDetails);
+        ImGui::MenuItem("GameObject List", NULL, &showObjectList_);
+        ImGui::MenuItem("GameObject Details", NULL, &showObjectDetails_);
         ImGui::EndMenu();
     }
 
@@ -216,10 +216,10 @@ void Editor::ObjectList()
     ImVec2 pos, size;
 
     pos = size = viewportSize;
-    size.x *= 0.14;
-    size.y *= 0.2;
-    pos.x = size.x / 2;
-    pos.y = size.y / 2 + 20;
+    size.x *= 0.14f;
+    size.y *= 0.2f;
+    pos.x = size.x / 2.f;
+    pos.y = size.y / 2.f + 20;
 
     ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(size, ImGuiCond_Appearing);
@@ -229,12 +229,12 @@ void Editor::ObjectList()
     for (const auto& objIt : Manager::objMgr.GetAllObjects())
     {
         GameObject* obj = objIt.second.get();
-        if (ImGui::Selectable(objIt.second->GetName().c_str(), selectedGameObject == obj))
+        if (ImGui::Selectable(objIt.second->GetName().c_str(), selectedGameObject_ == obj))
         {
-            if (selectedGameObject == obj)
-                selectedGameObject = nullptr;
+            if (selectedGameObject_ == obj)
+                selectedGameObject_ = nullptr;
             else
-                selectedGameObject = obj;
+                selectedGameObject_ = obj;
         }
     }
 
@@ -247,21 +247,21 @@ void Editor::ObjectDetails()
     ImVec2 pos, size;
 
     pos = size = viewportSize;
-    size.x *= 0.14;
-    size.y *= 0.6;
+    size.x *= 0.14f;
+    size.y *= 0.6f;
     pos.x = size.x / 2;
-    pos.y = viewportSize.y * 0.2 + size.y / 2 + 20;
+    pos.y = viewportSize.y * 0.2f + size.y / 2.f + 20;
 
     ImGui::SetNextWindowPos(pos, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(size, ImGuiCond_Appearing);
 
     ImGui::Begin("GameObject Details");
 
-    if (selectedGameObject)
+    if (selectedGameObject_)
     {
         DetailTransform();
 
-        for (const auto& compIt : selectedGameObject->GetAllComponents())
+        for (const auto& compIt : selectedGameObject_->GetAllComponents())
         {
             if (compIt.first == typeid(Sprite))
                 DetailSprite();
@@ -273,7 +273,7 @@ void Editor::ObjectDetails()
 
 void Editor::DetailTransform()
 {
-    Transform* trans = static_cast<Transform*>(selectedGameObject->GetComponent(typeid(Transform)));
+    Transform* trans = static_cast<Transform*>(selectedGameObject_->GetComponent(typeid(Transform)));
 
     ImGui::SeparatorText("Transform");
     ImGui::Text("Position");
@@ -291,7 +291,7 @@ void Editor::DetailTransform()
 
 void Editor::DetailSprite()
 {
-    Sprite* sp = static_cast<Sprite*>(selectedGameObject->GetComponent(typeid(Sprite)));
+    Sprite* sp = static_cast<Sprite*>(selectedGameObject_->GetComponent(typeid(Sprite)));
 
     ImGui::SeparatorText("Sprite");
     ImGui::Text("Local Position");
