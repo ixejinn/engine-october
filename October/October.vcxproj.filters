@@ -197,6 +197,9 @@
     <ClInclude Include="Component\EditmodeUpdatable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Component\FixedUpdatable\Rigidbody.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\imgui\imgui.natstepfilter" />
