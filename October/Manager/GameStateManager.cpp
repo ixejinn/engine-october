@@ -3,10 +3,12 @@
 #include <iostream>
 #include "../State/State.h"
 #include "../Manager/ComponentManager.h"
+#include "../Manager/GameObjectManager.h"
 
 namespace Manager
 {
 	extern ComponentManager& compMgr;
+	extern GameObjectManager& objMgr;
 }
 
 void GameStateManager::Init()
@@ -48,7 +50,8 @@ void GameStateManager::ChangeState(State* newState)
 
 void GameStateManager::ClearManagers()
 {
-	// Clear manager
+	Manager::objMgr.Clear();
+	Manager::compMgr.Clear();
 }
 
 bool GameStateManager::ShouldExit()

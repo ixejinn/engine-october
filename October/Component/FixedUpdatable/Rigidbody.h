@@ -4,6 +4,8 @@
 #include "../Component.h"
 #include "FixedUpdatable.h"
 
+class Transform;
+
 class Rigidbody : public Component, public FixedUpdatable
 {
 private:
@@ -14,6 +16,8 @@ private:
 
 	glm::vec2 velocity_ = { 0.f, 0.f };
 	glm::vec2 preVelocity_ = { 0.f, 0.f };
+
+	Transform* trans_ = nullptr;
 
 	Rigidbody(GameObject* owner);
 

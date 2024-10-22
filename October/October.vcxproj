@@ -152,6 +152,7 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
+    <ClCompile Include="Manager\WindowManager.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
     <ClCompile Include="Resource\Texture.cpp" />
     <ClCompile Include="State\EmptyState.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="GameObject\GameObject.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
+    <ClInclude Include="Manager\WindowManager.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />
     <ClInclude Include="Resource\Texture.h" />

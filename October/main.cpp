@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Manager/GameStateManager.h"
+#include "Manager/WindowManager.h"
 #include "Editor/Editor.h"
 #include "Utils/Setting.h"
 
@@ -46,6 +47,7 @@ int main()
 		return -1;
 	}
 
+	WindowManager::SetWindow(window);
 	Manager::editor.Init(window);
 
 	// Set state

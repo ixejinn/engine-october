@@ -1,41 +1,48 @@
 #include "PlayerController.h"
 
 #include <glm/glm.hpp>
-#include "../../GameObject/GameObject.h"
 #include "../FixedUpdatable/Rigidbody.h"
+#include "../../GameObject/GameObject.h"
+#include "../../Manager/WindowManager.h"
 #include "../../Utils/Setting.h"
 #include "../../Utils/Utils.h"
 #include "../../Utils/imgui/imgui.h"
 
-PlayerController::PlayerController(GameObject* owner) : Component(owner) {}
+PlayerController::PlayerController(GameObject* owner) : Component(owner)
+{
+	rb_ = static_cast<Rigidbody*>(owner_->GetComponent(typeid(Rigidbody)));
+}
 
 void PlayerController::Update()
 {
-	static Rigidbody* rb = static_cast<Rigidbody*>(owner_->GetComponent(typeid(Rigidbody)));
+	if (rb_ == nullptr)
+		rb_ = static_cast<Rigidbody*>(owner_->GetComponent(typeid(Rigidbody)));
+
+	GLFWwindow* window = WindowManager::GetWindow();
 
 	glm::vec2 moveVec{ 0.f, 0.f };
 
-	//if (horizontal_)
-	//{
-	//	if (glfwGetKey(window, moveKeys_[LEFT]) == GLFW_PRESS)
-	//		moveVec.x--;
+	if (horizontal_)
+	{
+		if (glfwGetKey(window, moveKeys_[LEFT]) == GLFW_PRESS)
+			moveVec.x--;
 
-	//	if (glfwGetKey(window, moveKeys_[RIGHT]) == GLFW_PRESS)
-	//		moveVec.x++;
-	//}
+		if (glfwGetKey(window, moveKeys_[RIGHT]) == GLFW_PRESS)
+			moveVec.x++;
+	}
 
-	//if (vertical_)
-	//{
-	//	if (glfwGetKey(window, moveKeys_[UP]) == GLFW_PRESS)
-	//		moveVec.y--;
+	if (vertical_)
+	{
+		if (glfwGetKey(window, moveKeys_[UP]) == GLFW_PRESS)
+			moveVec.y++;
 
-	//	if (glfwGetKey(window, moveKeys_[DOWN]) == GLFW_PRESS)
-	//		moveVec.y++;
-	//}
+		if (glfwGetKey(window, moveKeys_[DOWN]) == GLFW_PRESS)
+			moveVec.y--;
+	}
 
 	if (glm::length(moveVec) > 1.f)
 		moveVec = glm::normalize(moveVec);
-	rb->AddForce(moveVec * speed_);
+	rb_->AddForce(moveVec * speed_);
 }
 
 void PlayerController::LoadFromJson(const json& data)

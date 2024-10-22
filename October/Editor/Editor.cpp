@@ -15,6 +15,7 @@
 
 #include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/FixedUpdatable/Rigidbody.h"
+#include "../Component/Updatable/PlayerController.h"
 #include "../Component/LateUpdatable/Sprite.h"
 
 namespace Manager
@@ -39,6 +40,12 @@ void Editor::ToggleMode()
     {
         Manager::gsMgr.ClearManagers();
         Manager::gsMgr.Init();
+        Manager::serMgr.LoadState("Assets/States/temp.State");
+    }
+    else
+    {
+        selectedGameObject_ = nullptr;
+        Manager::serMgr.SaveState("Assets/States/temp.State");
     }
 }
 
@@ -171,11 +178,25 @@ void Editor::Topbar()
     {
         if (ImGui::BeginMenu("Add..."))
         {
-            if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject_ != nullptr && !selectedGameObject_->HasComponent(typeid(Sprite))))
+            bool selected = (selectedGameObject_ != nullptr);
+            bool hasSp, hasRb, hasPc;
+            hasSp = hasRb = hasPc = false;
+            
+            if (selected)
+            {
+                hasSp = selectedGameObject_->HasComponent(typeid(Sprite));
+                hasRb = selectedGameObject_->HasComponent(typeid(Rigidbody));
+                hasPc = selectedGameObject_->HasComponent(typeid(PlayerController));
+            }
+
+            if (ImGui::MenuItem("Sprite", NULL, false, selected && !hasSp))
                 selectedGameObject_->AddComponent(typeid(Sprite));
 
-            if (ImGui::MenuItem("Rigidbody", NULL, false, selectedGameObject_ != nullptr && !selectedGameObject_->HasComponent(typeid(Rigidbody))))
+            if (ImGui::MenuItem("Rigidbody", NULL, false, selected && !hasRb))
                 selectedGameObject_->AddComponent(typeid(Rigidbody));
+
+            if (ImGui::MenuItem("PlayerController", NULL, false, selected && !hasPc && hasRb))
+                selectedGameObject_->AddComponent(typeid(PlayerController));
 
             ImGui::EndMenu();
         }
@@ -187,6 +208,9 @@ void Editor::Topbar()
 
             if (ImGui::MenuItem("Rigidbody", NULL, false, selectedGameObject_->HasComponent(typeid(Rigidbody))))
                 selectedGameObject_->DeleteComponent(typeid(Rigidbody));
+
+            if (ImGui::MenuItem("PlayerController", NULL, false, selectedGameObject_->HasComponent(typeid(PlayerController))))
+                selectedGameObject_->DeleteComponent(typeid(PlayerController));
 
             ImGui::EndMenu();
         }
@@ -312,34 +336,3 @@ void Editor::EditmodeButton()
 
     ImGui::End();
 }
-//
-//void Editor::DetailSprite()
-//{
-//    Sprite* sp = static_cast<Sprite*>(selectedGameObject_->GetComponent(typeid(Sprite)));
-//
-//    ImGui::SeparatorText("Sprite");
-//    ImGui::Text("Local Position");
-//    ImGui::InputFloat2("##local position", sp->GetLocalPosition());
-//
-//    ImGui::Text("Vertex Colors");
-//    ImGui::ColorEdit3("Up Right", sp->GetColor(0));
-//    ImGui::ColorEdit3("Down Right", sp->GetColor(1));
-//    ImGui::ColorEdit3("Down Left", sp->GetColor(2));
-//    ImGui::ColorEdit3("Up Left", sp->GetColor(3));
-//    ImGui::SliderFloat("Alpha", sp->GetAlpha(), 0, 1);
-//    
-//    ImGui::Text("Texture");
-//    std::string test = sp->GetTextureName();
-//    if (ImGui::BeginCombo("##texture", sp->GetTextureName().c_str()))
-//    {
-//        std::string path = "Assets/Images/";
-//
-//        for (const auto& txr : std::filesystem::directory_iterator(path))
-//        {
-//            if (ImGui::MenuItem(txr.path().filename().string().c_str()))
-//                sp->SetTexture(path + txr.path().filename().string());
-//        }
-//
-//        ImGui::EndCombo();
-//    }
-//}

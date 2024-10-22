@@ -85,14 +85,17 @@ void ComponentManager::UpdateComponent()
 	}
 
 	/* Update */
-	for (auto it = updComponents_.begin(); it != updComponents_.end(); ++it)
+	if (!Manager::editor.GetMode())
 	{
-		(*it)->Update();
+		for (auto it = updComponents_.begin(); it != updComponents_.end(); ++it)
+		{
+			(*it)->Update();
 
-		if (skipUpdate_)
-			break;
+			if (skipUpdate_)
+				break;
+		}
+		skipUpdate_ = false;
 	}
-	skipUpdate_ = false;
 
 	/* LATE Update */
 	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)

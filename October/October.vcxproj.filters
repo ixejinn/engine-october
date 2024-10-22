@@ -105,6 +105,9 @@
     <ClCompile Include="Component\Updatable\Updatable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Manager\WindowManager.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Manager\GameStateManager.h">
@@ -213,6 +216,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Component\Updatable\Updatable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\WindowManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

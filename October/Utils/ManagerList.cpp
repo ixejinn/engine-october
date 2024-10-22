@@ -10,8 +10,8 @@ namespace Manager
 {
 	ResourceManager& rscMgr = ResourceManager::GetInstance();
 
-	GameObjectManager& objMgr = GameObjectManager::GetInstance();
 	ComponentManager& compMgr = ComponentManager::GetInstance();
+	GameObjectManager& objMgr = GameObjectManager::GetInstance();
 
 	GameStateManager& gsMgr = GameStateManager::GetInstance();
 	//EventManager& evntMgr = EventManager::GetInstance();

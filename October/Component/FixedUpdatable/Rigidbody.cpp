@@ -4,7 +4,10 @@
 #include "../../GameObject/GameObject.h"
 #include "../../Utils/imgui/imgui.h"
 
-Rigidbody::Rigidbody(GameObject* owner) : Component(owner) {}
+Rigidbody::Rigidbody(GameObject* owner) : Component(owner)
+{
+	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
+}
 
 void Rigidbody::FixedUpdate()
 {
@@ -16,15 +19,16 @@ void Rigidbody::FixedUpdate()
 	velocity_.y += force_.y / mass_ * dt;
 	force_ = { 0.f, 0.f };
 
-	static Transform* const trans = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
-	const glm::vec2 prePos = trans->GetPosition();
+	if (trans_ == nullptr)
+		trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
+	const glm::vec2 prePos = trans_->GetPosition();
 
 	glm::vec2 pos = prePos + velocity_ * dt;
 	if (CheckEpsilon(pos.x))
 		pos.x = 0;
 	if (CheckEpsilon(pos.y))
 		pos.y = 0;
-	trans->SetPosition(pos);
+	trans_->SetPosition(pos);
 }
 
 bool Rigidbody::CheckEpsilon(float val, float epsilon)
@@ -77,7 +81,8 @@ void Rigidbody::ShowDetails()
 
 void Rigidbody::AddForce(const glm::vec2& f)
 {
-	force_ += f;
+	force_.x += f.x;
+	force_.y += f.y;
 }
 
 void Rigidbody::AddForce(const float& fx, const float& fy)
