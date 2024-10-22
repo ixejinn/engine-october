@@ -5,6 +5,7 @@
 #include <type_traits>	// std::is_same
 
 #include "../Component/FixedUpdatable/FixedUpdatable.h"
+#include "../Component/Updatable/Updatable.h"
 #include "../Component/LateUpdatable/LateUpdatable.h"
 
 #include "../GameObject/GameObject.h"
@@ -15,6 +16,7 @@ class ComponentManager
 {
 private:
 	std::list<FixedUpdatable*> fixedComponents_;
+	std::list<Updatable*> updComponents_;
 	std::list<LateUpdatable*> lateComponents_;
 
 	std::map<std::string, std::type_index> nameToType_;
@@ -65,6 +67,17 @@ inline void ComponentManager::DeleteComponent(T* comp)
 			}
 		}
 	}
+	else if constexpr (std::is_same<T, Updatable>::value)
+	{
+		for (auto it = updComponents_.begin(); it != updComponents_.end(); ++it)
+		{
+			if (*it == comp)
+			{
+				updComponents_.erase(it);
+				return;
+			}
+		}
+	}
 	else if constexpr (std::is_same<T, LateUpdatable>::value)
 	{
 		for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
@@ -76,5 +89,4 @@ inline void ComponentManager::DeleteComponent(T* comp)
 			}
 		}
 	}
-	// Updatable, LateUpdatable Ãß°¡
 }

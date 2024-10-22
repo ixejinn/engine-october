@@ -9,6 +9,7 @@
 #include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/FixedUpdatable/Rigidbody.h"
 #include "../Component/LateUpdatable/Sprite.h"
+#include "../Component/Updatable/PlayerController.h"
 
 namespace Manager
 {
@@ -20,10 +21,12 @@ ComponentManager::ComponentManager()
 	nameToType_.insert({ typeid(Transform).name(), typeid(Transform)});
 	nameToType_.insert({ typeid(Rigidbody).name(), typeid(Rigidbody)});
 	nameToType_.insert({ typeid(Sprite).name(), typeid(Sprite) });
+	nameToType_.insert({ typeid(PlayerController).name(), typeid(PlayerController) });
 
 	componentMap_.insert({ typeid(Transform), Transform::CreateComponent });
 	componentMap_.insert({ typeid(Rigidbody), Rigidbody::CreateComponent });
 	componentMap_.insert({ typeid(Sprite), Sprite::CreateComponent });
+	componentMap_.insert({ typeid(PlayerController), PlayerController::CreateComponent });
 }
 
 ComponentManager::~ComponentManager() {}
@@ -39,11 +42,13 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 	Component* newComp = componentMap_[compType](owner);
 
 	FixedUpdatable* fixedComp = nullptr;
+	Updatable* updComp = nullptr;
 	LateUpdatable* lateComp = nullptr;
 
 	if (fixedComp = dynamic_cast<FixedUpdatable*>(newComp))
 		fixedComponents_.push_back(fixedComp);
-	// Updatable 추가
+	else if (updComp = dynamic_cast<Updatable*>(newComp))
+		updComponents_.push_back(updComp);
 	else if (lateComp = dynamic_cast<LateUpdatable*>(newComp))
 		lateComponents_.push_back(lateComp);
 
@@ -80,7 +85,13 @@ void ComponentManager::UpdateComponent()
 	}
 
 	/* Update */
-	// for 문 안에 skipUpdate 확인하고 for 문 끝에 true면 break
+	for (auto it = updComponents_.begin(); it != updComponents_.end(); ++it)
+	{
+		(*it)->Update();
+
+		if (skipUpdate_)
+			break;
+	}
 	skipUpdate_ = false;
 
 	/* LATE Update */
@@ -96,6 +107,6 @@ void ComponentManager::UpdateComponent()
 void ComponentManager::Clear()
 {
 	fixedComponents_.clear();
-	// Updatable 추가
+	updComponents_.clear();
 	lateComponents_.clear();
 }
