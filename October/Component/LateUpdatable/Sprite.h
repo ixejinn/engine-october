@@ -51,11 +51,9 @@ public:
 	void LoadFromJson(const json& data) override;
 	json SaveToJson() override;
 
-	const std::string& GetTextureName();
+	void ShowDetails() override;
 
-	float* GetLocalPosition() { return &localPosition_[0]; }
-	float* GetColor(const unsigned int& idx) { return &colors_[idx][0]; }
-	float* GetAlpha() { return &alpha_; }
+	const std::string& GetTextureName();
 
 	// @param idx is vertex of rectangle
 	// (0 up right, 1 down right, 2 down left, 3 up left)

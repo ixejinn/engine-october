@@ -14,6 +14,7 @@
 #include "../../GameObject/GameObject.h"
 #include "../../Manager/ResourceManager.h"
 #include "../../Utils/stb/stb_image.h"
+#include "../../Utils/imgui/imgui.h"
 #include "../../Resource/Shader.h"
 #include "../../Resource/Texture.h"
 
@@ -95,6 +96,34 @@ json Sprite::SaveToJson()
 
     data["compData"] = compData;
     return data;
+}
+
+void Sprite::ShowDetails()
+{
+    ImGui::SeparatorText("Sprite");
+    ImGui::Text("Local Position");
+    ImGui::InputFloat2("##local position", &localPosition_[0]);
+
+    ImGui::Text("Vertex Colors");
+    ImGui::ColorEdit3("Up Right", &colors_[0][0]);
+    ImGui::ColorEdit3("Down Right", &colors_[1][0]);
+    ImGui::ColorEdit3("Down Left", &colors_[2][0]);
+    ImGui::ColorEdit3("Up Left", &colors_[3][0]);
+    ImGui::SliderFloat("Alpha", &alpha_, 0, 1);
+
+    ImGui::Text("Texture");
+    if (ImGui::BeginCombo("##texture", texture_->GetName().c_str()))
+    {
+        std::string path = "Assets/Images/";
+
+        for (const auto& txr : std::filesystem::directory_iterator(path))
+        {
+            if (ImGui::MenuItem(txr.path().filename().string().c_str()))
+                SetTexture(path + txr.path().filename().string());
+        }
+
+        ImGui::EndCombo();
+    }
 }
 
 const std::string& Sprite::GetTextureName()

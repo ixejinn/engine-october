@@ -42,7 +42,4 @@ public:
 	void ObjectList();
 	void ObjectDetails();
 	void EditmodeButton();
-
-	void DetailTransform();
-	void DetailSprite();
 };

@@ -96,6 +96,9 @@
     <ClCompile Include="Resource\Texture.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Component\FixedUpdatable\Rigidbody.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Manager\GameStateManager.h">

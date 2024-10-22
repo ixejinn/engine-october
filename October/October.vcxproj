@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component\FixedUpdatable\FixedUpdatable.cpp" />
+    <ClCompile Include="Component\FixedUpdatable\Rigidbody.cpp" />
     <ClCompile Include="Component\FixedUpdatable\Transform.cpp" />
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />

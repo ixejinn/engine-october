@@ -24,16 +24,13 @@ public:
 	void LoadFromJson(const json& data) override;
 	json SaveToJson() override;
 
+	void ShowDetails() override;
+
 	const glm::vec2& GetPosition() const { return position_; }
 	const float& GetRotation() const { return rotation_; }
 	const glm::vec2& GetScale() const { return scale_; }
 	const glm::vec2& GetLocalScale() const { return localScale_; }
 	const glm::mat4& GetMatrix() const { return transformMatrix_; }
-
-	float* GetRotation() { return &rotation_; }
-	float* GetPosition() { return &position_[0]; }
-	float* GetScale() { return &scale_[0]; }
-	float* GetLocalScale() { return &localScale_[0]; }
 
 	void SetPosition(const glm::vec2& pos);
 	void SetPosition(const float& x, const float& y);

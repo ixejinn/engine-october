@@ -3,6 +3,7 @@
 #include <iostream>
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "../../Utils/imgui/imgui.h"
 
 Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_()
 {
@@ -57,6 +58,27 @@ json Transform::SaveToJson()
 
     data["compData"] = compData;
     return data;
+}
+
+void Transform::ShowDetails()
+{
+    ImGui::SeparatorText("Transform");
+
+    ImGui::Text("Position");
+    //ImGui::InputFloat2("##position", &position_[0]);
+    ImGui::DragFloat("position x", &position_[0], 0.01f);
+    ImGui::DragFloat("position y", &position_[1], 0.01f);
+
+    ImGui::Text("Rotation");
+    ImGui::SliderFloat("##rotation", &rotation_, -360, 360);
+
+    ImGui::Text("Scale");
+    ImGui::DragFloat("scale x", &scale_[0], 0.01f);
+    ImGui::DragFloat("scale y", &scale_[1], 0.01f);
+
+    //ImGui::Text("Local Scale");
+    //ImGui::DragFloat("local scale x", &localScale_[0], 0.01f);
+    //ImGui::DragFloat("local scale y", &localScale_[1], 0.01f);
 }
 
 void Transform::SetPosition(const glm::vec2& pos)

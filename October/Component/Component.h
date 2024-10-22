@@ -14,4 +14,6 @@ public:
 	virtual ~Component() = default;
 
 	GameObject* GetOwner() { return owner_; }
+
+	virtual void ShowDetails() = 0;
 };

@@ -14,6 +14,7 @@
 #include "../State/EmptyState.h"
 
 #include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/FixedUpdatable/Rigidbody.h"
 #include "../Component/LateUpdatable/Sprite.h"
 
 namespace Manager
@@ -173,6 +174,9 @@ void Editor::Topbar()
             if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject_ != nullptr && !selectedGameObject_->HasComponent(typeid(Sprite))))
                 selectedGameObject_->AddComponent(typeid(Sprite));
 
+            if (ImGui::MenuItem("Rigidbody", NULL, false, selectedGameObject_ != nullptr && !selectedGameObject_->HasComponent(typeid(Rigidbody))))
+                selectedGameObject_->AddComponent(typeid(Rigidbody));
+
             ImGui::EndMenu();
         }
        
@@ -180,6 +184,9 @@ void Editor::Topbar()
         {
             if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject_->HasComponent(typeid(Sprite))))
                 selectedGameObject_->DeleteComponent(typeid(Sprite));
+
+            if (ImGui::MenuItem("Rigidbody", NULL, false, selectedGameObject_->HasComponent(typeid(Rigidbody))))
+                selectedGameObject_->DeleteComponent(typeid(Rigidbody));
 
             ImGui::EndMenu();
         }
@@ -229,7 +236,7 @@ void Editor::ObjectList()
     ImVec2 pos, size;
 
     size = viewportSize;
-    size.x *= 0.14f;
+    size.x *= 0.18f;
     size.y *= 0.2f;
     pos.x = size.x / 2.f;
     pos.y = size.y / 2.f + 20;
@@ -260,7 +267,7 @@ void Editor::ObjectDetails()
     ImVec2 pos, size;
 
     size = viewportSize;
-    size.x *= 0.14f;
+    size.x *= 0.18f;
     size.y *= 0.6f;
     pos.x = size.x / 2;
     pos.y = viewportSize.y * 0.2f + size.y / 2.f + 20;
@@ -272,12 +279,12 @@ void Editor::ObjectDetails()
 
     if (selectedGameObject_)
     {
-        DetailTransform();
+        selectedGameObject_->GetComponent(typeid(Transform))->ShowDetails();
 
         for (const auto& compIt : selectedGameObject_->GetAllComponents())
         {
-            if (compIt.first == typeid(Sprite))
-                DetailSprite();
+            if (compIt.first != typeid(Transform))
+                compIt.second->ShowDetails();
         }
     }
 
@@ -305,52 +312,34 @@ void Editor::EditmodeButton()
 
     ImGui::End();
 }
-
-void Editor::DetailTransform()
-{
-    Transform* trans = static_cast<Transform*>(selectedGameObject_->GetComponent(typeid(Transform)));
-
-    ImGui::SeparatorText("Transform");
-    ImGui::Text("Position");
-    ImGui::InputFloat2("##position", trans->GetPosition());
-
-    ImGui::Text("Rotation");
-    ImGui::SliderFloat("##rotation", trans->GetRotation(), -360, 360);
-
-    ImGui::Text("Scale");
-    ImGui::InputFloat2("##scale", trans->GetScale());
-
-    ImGui::Text("Local Scale");
-    ImGui::InputFloat2("##local scale", trans->GetLocalScale());
-}
-
-void Editor::DetailSprite()
-{
-    Sprite* sp = static_cast<Sprite*>(selectedGameObject_->GetComponent(typeid(Sprite)));
-
-    ImGui::SeparatorText("Sprite");
-    ImGui::Text("Local Position");
-    ImGui::InputFloat2("##local position", sp->GetLocalPosition());
-
-    ImGui::Text("Vertex Colors");
-    ImGui::ColorEdit3("Up Right", sp->GetColor(0));
-    ImGui::ColorEdit3("Down Right", sp->GetColor(1));
-    ImGui::ColorEdit3("Down Left", sp->GetColor(2));
-    ImGui::ColorEdit3("Up Left", sp->GetColor(3));
-    ImGui::SliderFloat("Alpha", sp->GetAlpha(), 0, 1);
-    
-    ImGui::Text("Texture");
-    std::string test = sp->GetTextureName();
-    if (ImGui::BeginCombo("##texture", sp->GetTextureName().c_str()))
-    {
-        std::string path = "Assets/Images/";
-
-        for (const auto& txr : std::filesystem::directory_iterator(path))
-        {
-            if (ImGui::MenuItem(txr.path().filename().string().c_str()))
-                sp->SetTexture(path + txr.path().filename().string());
-        }
-
-        ImGui::EndCombo();
-    }
-}
+//
+//void Editor::DetailSprite()
+//{
+//    Sprite* sp = static_cast<Sprite*>(selectedGameObject_->GetComponent(typeid(Sprite)));
+//
+//    ImGui::SeparatorText("Sprite");
+//    ImGui::Text("Local Position");
+//    ImGui::InputFloat2("##local position", sp->GetLocalPosition());
+//
+//    ImGui::Text("Vertex Colors");
+//    ImGui::ColorEdit3("Up Right", sp->GetColor(0));
+//    ImGui::ColorEdit3("Down Right", sp->GetColor(1));
+//    ImGui::ColorEdit3("Down Left", sp->GetColor(2));
+//    ImGui::ColorEdit3("Up Left", sp->GetColor(3));
+//    ImGui::SliderFloat("Alpha", sp->GetAlpha(), 0, 1);
+//    
+//    ImGui::Text("Texture");
+//    std::string test = sp->GetTextureName();
+//    if (ImGui::BeginCombo("##texture", sp->GetTextureName().c_str()))
+//    {
+//        std::string path = "Assets/Images/";
+//
+//        for (const auto& txr : std::filesystem::directory_iterator(path))
+//        {
+//            if (ImGui::MenuItem(txr.path().filename().string().c_str()))
+//                sp->SetTexture(path + txr.path().filename().string());
+//        }
+//
+//        ImGui::EndCombo();
+//    }
+//}

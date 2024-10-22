@@ -7,6 +7,7 @@
 #include "../Component/Component.h"
 
 #include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/FixedUpdatable/Rigidbody.h"
 #include "../Component/LateUpdatable/Sprite.h"
 
 namespace Manager
@@ -17,9 +18,11 @@ namespace Manager
 ComponentManager::ComponentManager()
 {
 	nameToType_.insert({ typeid(Transform).name(), typeid(Transform)});
+	nameToType_.insert({ typeid(Rigidbody).name(), typeid(Rigidbody)});
 	nameToType_.insert({ typeid(Sprite).name(), typeid(Sprite) });
 
 	componentMap_.insert({ typeid(Transform), Transform::CreateComponent });
+	componentMap_.insert({ typeid(Rigidbody), Rigidbody::CreateComponent });
 	componentMap_.insert({ typeid(Sprite), Sprite::CreateComponent });
 }
 
