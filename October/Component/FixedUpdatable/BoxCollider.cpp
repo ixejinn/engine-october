@@ -1,36 +1,55 @@
 #include "BoxCollider.h"
 
 #include "Transform.h"
+#include "../../Utils/imgui/imgui.h"
 
-BoxCollider::BoxCollider(GameObject* owner) : Collider(owner) {}
+BoxCollider::BoxCollider(GameObject* owner) : Collider(owner)
+{
+    scale_ = trans_->GetScale();
+}
 
 void BoxCollider::FixedUpdate()
 {
-	glm::vec2 halfSize = trans_->GetLocalScale() * scale_ * 0.5f;
-	vertices_[0] = { center_.x + halfSize.x, center_.y + halfSize.y };
-	vertices_[1] = { center_.x - halfSize.x, center_.y + halfSize.y };
-	vertices_[2] = { center_.x - halfSize.x, center_.y - halfSize.y };
-	vertices_[3] = { center_.x + halfSize.x, center_.y - halfSize.y };
-
-	glm::mat4 transformMatrix = trans_->GetMatrix();
-	//for (int i = 0; i < 4; i++)
-	//	vertices_[i] = 
+	UpdateVertices(trans_->GetLocalScale() * scale_ * 0.5f);
 }
 
 void BoxCollider::LoadFromJson(const json& data)
 {
+    auto compData = data.find("compData");
+    if (compData != data.end())
+    {
+        auto it = compData->find("center");
+        center_.x = it->begin().value();
+        center_.y = (it->begin() + 1).value();
+
+        it = compData->find("scale");
+        scale_.x = it->begin().value();
+        scale_.y = (it->begin() + 1).value();
+    }
 }
 
 json BoxCollider::SaveToJson()
 {
-	return json();
+    json data, compData;
+    data["type"] = typeid(Transform).name();
+
+    compData["center"] = { center_.x, center_.y };
+    compData["scale"] = { scale_.x, scale_.y };
+
+    data["compData"] = compData;
+    return data;
 }
 
 void BoxCollider::ShowDetails()
 {
+    ImGui::SeparatorText("BoxCollider");
+
+    ImGui::Text("Center");
+
 }
 
 Component* BoxCollider::CreateComponent(GameObject* owner)
 {
-	return nullptr;
+	BoxCollider* newComp = new BoxCollider(owner);
+	return static_cast<BoxCollider*>(newComp);
 }

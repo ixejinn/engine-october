@@ -20,5 +20,7 @@ protected:
 	Collider(GameObject* owner);
 	virtual ~Collider() = default;
 
+	void UpdateVertices(const glm::vec2& halfSize);
+
 public:
 };
