@@ -8,10 +8,10 @@
 class Transform : public Component, public FixedUpdatable
 {
 private:
-	glm::vec2 position_ = { 0.f, 0.f };
-	float rotation_ = 0.f;
-	glm::vec2 scale_ = { 1.f, 1.f };
-	glm::vec2 localScale_ = { 1.f, 1.f };
+	glm::vec2 position_{ 0.f, 0.f };
+	float rotation_{ 0.f };
+	glm::vec2 scale_{ 1.f, 1.f };
+	glm::vec2 localScale_{ 1.f, 1.f };
 
 	glm::mat4 transformMatrix_;
 

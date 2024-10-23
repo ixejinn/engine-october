@@ -221,6 +221,9 @@
     <ClInclude Include="Manager\WindowManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Component\FixedUpdatable\Collider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\imgui\imgui.natstepfilter" />

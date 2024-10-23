@@ -18,14 +18,14 @@ private:
 		PNG,
 		JPEG
 	};
-	std::map<std::string, Extension> stringToExtension_ =
+	std::map<std::string, Extension> stringToExtension_
 	{
 		{ "fs", SHADER },
 		{ "png", PNG },
 		{ "jpeg", JPEG }
 	};
 
-	std::map<Extension, std::map<std::string, std::unique_ptr<Resource>>> resources_;
+	std::map<Extension, std::map<std::string, std::unique_ptr<Resource>>> resources_{};
 
 	ResourceManager() = default;
 	~ResourceManager();

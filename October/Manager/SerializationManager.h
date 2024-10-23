@@ -6,7 +6,7 @@
 class SerializationManager
 {
 private:
-	std::map<std::string, std::type_index> nameToType_;
+	std::map<std::string, std::type_index> nameToType_{};
 
 	SerializationManager() = default;
 	~SerializationManager() = default;

@@ -5,8 +5,8 @@ class State;
 class GameStateManager
 {
 private:
-	State* preState_ = nullptr;
-	State* curState_ = nullptr;
+	State* preState_{ nullptr };
+	State* curState_{ nullptr };
 
 	GameStateManager() = default;
 	~GameStateManager() = default;

@@ -175,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\EditmodeUpdatable.h" />
+    <ClInclude Include="Component\FixedUpdatable\Collider.h" />
     <ClInclude Include="Component\FixedUpdatable\FixedUpdatable.h" />
     <ClInclude Include="Component\FixedUpdatable\Rigidbody.h" />
     <ClInclude Include="Component\FixedUpdatable\Transform.h" />

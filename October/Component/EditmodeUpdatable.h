@@ -3,5 +3,5 @@
 class EditmodeUpdatable
 {
 protected:
-	bool updateInEditmode_ = false;
+	bool updateInEditmode_{ false };
 };

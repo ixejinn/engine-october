@@ -5,9 +5,9 @@
 class Texture : public Resource
 {
 private:
-	std::string textureName_;
+	std::string textureName_{};
 
-	Texture();
+	Texture() = default;
 
 	static void CreateBasicTexture(Texture* basicTexture);
 

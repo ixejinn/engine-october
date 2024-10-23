@@ -22,22 +22,23 @@ public:
 	};
 
 private:
-	AnchorPoint anchor_ = CENTER;
-	glm::vec2 localPosition_ = { 0.f, 0.f };
+	AnchorPoint anchor_{ CENTER };
+	glm::vec2 localPosition_{ 0.f, 0.f };
 
-	glm::vec3 colors_[4] = {
+	glm::vec3 colors_[4]
+	{
 		{ 1.f, 1.f, 1.f },
 		{ 1.f, 1.f, 1.f },
 		{ 1.f, 1.f, 1.f },
 		{ 1.f, 1.f, 1.f }
 	};
-	GLfloat alpha_ = 1.0f;
+	GLfloat alpha_{ 1.0f };
 
 	GLuint vbo_[3], vao_, ebo_;
-	Shader* shader_ = nullptr;
-	Texture* texture_ = nullptr;
+	Shader* shader_{ nullptr };
+	Texture* texture_{ nullptr };
 
-	Transform* trans_ = nullptr;
+	Transform* trans_{ nullptr };
 
 	Sprite(GameObject* owner);
 

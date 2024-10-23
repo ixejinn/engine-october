@@ -9,10 +9,10 @@ class Component;
 class GameObject
 {
 private:
-	std::map<std::type_index, std::unique_ptr<Component>> components_;
-	std::string name_;
+	std::map<std::type_index, std::unique_ptr<Component>> components_{};
+	std::string name_{};
 
-	Component* mainComp_ = nullptr;
+	Component* mainComp_{ nullptr };
 
 	GameObject(const std::string& name);
 

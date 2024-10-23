@@ -6,7 +6,7 @@ class GameObject;
 class Component : public ComponentSerializer
 {
 protected:
-	GameObject* owner_ = nullptr;
+	GameObject* owner_{ nullptr };
 
 	Component(GameObject* owner) : owner_(owner) {}
 

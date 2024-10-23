@@ -8,12 +8,12 @@ class GameObject;
 class Editor
 {
 private:
-	bool mode_ = false;
+	bool mode_{ false };
 
-	bool showObjectList_ = true;
-	bool showObjectDetails_ = true;
+	bool showObjectList_{ true };
+	bool showObjectDetails_{ true };
 
-	GameObject* selectedGameObject_ = nullptr;
+	GameObject* selectedGameObject_{ nullptr };
 
 	Editor();
 	~Editor() = default;

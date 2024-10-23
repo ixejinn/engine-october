@@ -15,14 +15,14 @@ class Component;
 class ComponentManager
 {
 private:
-	std::list<FixedUpdatable*> fixedComponents_;
-	std::list<Updatable*> updComponents_;
-	std::list<LateUpdatable*> lateComponents_;
+	std::list<FixedUpdatable*> fixedComponents_{};
+	std::list<Updatable*> updComponents_{};
+	std::list<LateUpdatable*> lateComponents_{};
 
-	std::map<std::string, std::type_index> nameToType_;
-	std::map<std::type_index, Component* (*)(GameObject* owner)> componentMap_;
+	std::map<std::string, std::type_index> nameToType_{};
+	std::map<std::type_index, Component* (*)(GameObject* owner)> componentMap_{};
 
-	bool skipUpdate_ = false;
+	bool skipUpdate_{ false };
 
 	ComponentManager();
 	~ComponentManager();

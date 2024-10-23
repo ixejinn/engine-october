@@ -2,8 +2,6 @@
 
 #include "../Utils/stb/stb_image.h"
 
-Texture::Texture() : textureName_() {}
-
 Texture::~Texture()
 {
 	Unload();

@@ -4,11 +4,11 @@
 class Resource
 {
 private:
-	int counter_ = 0;
-	bool persistent_ = false;
+	int counter_{ 0 };
+	bool persistent_{ false };
 
 protected:
-	void* data_ = nullptr;
+	void* data_{ nullptr };
 
 public:
 	virtual ~Resource() = default;

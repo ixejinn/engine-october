@@ -9,15 +9,15 @@ class Transform;
 class Rigidbody : public Component, public FixedUpdatable
 {
 private:
-	float mass_ = 1.f;
-	float drag_ = 0.f;
+	float mass_{ 1.f };
+	float drag_{ 0.f };
 
-	glm::vec2 force_ = { 0.f, 0.f };
+	glm::vec2 force_{ 0.f, 0.f };
 
-	glm::vec2 velocity_ = { 0.f, 0.f };
-	glm::vec2 preVelocity_ = { 0.f, 0.f };
+	glm::vec2 velocity_{ 0.f, 0.f };
+	glm::vec2 preVelocity_{ 0.f, 0.f };
 
-	Transform* trans_ = nullptr;
+	Transform* trans_{ nullptr };
 
 	Rigidbody(GameObject* owner);
 

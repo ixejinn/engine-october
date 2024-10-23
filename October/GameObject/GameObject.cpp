@@ -10,7 +10,7 @@ namespace Manager
     extern ComponentManager& compMgr;
 }
 
-GameObject::GameObject(const std::string& name) : components_(), name_(name)
+GameObject::GameObject(const std::string& name) : name_{name}
 {
     AddComponent(typeid(Transform));
 }

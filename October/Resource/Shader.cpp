@@ -8,8 +8,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Shader::Shader() : fsName_() {}
-
 Shader::~Shader()
 {
     Unload();

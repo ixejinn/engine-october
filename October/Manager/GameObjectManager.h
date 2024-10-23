@@ -8,9 +8,9 @@ class GameObject;
 class GameObjectManager
 {
 private:
-	std::map<std::string, std::unique_ptr<GameObject>> objects_;
+	std::map<std::string, std::unique_ptr<GameObject>> objects_{};
 
-	int noNameObject_ = 0;
+	int noNameObject_{ 0 };
 
 	GameObjectManager() = default;
 	~GameObjectManager() = default;
