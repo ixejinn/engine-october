@@ -19,7 +19,7 @@ void Rigidbody::FixedUpdate()
 	velocity_.y += force_.y / mass_ * dt;
 	force_ = { 0.f, 0.f };
 
-	if (trans_ == nullptr)
+	if (trans_ == nullptr)	//// delete if load order is modified
 		trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 	const glm::vec2 prePos = trans_->GetPosition();
 

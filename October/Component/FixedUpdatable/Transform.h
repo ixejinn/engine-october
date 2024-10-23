@@ -13,7 +13,7 @@ private:
 	glm::vec2 scale_{ 1.f, 1.f };
 	glm::vec2 localScale_{ 1.f, 1.f };
 
-	glm::mat4 transformMatrix_;
+	glm::mat4 transformMatrix_{};
 
 	Transform(GameObject* owner);
 

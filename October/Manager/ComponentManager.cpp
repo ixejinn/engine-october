@@ -57,7 +57,7 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 
 Component* ComponentManager::CreateComponent(std::string compName, GameObject* owner)
 {
-	return owner->AddComponent(nameToType_.find(compName)->second);
+	return CreateComponent(nameToType_.find(compName)->second, owner);
 }
 
 void ComponentManager::UpdateComponent()

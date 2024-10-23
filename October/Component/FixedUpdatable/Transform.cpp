@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "../../Utils/imgui/imgui.h"
 
-Transform::Transform(GameObject* owner) : Component(owner), transformMatrix_()
+Transform::Transform(GameObject* owner) : Component(owner)
 {
     updateInEditmode_ = true;
 }

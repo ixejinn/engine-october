@@ -4,7 +4,7 @@
 class WindowManager
 {
 private:
-	static GLFWwindow* window_{};
+	static GLFWwindow* window_;
 
 public:
 	static GLFWwindow* GetWindow() { return window_; }
