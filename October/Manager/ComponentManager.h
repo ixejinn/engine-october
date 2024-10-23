@@ -32,6 +32,8 @@ private:
 	ComponentManager(ComponentManager&&) = delete;
 	ComponentManager& operator =(ComponentManager&&) = delete;
 
+	Component* CreateComponent(std::type_index compType, GameObject* owner);
+
 public:
 	static ComponentManager& GetInstance()
 	{
@@ -41,9 +43,6 @@ public:
 
 	void SetSkipUpdate() { skipUpdate_ = true; }
 
-	Component* CreateComponent(std::type_index compType, GameObject* owner);
-	Component* CreateComponent(std::string compName, GameObject* owner);
-
 	void UpdateComponent();
 
 	// @tparam T: Type of component (FixedUpdatable, Updatable, LateUpdatable)
@@ -51,6 +50,8 @@ public:
 	void DeleteComponent(T* comp);
 
 	void Clear();
+
+	friend class GameObject;
 };
 
 template<typename T>

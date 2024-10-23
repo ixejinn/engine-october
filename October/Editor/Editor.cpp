@@ -237,9 +237,9 @@ void Editor::Topbar()
 
     if (ImGui::BeginPopupModal("Save State", NULL, ImGuiWindowFlags_AlwaysAutoResize))
     {
-        if (ImGui::InputTextWithHint("##save state", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
+        if (ImGui::InputTextWithHint("##save state", "filename(.state)", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            curStateName = path + std::string(str) + ".State";
+            curStateName = path + std::string(str) + ".state";
             Manager::serMgr.SaveState(curStateName);
 
             saveNewState = false;

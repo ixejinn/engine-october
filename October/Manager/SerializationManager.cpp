@@ -40,13 +40,22 @@ void SerializationManager::LoadState(const std::string& filename)
 			if (compIt == objData.end())
 				continue;
 
+			bool transformComp = true;
 			for (auto& compData : *compIt)
 			{
 				auto compDataIt = compData.find("type");
 				if (compDataIt == compData.end())
 					continue;
 				
-				Component* comp = Manager::compMgr.CreateComponent(compDataIt.value(), obj);
+				Component* comp = nullptr;
+				if (transformComp)
+				{
+					comp = obj->GetComponent(typeid(Transform));
+					transformComp = false;
+				}
+				else
+					comp = obj->AddComponent(compDataIt.value());
+
 				if (comp != nullptr)
 					comp->LoadFromJson(compData);
 			}

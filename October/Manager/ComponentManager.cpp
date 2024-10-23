@@ -35,7 +35,13 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 {
 	if (componentMap_.find(compType) == componentMap_.end())
 	{
-		std::cerr << "Registry::CreateComponent() Invalid component type" << std::endl;
+		std::cerr << "ComponentManager::CreateComponent() Invalid component type" << std::endl;
+		return nullptr;
+	}
+
+	if (owner->GetComponent(compType))
+	{
+		std::cout << "ComponentManager::CreateComponent() " << compType.name() << " already exists" << std::endl;
 		return nullptr;
 	}
 
@@ -53,11 +59,6 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 		lateComponents_.push_back(lateComp);
 
 	return newComp;
-}
-
-Component* ComponentManager::CreateComponent(std::string compName, GameObject* owner)
-{
-	return CreateComponent(nameToType_.find(compName)->second, owner);
 }
 
 void ComponentManager::UpdateComponent()

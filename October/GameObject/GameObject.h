@@ -20,6 +20,7 @@ public:
 	~GameObject();
 
 	Component* AddComponent(std::type_index compType);
+	Component* AddComponent(std::string compName);
 	Component* GetComponent(std::type_index compType);
 
 	const std::map<std::type_index, std::unique_ptr<Component>>& GetAllComponents() const { return components_; }
