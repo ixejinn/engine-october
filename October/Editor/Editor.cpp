@@ -40,12 +40,12 @@ void Editor::ToggleMode()
     {
         Manager::gsMgr.ClearManagers();
         Manager::gsMgr.Init();
-        Manager::serMgr.LoadState("Assets/States/temp.State");
+        Manager::serMgr.LoadState("Assets/States/.temp.State");
     }
     else
     {
         selectedGameObject_ = nullptr;
-        Manager::serMgr.SaveState("Assets/States/temp.State");
+        Manager::serMgr.SaveState("Assets/States/.temp.State");
     }
 }
 
@@ -98,7 +98,7 @@ void Editor::Topbar()
     static const std::string path = "Assets/States/";
     static char str[128] = "";
     static bool saveNewState = false;
-    static std::string stateFileName = "";
+    static std::string curStateName = "";
 
     ImGui::BeginMainMenuBar();
 
@@ -113,18 +113,22 @@ void Editor::Topbar()
 
         if (ImGui::BeginMenu("Open State"))
         {
-            if (ImGui::BeginCombo("##open state", stateFileName.c_str()))
+            if (ImGui::BeginCombo("##open state", curStateName.c_str()))
             {
                 for (const auto& state : std::filesystem::directory_iterator(path))
                 {
-                    if (ImGui::MenuItem(state.path().filename().string().c_str()))
+                    std::string filename = state.path().filename().string();
+                    if (filename[0] == '.')
+                        continue;
+
+                    if (ImGui::MenuItem(filename.c_str()))
                     {
                         selectedGameObject_ = nullptr;
                         EmptyState* newState = new EmptyState();
                         Manager::gsMgr.ChangeState(newState);
 
-                        stateFileName = state.path().filename().string();
-                        Manager::serMgr.LoadState(path + stateFileName);
+                        curStateName = filename;
+                        Manager::serMgr.LoadState(path + curStateName);
                     }
                 }
 
@@ -138,8 +142,8 @@ void Editor::Topbar()
 
         if (ImGui::MenuItem("Save"/*, "Ctrl+S"*/))
         {
-            if (!stateFileName.empty())
-                Manager::serMgr.SaveState(path + stateFileName);
+            if (!curStateName.empty())
+                Manager::serMgr.SaveState(path + curStateName);
             else
                 saveNewState = true;
         }
@@ -235,8 +239,8 @@ void Editor::Topbar()
     {
         if (ImGui::InputTextWithHint("##save state", ".State", str, IM_ARRAYSIZE(str), ImGuiInputTextFlags_EnterReturnsTrue))
         {
-            stateFileName = path + std::string(str) + ".State";
-            Manager::serMgr.SaveState(stateFileName);
+            curStateName = path + std::string(str) + ".State";
+            Manager::serMgr.SaveState(curStateName);
 
             saveNewState = false;
             ImGui::CloseCurrentPopup();

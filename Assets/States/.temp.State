@@ -1,0 +1,51 @@
+[
+  {
+    "object": "Object0",
+    "components": [
+      {
+        "type": "class Transform",
+        "compData": {
+          "position": [
+            0.0,
+            -1.340000033378601
+          ],
+          "rotation": 0.0,
+          "scale": [
+            2.490000009536743,
+            1.0
+          ],
+          "localScale": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      {
+        "type": "class Sprite",
+        "compData": {
+          "anchor": 0,
+          "localPosition": [
+            0.0,
+            0.0
+          ],
+          "colors": [
+            1.0,
+            0.0,
+            0.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 1.0,
+          "textureName": ""
+        }
+      }
+    ]
+  }
+]
