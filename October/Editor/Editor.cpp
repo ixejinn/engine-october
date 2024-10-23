@@ -40,12 +40,12 @@ void Editor::ToggleMode()
     {
         Manager::gsMgr.ClearManagers();
         Manager::gsMgr.Init();
-        Manager::serMgr.LoadState("Assets/States/.temp.State");
+        Manager::serMgr.LoadState("Assets/States/.temp.state");
     }
     else
     {
         selectedGameObject_ = nullptr;
-        Manager::serMgr.SaveState("Assets/States/.temp.State");
+        Manager::serMgr.SaveState("Assets/States/.temp.state");
     }
 }
 
