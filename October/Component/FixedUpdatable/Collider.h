@@ -1,5 +1,7 @@
 #pragma once
 #include <glm/vec2.hpp>
+#include <map>
+#include <string>
 
 #include "../Component.h"
 #include "FixedUpdatable.h"
@@ -8,7 +10,22 @@ class Transform;
 
 class Collider : public Component, public FixedUpdatable
 {
+public:
+	enum ColliderType
+	{
+		AABB,
+		OBB,
+		CIRCLE
+	};
+
 protected:
+	ColliderType type_{ AABB };
+	std::map<ColliderType, std::string> typeToString_{
+		{ AABB, "AABB" },
+		{ OBB, "OBB" },
+		{ CIRCLE, "CIRCLE" }
+	};
+
 	glm::vec2 center_{ 0.f, 0.f };
 
 	bool scaleWithTransform{ true };

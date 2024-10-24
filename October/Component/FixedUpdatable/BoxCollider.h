@@ -16,5 +16,7 @@ public:
 
 	void ShowDetails() override;
 
+	void SetColliderType(ColliderType type);
+
 	static Component* CreateComponent(GameObject* owner);
 };

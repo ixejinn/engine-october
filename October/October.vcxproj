@@ -188,6 +188,7 @@
     <ClInclude Include="Component\Updatable\Updatable.h" />
     <ClInclude Include="Editor\Editor.h" />
     <ClInclude Include="GameObject\GameObject.h" />
+    <ClInclude Include="Manager\CollisionManager.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Manager\WindowManager.h" />

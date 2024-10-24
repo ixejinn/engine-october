@@ -233,6 +233,9 @@
     <ClInclude Include="Component\FixedUpdatable\BoxCollider.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Manager\CollisionManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Utils\imgui\imgui.natstepfilter" />

@@ -33,7 +33,7 @@ void BoxCollider::LoadFromJson(const json& data)
 json BoxCollider::SaveToJson()
 {
     json data, compData;
-    data["type"] = typeid(Transform).name();
+    data["type"] = typeid(BoxCollider).name();
 
     compData["center"] = { center_.x, center_.y };
     compData["scale"] = { scale_.x, scale_.y };
@@ -46,6 +46,18 @@ void BoxCollider::ShowDetails()
 {
     ImGui::SeparatorText("BoxCollider");
 
+    ImGui::Text("Collider type");
+    if (ImGui::BeginCombo("##boxCollider_type", typeToString_[type_].c_str()))
+    {
+        if (ImGui::MenuItem(typeToString_[AABB].c_str()))
+            type_ = AABB;
+
+        if (ImGui::MenuItem(typeToString_[OBB].c_str()))
+            type_ = OBB;
+
+        ImGui::EndCombo();
+    }
+
     ImGui::Text("Center");
     ImGui::InputFloat2("##boxCollider_center", &center_[0]);
 
@@ -56,6 +68,13 @@ void BoxCollider::ShowDetails()
         ImGui::DragFloat("x##boxCollider_scale", &scale_[0], 0.01f);
         ImGui::DragFloat("y##boxCollider_scale", &scale_[1], 0.01f);
     }
+}
+
+void BoxCollider::SetColliderType(ColliderType type)
+{
+    if (type != AABB && type != OBB)
+        type = AABB;
+    type_ = type;
 }
 
 Component* BoxCollider::CreateComponent(GameObject* owner)
