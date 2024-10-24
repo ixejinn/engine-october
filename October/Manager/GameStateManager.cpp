@@ -21,10 +21,16 @@ void GameStateManager::Update()
 {
 	if (curState_)
 	{
-		curState_->Update();
+		// Physics
+		Manager::compMgr.FixedUpdate();
 
-		// Update components
-		Manager::compMgr.UpdateComponent();
+		// Game logic
+		curState_->Update();
+		Manager::compMgr.Update();
+
+		// Rendering
+		Manager::compMgr.LateUpdate();
+		
 	}
 }
 

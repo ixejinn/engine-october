@@ -43,7 +43,9 @@ public:
 
 	void SetSkipUpdate() { skipUpdate_ = true; }
 
-	void UpdateComponent();
+	void FixedUpdate();
+	void Update();
+	void LateUpdate();
 
 	// @tparam T: Type of component (FixedUpdatable, Updatable, LateUpdatable)
 	template <typename T>
