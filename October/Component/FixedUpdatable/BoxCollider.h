@@ -19,4 +19,6 @@ public:
 	void SetColliderType(ColliderType type);
 
 	static Component* CreateComponent(GameObject* owner);
+
+	friend class CollisionManager;
 };

@@ -152,6 +152,7 @@
     <ClCompile Include="Editor\Editor.cpp" />
     <ClCompile Include="GameObject\GameObject.cpp" />
     <ClCompile Include="glad.c" />
+    <ClCompile Include="Manager\CollisionManager.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Manager\WindowManager.cpp" />

@@ -42,4 +42,6 @@ protected:
 
 public:
 	void SetScaleWithTransform(bool b) { scaleWithTransform = b; }
+
+	friend class CollisionManager;
 };
