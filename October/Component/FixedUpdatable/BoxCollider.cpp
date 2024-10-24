@@ -10,6 +10,8 @@ BoxCollider::BoxCollider(GameObject* owner) : Collider(owner)
 
 void BoxCollider::FixedUpdate()
 {
+    if (scaleWithTransform)
+        scale_ = trans_->GetScale();
 	UpdateVertices(trans_->GetLocalScale() * scale_ * 0.5f);
 }
 
@@ -45,7 +47,15 @@ void BoxCollider::ShowDetails()
     ImGui::SeparatorText("BoxCollider");
 
     ImGui::Text("Center");
+    ImGui::InputFloat2("##boxCollider_center", &center_[0]);
 
+    ImGui::Text("Scale");
+    ImGui::Checkbox("Scale with transform", &scaleWithTransform);
+    if (!scaleWithTransform)
+    {
+        ImGui::DragFloat("x##boxCollider_scale", &scale_[0], 0.01f);
+        ImGui::DragFloat("y##boxCollider_scale", &scale_[1], 0.01f);
+    }
 }
 
 Component* BoxCollider::CreateComponent(GameObject* owner)

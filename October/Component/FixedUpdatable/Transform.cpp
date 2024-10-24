@@ -66,15 +66,15 @@ void Transform::ShowDetails()
 
     ImGui::Text("Position");
     //ImGui::InputFloat2("##position", &position_[0]);
-    ImGui::DragFloat("position x", &position_[0], 0.01f);
-    ImGui::DragFloat("position y", &position_[1], 0.01f);
+    ImGui::DragFloat("x##transform_position", &position_[0], 0.01f);
+    ImGui::DragFloat("y##transform_position", &position_[1], 0.01f);
 
     ImGui::Text("Rotation");
-    ImGui::SliderFloat("##rotation", &rotation_, -360, 360);
+    ImGui::SliderFloat("##transform_rotation", &rotation_, -360, 360);
 
     ImGui::Text("Scale");
-    ImGui::DragFloat("scale x", &scale_[0], 0.01f);
-    ImGui::DragFloat("scale y", &scale_[1], 0.01f);
+    ImGui::DragFloat("x##transform_scale", &scale_[0], 0.01f);
+    ImGui::DragFloat("y##transform_scale", &scale_[1], 0.01f);
 
     //ImGui::Text("Local Scale");
     //ImGui::DragFloat("local scale x", &localScale_[0], 0.01f);

@@ -15,6 +15,7 @@
 
 #include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/FixedUpdatable/Rigidbody.h"
+#include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/Updatable/PlayerController.h"
 #include "../Component/LateUpdatable/Sprite.h"
 
@@ -180,41 +181,67 @@ void Editor::Topbar()
 
     if (ImGui::BeginMenu("Component"))
     {
-        if (ImGui::BeginMenu("Add..."))
+        bool selected = (selectedGameObject_ != nullptr);
+        bool hasRb, hasBoxCol, hasPc, hasSp;
+        hasRb = hasBoxCol = hasPc = hasSp = false;
+
+        if (selected)
         {
-            bool selected = (selectedGameObject_ != nullptr);
-            bool hasSp, hasRb, hasPc;
-            hasSp = hasRb = hasPc = false;
-            
-            if (selected)
-            {
-                hasSp = selectedGameObject_->HasComponent(typeid(Sprite));
-                hasRb = selectedGameObject_->HasComponent(typeid(Rigidbody));
-                hasPc = selectedGameObject_->HasComponent(typeid(PlayerController));
-            }
+            hasRb = selectedGameObject_->HasComponent(typeid(Rigidbody));
+            hasBoxCol = selectedGameObject_->HasComponent(typeid(BoxCollider));
+            hasPc = selectedGameObject_->HasComponent(typeid(PlayerController));
+            hasSp = selectedGameObject_->HasComponent(typeid(Sprite));
+        }
 
-            if (ImGui::MenuItem("Sprite", NULL, false, selected && !hasSp))
-                selectedGameObject_->AddComponent(typeid(Sprite));
-
-            if (ImGui::MenuItem("Rigidbody", NULL, false, selected && !hasRb))
+        if (ImGui::BeginMenu("Add...", selected))
+        {
+            if (ImGui::MenuItem("Rigidbody", NULL, false, !hasRb))
                 selectedGameObject_->AddComponent(typeid(Rigidbody));
 
-            if (ImGui::MenuItem("PlayerController", NULL, false, selected && !hasPc && hasRb))
+            if (ImGui::BeginMenu("Collider", hasRb))
+            {
+                if (ImGui::MenuItem("BoxCollider", NULL, false, !hasBoxCol))
+                    selectedGameObject_->AddComponent(typeid(BoxCollider));
+
+                // CircleCollider
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::MenuItem("PlayerController", NULL, false, hasRb && !hasPc))
                 selectedGameObject_->AddComponent(typeid(PlayerController));
+
+            if (ImGui::MenuItem("Sprite", NULL, false, !hasSp))
+                selectedGameObject_->AddComponent(typeid(Sprite));
 
             ImGui::EndMenu();
         }
        
-        if (ImGui::BeginMenu("Delete...", selectedGameObject_ != nullptr))
+        if (ImGui::BeginMenu("Delete...", selected))
         {
-            if (ImGui::MenuItem("Sprite", NULL, false, selectedGameObject_->HasComponent(typeid(Sprite))))
-                selectedGameObject_->DeleteComponent(typeid(Sprite));
-
-            if (ImGui::MenuItem("Rigidbody", NULL, false, selectedGameObject_->HasComponent(typeid(Rigidbody))))
+            if (ImGui::MenuItem("Rigidbody", NULL, false, hasRb))
+            {
                 selectedGameObject_->DeleteComponent(typeid(Rigidbody));
 
-            if (ImGui::MenuItem("PlayerController", NULL, false, selectedGameObject_->HasComponent(typeid(PlayerController))))
+                selectedGameObject_->DeleteComponent(typeid(Rigidbody));
                 selectedGameObject_->DeleteComponent(typeid(PlayerController));
+            }
+
+            if (ImGui::BeginMenu("Collider", hasRb))
+            {
+                if (ImGui::MenuItem("BoxCollider", NULL, false, hasBoxCol))
+                    selectedGameObject_->DeleteComponent(typeid(BoxCollider));
+
+                // CircleCollider
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::MenuItem("PlayerController", NULL, false, hasPc))
+                selectedGameObject_->DeleteComponent(typeid(PlayerController));
+
+            if (ImGui::MenuItem("Sprite", NULL, false, hasSp))
+                selectedGameObject_->DeleteComponent(typeid(Sprite));
 
             ImGui::EndMenu();
         }

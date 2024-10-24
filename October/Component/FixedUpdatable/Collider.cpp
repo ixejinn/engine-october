@@ -5,6 +5,8 @@
 
 Collider::Collider(GameObject* owner) : Component(owner)
 {
+	updateInEditmode_ = true;
+
 	// Registry to CollisionManager
 
 	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
