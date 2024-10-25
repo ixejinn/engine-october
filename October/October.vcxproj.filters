@@ -105,7 +105,7 @@
     <ClCompile Include="Component\Updatable\Updatable.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Manager\WindowManager.cpp">
+    <ClCompile Include="Manager\SettingManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Component\FixedUpdatable\Collider.cpp">
@@ -227,7 +227,7 @@
     <ClInclude Include="Component\Updatable\Updatable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Manager\WindowManager.h">
+    <ClInclude Include="Manager\SettingManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Component\FixedUpdatable\Collider.h">
@@ -240,6 +240,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Component\Collidable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Collision.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

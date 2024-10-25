@@ -2,30 +2,59 @@
 
 #include <queue>
 #include "../Component/FixedUpdatable/BoxCollider.h"
+#include "../Component/Collidable.h"
+#include "../GameObject/GameObject.h"
+#include "../Collision/Collision.h"
+
+CollisionManager::CollisionManager()
+{
+	layerCollisionMatrix_[0] |= 1 << 31;	// default setting for layer collision
+}
 
 void CollisionManager::CheckAllCollisions()
 {
-	static std::queue<std::pair<Collider*, Collider*>> collisionPairs{};
+	static std::queue<std::pair<Collider*, Collider*>> colliderPairs{};
 
 	for (auto it1 = colliders_.begin(); it1 != colliders_.end(); ++it1)
 	{
 		auto it2 = std::next(it1);
 		for (; it2 != colliders_.end(); ++it2)
 		{
-			if ((*it1)->owner_ != (*it2)->owner_ && CheckCollision(*it1, *it2))
-				collisionPairs.push({ *it1, *it2 });
+			if ((*it1)->owner_->active_ && (*it2)->owner_->active_ &&
+				CheckCollision(*it1, *it2))
+				colliderPairs.push({ *it1, *it2 });
 		}
 	}
 
-	while (!collisionPairs.empty())
+	while (!colliderPairs.empty())
 	{
+		std::pair<Collider*, Collider*> colliderPair = colliderPairs.front();
 
+		Collidable* first = nullptr;
+		Collidable* second = nullptr;
+
+		if (first = colliderPair.first->owner_->GetCollidable())
+		{
+			Collision* collision1 = new Collision();
+			first->OnCollision(collision1);
+			delete collision1;
+		}
+
+		if (second = colliderPair.second->owner_->GetCollidable())
+		{
+			Collision* collision2 = new Collision();
+			second->OnCollision(collision2);
+			delete collision2;
+		}
+
+		colliderPairs.pop();
 	}
 }
 
 bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 {
-	return false;
+	if (col1->owner_ == col2->owner_)
+		return false;
 }
 
 bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)

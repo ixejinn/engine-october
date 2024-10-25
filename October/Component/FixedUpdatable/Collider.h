@@ -5,6 +5,7 @@
 
 #include "../Component.h"
 #include "FixedUpdatable.h"
+#include "../../Utils/Utils.h"
 
 class Transform;
 

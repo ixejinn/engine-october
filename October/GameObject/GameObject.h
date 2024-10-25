@@ -5,6 +5,7 @@
 #include <string>
 
 class Component;
+class Collidable;
 
 class GameObject
 {
@@ -13,11 +14,14 @@ private:
 	std::string name_{};
 
 	Component* mainComp_{ nullptr };
+	Collidable* collidable_{ nullptr };
 
 	GameObject(const std::string& name);
 
 public:
 	~GameObject();
+
+	bool active_{ true };
 
 	Component* AddComponent(std::type_index compType);
 	Component* AddComponent(std::string compName);
@@ -26,6 +30,7 @@ public:
 	const std::map<std::type_index, std::unique_ptr<Component>>& GetAllComponents() const { return components_; }
 	const std::string& GetName() const { return name_; }
 	Component* GetMainComp() const { return mainComp_; }
+	Collidable* GetCollidable() const { return collidable_; }
 
 	bool HasComponent(std::type_index compType);
 

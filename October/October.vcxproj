@@ -155,7 +155,7 @@
     <ClCompile Include="Manager\CollisionManager.cpp" />
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
-    <ClCompile Include="Manager\WindowManager.cpp" />
+    <ClCompile Include="Manager\SettingManager.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
     <ClCompile Include="Resource\Texture.cpp" />
     <ClCompile Include="State\EmptyState.cpp" />
@@ -176,6 +176,7 @@
     <ClCompile Include="Utils\ManagerList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Component\Collidable.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\EditmodeUpdatable.h" />
@@ -193,7 +194,7 @@
     <ClInclude Include="Manager\CollisionManager.h" />
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
-    <ClInclude Include="Manager\WindowManager.h" />
+    <ClInclude Include="Manager\SettingManager.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />
     <ClInclude Include="Resource\Texture.h" />

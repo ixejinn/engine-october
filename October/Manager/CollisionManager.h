@@ -8,14 +8,16 @@ class CollisionManager
 {
 private:
 	std::list<Collider*> colliders_{};
-	
+
+	unsigned int layerCollisionMatrix_[32]{ 0, };
+		
 	bool CheckCollision(Collider* col1, Collider* col2);
 
 	bool CheckAABBAABB(Collider* aabb1, Collider* aabb2);
 	bool CheckAABBOBB(Collider* aabb, BoxCollider* obb);
 	bool CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2);
 
-	CollisionManager() = default;
+	CollisionManager();
 	~CollisionManager() = default;
 
 	CollisionManager(const CollisionManager&) = delete;

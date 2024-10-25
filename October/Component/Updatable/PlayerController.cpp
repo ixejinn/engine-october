@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include "../FixedUpdatable/Rigidbody.h"
 #include "../../GameObject/GameObject.h"
-#include "../../Manager/WindowManager.h"
+#include "../../Manager/SettingManager.h"
 #include "../../Utils/Setting.h"
 #include "../../Utils/Utils.h"
 #include "../../Utils/imgui/imgui.h"
@@ -18,7 +18,7 @@ void PlayerController::Update()
 	if (rb_ == nullptr)
 		rb_ = static_cast<Rigidbody*>(owner_->GetComponent(typeid(Rigidbody)));
 
-	GLFWwindow* window = WindowManager::GetWindow();
+	GLFWwindow* window = SettingManager::GetInstance().GetWindow();
 
 	glm::vec2 moveVec{ 0.f, 0.f };
 
