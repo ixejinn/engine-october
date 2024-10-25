@@ -176,6 +176,7 @@
     <ClCompile Include="Utils\ManagerList.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Component\Collidable.h" />
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\EditmodeUpdatable.h" />
     <ClInclude Include="Component\FixedUpdatable\BoxCollider.h" />
