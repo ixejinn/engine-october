@@ -15,6 +15,9 @@ private:
 	SettingManager& operator =(SettingManager&&) = delete;
 
 public:
+	const unsigned int WINDOW_WIDTH = 1600;
+	const unsigned int WINDOW_HEIGHT = 900;
+
 	static SettingManager& GetInstance()
 	{
 		static SettingManager instance;

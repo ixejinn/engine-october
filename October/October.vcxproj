@@ -216,7 +216,6 @@
     <ClInclude Include="Manager\GameStateManager.h" />
     <ClInclude Include="State\State.h" />
     <ClInclude Include="State\Sample.h" />
-    <ClInclude Include="Utils\Setting.h" />
     <ClInclude Include="Utils\Utils.h" />
   </ItemGroup>
   <ItemGroup>

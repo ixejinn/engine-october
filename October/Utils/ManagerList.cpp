@@ -3,6 +3,7 @@
 #include "../Manager/ComponentManager.h"
 #include "../Manager/GameObjectManager.h"
 #include "../Manager/SerializationManager.h"
+#include "../Manager/SettingManager.h"
 
 #include "../Editor/Editor.h"
 
@@ -18,5 +19,6 @@ namespace Manager
 
 	SerializationManager& serMgr = SerializationManager::GetInstance();
 
+	SettingManager& setMgr = SettingManager::GetInstance();
 	Editor& editor = Editor::GetInstance();
 }

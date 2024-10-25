@@ -8,13 +8,13 @@
 #include "Manager/GameStateManager.h"
 #include "Manager/SettingManager.h"
 #include "Editor/Editor.h"
-#include "Utils/Setting.h"
 
 #include "State/EmptyState.h"
 
 namespace Manager
 {
 	extern GameStateManager& gsMgr;
+	extern SettingManager& setMgr;
 	extern Editor& editor;
 }
 
@@ -30,7 +30,7 @@ int main()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 	// Create GLFW window
-	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "October", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(Manager::setMgr.WINDOW_WIDTH, Manager::setMgr.WINDOW_HEIGHT, "October", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -47,7 +47,7 @@ int main()
 		return -1;
 	}
 
-	SettingManager::SetWindow(window);
+	SettingManager::GetInstance().SetWindow(window);
 	Manager::editor.Init(window);
 
 	// Set state

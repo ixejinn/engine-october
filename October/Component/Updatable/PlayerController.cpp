@@ -4,7 +4,6 @@
 #include "../FixedUpdatable/Rigidbody.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Manager/SettingManager.h"
-#include "../../Utils/Setting.h"
 #include "../../Utils/Utils.h"
 #include "../../Utils/imgui/imgui.h"
 
@@ -89,7 +88,7 @@ void PlayerController::ShowDetails()
 	ImGui::Checkbox("Horizontal", &horizontal_);
 
 	ImGui::Text("Speed");
-	ImGui::InputFloat("##speed", &speed_, 0.01f, 1.0f, "%.2f");
+	ImGui::InputFloat("##speed", &speed_, 1.f, 1.0f, "%.2f");
 }
 
 Component* PlayerController::CreateComponent(GameObject* owner)

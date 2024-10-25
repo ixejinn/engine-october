@@ -73,10 +73,10 @@ void Rigidbody::ShowDetails()
 	ImGui::SeparatorText("Rigidbody");
 
 	ImGui::Text("Mass");
-	ImGui::InputFloat("##mass", &mass_, 0.01f, 1.0f, "%.2f");
+	ImGui::InputFloat("##mass", &mass_, 1.f, 1.0f, "%.2f");
 
 	ImGui::Text("Drag");
-	ImGui::InputFloat("##drag", &drag_, 0.01f, 1.0f, "%.2f");
+	ImGui::InputFloat("##drag", &drag_, 1.f, 1.0f, "%.2f");
 }
 
 void Rigidbody::AddForce(const glm::vec2& f)

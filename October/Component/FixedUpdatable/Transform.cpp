@@ -70,7 +70,7 @@ void Transform::ShowDetails()
     ImGui::DragFloat("y##transform_position", &position_[1], 0.01f);
 
     ImGui::Text("Rotation");
-    ImGui::SliderFloat("##transform_rotation", &rotation_, -360, 360);
+    ImGui::DragFloat("##transform_rotation", &rotation_, 1.f, -360.f, 360.f);
 
     ImGui::Text("Scale");
     ImGui::DragFloat("x##transform_scale", &scale_[0], 0.01f);
