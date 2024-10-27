@@ -4,11 +4,13 @@
 #include "../State/State.h"
 #include "../Manager/ComponentManager.h"
 #include "../Manager/GameObjectManager.h"
+#include "../Manager/CollisionManager.h"
 
 namespace Manager
 {
 	extern ComponentManager& compMgr;
 	extern GameObjectManager& objMgr;
+	extern CollisionManager& colMgr;
 }
 
 void GameStateManager::Init()
@@ -23,6 +25,7 @@ void GameStateManager::Update()
 	{
 		// Physics
 		Manager::compMgr.FixedUpdate();
+		Manager::colMgr.CheckAllCollisions();
 
 		// Game logic
 		curState_->Update();
@@ -58,6 +61,7 @@ void GameStateManager::ClearManagers()
 {
 	Manager::objMgr.Clear();
 	Manager::compMgr.Clear();
+	Manager::colMgr.Clear();
 }
 
 bool GameStateManager::ShouldExit()
