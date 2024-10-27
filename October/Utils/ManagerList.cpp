@@ -1,7 +1,8 @@
 #include "../Manager/ResourceManager.h"
-#include "../Manager/GameStateManager.h"
 #include "../Manager/ComponentManager.h"
 #include "../Manager/GameObjectManager.h"
+#include "../Manager/GameStateManager.h"
+#include "../Manager/CollisionManager.h"
 #include "../Manager/SerializationManager.h"
 #include "../Manager/SettingManager.h"
 
@@ -15,7 +16,9 @@ namespace Manager
 	GameObjectManager& objMgr = GameObjectManager::GetInstance();
 
 	GameStateManager& gsMgr = GameStateManager::GetInstance();
+
 	//EventManager& evntMgr = EventManager::GetInstance();
+	CollisionManager& colMgr = CollisionManager::GetInstance();
 
 	SerializationManager& serMgr = SerializationManager::GetInstance();
 

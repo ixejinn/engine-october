@@ -2,12 +2,18 @@
 
 #include "Transform.h"
 #include "../../GameObject/GameObject.h"
+#include "../../Manager/CollisionManager.h"
+
+namespace Manager
+{
+	extern CollisionManager& colMgr;
+}
 
 Collider::Collider(GameObject* owner) : Component(owner)
 {
 	updateInEditmode_ = true;
 
-	// Registry to CollisionManager
+	Manager::colMgr.AddCollider(this);
 
 	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 }

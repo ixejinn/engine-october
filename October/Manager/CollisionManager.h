@@ -33,4 +33,8 @@ public:
 	}
 
 	void CheckAllCollisions();
+
+	void AddCollider(Collider* col);
+
+	void Clear();
 };
