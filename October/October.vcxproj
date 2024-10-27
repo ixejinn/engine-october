@@ -147,6 +147,7 @@
     <ClCompile Include="Component\FixedUpdatable\Transform.cpp" />
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
+    <ClCompile Include="Component\Updatable\Gameplay\Player.cpp" />
     <ClCompile Include="Component\Updatable\PlayerController.cpp" />
     <ClCompile Include="Component\Updatable\Updatable.cpp" />
     <ClCompile Include="Editor\Editor.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Component\FixedUpdatable\Transform.h" />
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
+    <ClInclude Include="Component\Updatable\Gameplay\Player.h" />
     <ClInclude Include="Component\Updatable\PlayerController.h" />
     <ClInclude Include="Component\Updatable\Updatable.h" />
     <ClInclude Include="Editor\Editor.h" />

@@ -26,6 +26,8 @@ protected:
 		{ OBB, "OBB" },
 		{ CIRCLE, "CIRCLE" }
 	};
+	
+	int layer_ = 0;	// 수정 필요.. 아마 enum
 
 	glm::vec2 center_{ 0.f, 0.f };
 

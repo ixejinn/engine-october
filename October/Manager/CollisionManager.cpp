@@ -51,15 +51,40 @@ void CollisionManager::CheckAllCollisions()
 	}
 }
 
+void CollisionManager::AddCollider(Collider* col)
+{
+	colliders_.emplace_back(col);
+}
+
+void CollisionManager::Clear()
+{
+	for (auto it = colliders_.begin(); it != colliders_.end(); )
+		colliders_.erase(it++);
+}
+
 bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 {
 	if (col1->owner_ == col2->owner_)
 		return false;
+
+	if (!(layerCollisionMatrix_[col1->layer_] & 1 << (31 - col2->layer_)))
+		return false;
+
+	if (!CheckAABBAABB(col1, col2))
+		return false;
+
+	return true;	// 나중에 수정하기
 }
 
 bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)
 {
-	return false;
+	if (aabb1->topRight_.x > aabb2->bottomLeft_.x &&
+		aabb1->bottomLeft_.x < aabb2->topRight_.x &&
+		aabb1->topRight_.y > aabb2->bottomLeft_.y &&
+		aabb1->bottomLeft_.y < aabb2->topRight_.y)
+		return true;
+	else
+		return false;
 }
 
 bool CollisionManager::CheckAABBOBB(Collider* aabb, BoxCollider* obb)
