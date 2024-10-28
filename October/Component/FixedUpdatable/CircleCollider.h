@@ -1,12 +1,12 @@
 #pragma once
 #include "Collider.h"
 
-class BoxCollider : public Collider
+class CircleCollider : public Collider
 {
 private:
-	glm::vec2 scale_{};
+	float radius_{};
 
-	BoxCollider(GameObject* owner);
+	CircleCollider(GameObject* owner);
 
 	void FixedUpdate() override;
 
@@ -17,8 +17,6 @@ public:
 	void ShowDetails() override;
 
 	void SetScaleWithTransform(bool b) override;
-
-	void SetColliderType(ColliderType type);
 
 	static Component* CreateComponent(GameObject* owner);
 

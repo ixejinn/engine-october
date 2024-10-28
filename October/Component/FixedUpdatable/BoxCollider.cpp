@@ -10,8 +10,6 @@ BoxCollider::BoxCollider(GameObject* owner) : Collider(owner)
 
 void BoxCollider::FixedUpdate()
 {
-    if (scaleWithTransform)
-        scale_ = trans_->GetScale();
 	UpdateVertices(trans_->GetLocalScale() * scale_ * 0.5f);
 }
 
@@ -20,9 +18,18 @@ void BoxCollider::LoadFromJson(const json& data)
     auto compData = data.find("compData");
     if (compData != data.end())
     {
-        auto it = compData->find("center");
+        auto it = compData->find("type");
+        type_ = it->begin().value();
+
+        it = compData->find("layer");
+        layer_ = it->begin().value();
+
+        it = compData->find("center");
         center_.x = it->begin().value();
         center_.y = (it->begin() + 1).value();
+
+        it = compData->find("scaleWithTransform");
+        scaleWithTransform_ = it->begin().value();
 
         it = compData->find("scale");
         scale_.x = it->begin().value();
@@ -35,7 +42,10 @@ json BoxCollider::SaveToJson()
     json data, compData;
     data["type"] = typeid(BoxCollider).name();
 
+    compData["type"] = type_;
+    compData["layer"] = layer_;
     compData["center"] = { center_.x, center_.y };
+    compData["scaleWithTransform"] = scaleWithTransform_;
     compData["scale"] = { scale_.x, scale_.y };
 
     data["compData"] = compData;
@@ -62,12 +72,20 @@ void BoxCollider::ShowDetails()
     ImGui::InputFloat2("##boxCollider_center", &center_[0]);
 
     ImGui::Text("Scale");
-    ImGui::Checkbox("Scale with transform", &scaleWithTransform);
-    if (!scaleWithTransform)
+    ImGui::Checkbox("Scale with transform", &scaleWithTransform_);
+    if (!scaleWithTransform_)
     {
         ImGui::DragFloat("x##boxCollider_scale", &scale_[0], 0.01f);
         ImGui::DragFloat("y##boxCollider_scale", &scale_[1], 0.01f);
     }
+}
+
+void BoxCollider::SetScaleWithTransform(bool b)
+{
+    scaleWithTransform_ = b;
+
+    if (b)
+        scale_.x = scale_.y = 1.f;
 }
 
 void BoxCollider::SetColliderType(ColliderType type)

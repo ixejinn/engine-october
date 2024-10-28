@@ -5,12 +5,14 @@
 #include "../Manager/ComponentManager.h"
 #include "../Manager/GameObjectManager.h"
 #include "../Manager/CollisionManager.h"
+#include "../Editor/Editor.h"
 
 namespace Manager
 {
 	extern ComponentManager& compMgr;
 	extern GameObjectManager& objMgr;
 	extern CollisionManager& colMgr;
+	extern Editor& editor;
 }
 
 void GameStateManager::Init()
@@ -25,7 +27,8 @@ void GameStateManager::Update()
 	{
 		// Physics
 		Manager::compMgr.FixedUpdate();
-		Manager::colMgr.CheckAllCollisions();
+		if (!Manager::editor.GetMode())
+			Manager::colMgr.CheckAllCollisions();
 
 		// Game logic
 		curState_->Update();

@@ -17,6 +17,7 @@
 #include "../Component/FixedUpdatable/Rigidbody.h"
 #include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/Updatable/PlayerController.h"
+#include "../Component/Updatable/Gameplay/Player.h"
 #include "../Component/LateUpdatable/Sprite.h"
 
 namespace Manager
@@ -182,14 +183,19 @@ void Editor::Topbar()
     if (ImGui::BeginMenu("Component"))
     {
         bool selected = (selectedGameObject_ != nullptr);
-        bool hasRb, hasBoxCol, hasPc, hasSp;
-        hasRb = hasBoxCol = hasPc = hasSp = false;
+        bool hasRb, hasBoxCol;
+        bool hasPc, hasPlayer;
+        bool hasSp;
+        hasRb = hasBoxCol = false;
+        hasPc = hasPlayer = false;
+        hasSp = false;
 
         if (selected)
         {
             hasRb = selectedGameObject_->HasComponent(typeid(Rigidbody));
             hasBoxCol = selectedGameObject_->HasComponent(typeid(BoxCollider));
             hasPc = selectedGameObject_->HasComponent(typeid(PlayerController));
+            hasPlayer = selectedGameObject_->HasComponent(typeid(Player));
             hasSp = selectedGameObject_->HasComponent(typeid(Sprite));
         }
 
@@ -210,6 +216,9 @@ void Editor::Topbar()
 
             if (ImGui::MenuItem("PlayerController", NULL, false, hasRb && !hasPc))
                 selectedGameObject_->AddComponent(typeid(PlayerController));
+
+            if (ImGui::MenuItem("Player", NULL, false, hasRb && hasSp && !hasPlayer))
+                selectedGameObject_->AddComponent(typeid(Player));
 
             if (ImGui::MenuItem("Sprite", NULL, false, !hasSp))
                 selectedGameObject_->AddComponent(typeid(Sprite));
@@ -239,6 +248,9 @@ void Editor::Topbar()
 
             if (ImGui::MenuItem("PlayerController", NULL, false, hasPc))
                 selectedGameObject_->DeleteComponent(typeid(PlayerController));
+
+            if (ImGui::MenuItem("Player", NULL, false, hasPlayer))
+                selectedGameObject_->DeleteComponent(typeid(Player));
 
             if (ImGui::MenuItem("Sprite", NULL, false, hasSp))
                 selectedGameObject_->DeleteComponent(typeid(Sprite));

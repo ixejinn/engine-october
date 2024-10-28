@@ -2,6 +2,8 @@
 
 #include <queue>
 #include "../Component/FixedUpdatable/BoxCollider.h"
+#include "../Component/FixedUpdatable/CircleCollider.h"
+#include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/Collidable.h"
 #include "../GameObject/GameObject.h"
 #include "../Collision/Collision.h"
@@ -73,7 +75,54 @@ bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 	if (!CheckAABBAABB(col1, col2))
 		return false;
 
-	return true;	// 나중에 수정하기
+	if (col1->type_ == Collider::AABB && col2->type_ == Collider::AABB)
+		return true;
+
+	Collider* colA = col1;
+	Collider* colB = col2;
+	if (col1->type_ > col2->type_)
+	{
+		colA = col2;
+		colB = col1;
+	}
+
+	switch (colA->type_)
+	{
+	case Collider::AABB:
+	{
+		switch (colB->type_)
+		{
+		case Collider::OBB:
+			return CheckAABBOBB(colA, static_cast<BoxCollider*>(colB));
+
+		case Collider::CIRCLE:
+			return CheckAABBCircle(colA, static_cast<CircleCollider*>(colB));
+		}
+		break;
+	}
+
+	case Collider::OBB:
+	{
+		switch (colB->type_)
+		{
+		case Collider::OBB:
+			return CheckOBBOBB(static_cast<BoxCollider*>(colA), static_cast<BoxCollider*>(colB));
+
+		case Collider::CIRCLE:
+			return CheckOBBCircle(static_cast<BoxCollider*>(colA), static_cast<CircleCollider*>(colB));
+		}
+		break;
+	}
+
+	case Collider::CIRCLE:
+	{
+		return CheckCircleCircle(static_cast<CircleCollider*>(colA), static_cast<CircleCollider*>(colB));
+		break;
+	}
+
+	default:
+		return false;
+	}
 }
 
 bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)
@@ -89,10 +138,90 @@ bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)
 
 bool CollisionManager::CheckAABBOBB(Collider* aabb, BoxCollider* obb)
 {
-	return false;
+	return CheckOBBOBB(static_cast<BoxCollider*>(aabb), obb);
+}
+
+bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
+{
+	Transform* transAABB = aabb->trans_;
+	Transform* transCircle = circle->trans_;
+
+	glm::vec2 colliderCtrAABB = transAABB->GetPosition() + aabb->center_;
+	glm::vec2 colliderCtrCircle = transCircle->GetPosition() + circle->center_;
+
+	glm::vec2 colliderRangeAABB[2] = { aabb->bottomLeft_, aabb->topRight_ };
+
+	// Circle collider가 AABB의 대각선 방향이 아닌 곳에 위치하는 경우
+	if (
+		(colliderCtrCircle.x >= colliderRangeAABB[0].x && colliderCtrCircle.x <= colliderRangeAABB[1].x) ||
+		(colliderCtrCircle.y >= colliderRangeAABB[0].y && colliderCtrCircle.y <= colliderRangeAABB[1].y)
+		)
+	{
+		// AABB를 circle collider의 반지름만큼 확장시켰을 때,
+		float radius = circle->radius_;
+		colliderRangeAABB[0] -= radius;
+		colliderRangeAABB[1] += radius;
+
+		// circle collider의 center가 AABB의 내부에 위치한다면 충돌 있음
+		if (
+			colliderCtrCircle.x >= colliderRangeAABB[0].x &&
+			colliderCtrCircle.x <= colliderRangeAABB[1].x &&
+			colliderCtrCircle.y >= colliderRangeAABB[0].y &&
+			colliderCtrCircle.y <= colliderRangeAABB[1].y
+			)
+			return true;
+	}
+	else
+	{
+		// 
+	}
 }
 
 bool CollisionManager::CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2)
 {
-	return false;
+	return CheckOBB(obb1, obb2) && CheckOBB(obb2, obb1);
+}
+
+bool CollisionManager::CheckOBB(BoxCollider* obb1, BoxCollider* obb2)
+{
+	float minDotProducts[4]{ 0.f, };
+	float minDotProduct, maxDotProduct;
+
+	// Check obb1's normal vector
+	for (int i = 0; i < 4; i++)
+	{
+		int inext = i + 1;
+		if (inext == 4)
+			inext = 0;
+
+		glm::vec2 normal
+		{
+			obb1->vertices_[inext].x - obb1->vertices_[i].x,
+			obb1->vertices_[inext].y - obb1->vertices_[i].y
+		};
+
+		minDotProduct = FLT_MAX;
+		for (const glm::vec2& v2 : obb2->vertices_)
+		{
+			glm::vec2 vec12{ v2.x - obb1->vertices_[inext].x, v2.y - obb1->vertices_[inext].y };
+
+			float dotProduct = normal.x * vec12.x + normal.y * vec12.y;
+			if (minDotProduct > dotProduct)
+				minDotProduct = dotProduct;
+		}
+
+		minDotProducts[inext] = minDotProduct;
+	}
+
+	maxDotProduct = minDotProducts[0];
+	for (int i = 1; i < 4; i++)
+	{
+		if (maxDotProduct < minDotProducts[i])
+			maxDotProduct = minDotProducts[i];
+	}
+
+	if (maxDotProduct > 0)
+		return false;
+	else
+		return true;
 }

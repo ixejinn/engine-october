@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Component\FixedUpdatable\BoxCollider.cpp" />
+    <ClCompile Include="Component\FixedUpdatable\CircleCollider.cpp" />
     <ClCompile Include="Component\FixedUpdatable\Collider.cpp" />
     <ClCompile Include="Component\FixedUpdatable\FixedUpdatable.cpp" />
     <ClCompile Include="Component\FixedUpdatable\Rigidbody.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Component\Component.h" />
     <ClInclude Include="Component\EditmodeUpdatable.h" />
     <ClInclude Include="Component\FixedUpdatable\BoxCollider.h" />
+    <ClInclude Include="Component\FixedUpdatable\CircleCollider.h" />
     <ClInclude Include="Component\FixedUpdatable\Collider.h" />
     <ClInclude Include="Component\FixedUpdatable\FixedUpdatable.h" />
     <ClInclude Include="Component\FixedUpdatable\Rigidbody.h" />

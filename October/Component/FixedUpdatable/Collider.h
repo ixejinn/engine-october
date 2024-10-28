@@ -31,7 +31,7 @@ protected:
 
 	glm::vec2 center_{ 0.f, 0.f };
 
-	bool scaleWithTransform{ true };
+	bool scaleWithTransform_{ true };
 	glm::vec2 vertices_[4]{};
 	glm::vec2 bottomLeft_{};
 	glm::vec2 topRight_{};
@@ -44,7 +44,7 @@ protected:
 	void UpdateVertices(const glm::vec2& halfSize);
 
 public:
-	void SetScaleWithTransform(bool b) { scaleWithTransform = b; }
+	virtual void SetScaleWithTransform(bool) = 0;
 
 	friend class CollisionManager;
 };
