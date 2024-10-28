@@ -50,6 +50,14 @@ void GameObject::SetName(const std::string& newName)
     name_ = newName;
 }
 
+void GameObject::SetCollidable(Collidable* collidable)
+{
+    if (collidable_ != nullptr)
+        std::cout << "GameObject::SetCollidable Change " << name_ << "'s collidable" << std::endl;
+
+    collidable_ = collidable;
+}
+
 void GameObject::DeleteComponent(std::type_index compType)
 {
     components_.erase(compType);
