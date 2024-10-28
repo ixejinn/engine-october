@@ -16,6 +16,7 @@ private:
 	bool CheckAABBAABB(Collider* aabb1, Collider* aabb2);
 	bool CheckAABBOBB(Collider* aabb, BoxCollider* obb);
 	bool CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2);
+	bool CheckOBB(BoxCollider* obb1, BoxCollider* obb2);
 
 	CollisionManager();
 	~CollisionManager() = default;
