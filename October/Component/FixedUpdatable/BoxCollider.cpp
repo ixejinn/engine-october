@@ -80,6 +80,14 @@ void BoxCollider::ShowDetails()
     }
 }
 
+void BoxCollider::SetScaleWithTransform(bool b)
+{
+    scaleWithTransform_ = b;
+
+    if (b)
+        scale_.x = scale_.y = 1.f;
+}
+
 void BoxCollider::SetColliderType(ColliderType type)
 {
     if (type != AABB && type != OBB)

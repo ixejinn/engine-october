@@ -3,6 +3,7 @@
 
 class Collider;
 class BoxCollider;
+class CircleCollider;
 
 class CollisionManager
 {
@@ -15,8 +16,11 @@ private:
 
 	bool CheckAABBAABB(Collider* aabb1, Collider* aabb2);
 	bool CheckAABBOBB(Collider* aabb, BoxCollider* obb);
+	bool CheckAABBCircle(Collider* aabb, CircleCollider* circle);
 	bool CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2);
 	bool CheckOBB(BoxCollider* obb1, BoxCollider* obb2);
+	bool CheckOBBCircle(BoxCollider* obb, CircleCollider* circle);
+	bool CheckCircleCircle(CircleCollider* circle1, CircleCollider* circle2);
 
 	CollisionManager();
 	~CollisionManager() = default;

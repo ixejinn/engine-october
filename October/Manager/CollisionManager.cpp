@@ -2,6 +2,8 @@
 
 #include <queue>
 #include "../Component/FixedUpdatable/BoxCollider.h"
+#include "../Component/FixedUpdatable/CircleCollider.h"
+#include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/Collidable.h"
 #include "../GameObject/GameObject.h"
 #include "../Collision/Collision.h"
@@ -94,7 +96,7 @@ bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 			return CheckAABBOBB(colA, static_cast<BoxCollider*>(colB));
 
 		case Collider::CIRCLE:
-			return false;
+			return CheckAABBCircle(colA, static_cast<CircleCollider*>(colB));
 		}
 		break;
 	}
@@ -107,14 +109,16 @@ bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 			return CheckOBBOBB(static_cast<BoxCollider*>(colA), static_cast<BoxCollider*>(colB));
 
 		case Collider::CIRCLE:
-			return false;
+			return CheckOBBCircle(static_cast<BoxCollider*>(colA), static_cast<CircleCollider*>(colB));
 		}
 		break;
 	}
 
 	case Collider::CIRCLE:
-		return false;
+	{
+		return CheckCircleCircle(static_cast<CircleCollider*>(colA), static_cast<CircleCollider*>(colB));
 		break;
+	}
 
 	default:
 		return false;
@@ -135,6 +139,42 @@ bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)
 bool CollisionManager::CheckAABBOBB(Collider* aabb, BoxCollider* obb)
 {
 	return CheckOBBOBB(static_cast<BoxCollider*>(aabb), obb);
+}
+
+bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
+{
+	Transform* transAABB = aabb->trans_;
+	Transform* transCircle = circle->trans_;
+
+	glm::vec2 colliderCtrAABB = transAABB->GetPosition() + aabb->center_;
+	glm::vec2 colliderCtrCircle = transCircle->GetPosition() + circle->center_;
+
+	glm::vec2 colliderRangeAABB[2] = { aabb->bottomLeft_, aabb->topRight_ };
+
+	// Circle collider가 AABB의 대각선 방향이 아닌 곳에 위치하는 경우
+	if (
+		(colliderCtrCircle.x >= colliderRangeAABB[0].x && colliderCtrCircle.x <= colliderRangeAABB[1].x) ||
+		(colliderCtrCircle.y >= colliderRangeAABB[0].y && colliderCtrCircle.y <= colliderRangeAABB[1].y)
+		)
+	{
+		// AABB를 circle collider의 반지름만큼 확장시켰을 때,
+		float radius = circle->radius_;
+		colliderRangeAABB[0] -= radius;
+		colliderRangeAABB[1] += radius;
+
+		// circle collider의 center가 AABB의 내부에 위치한다면 충돌 있음
+		if (
+			colliderCtrCircle.x >= colliderRangeAABB[0].x &&
+			colliderCtrCircle.x <= colliderRangeAABB[1].x &&
+			colliderCtrCircle.y >= colliderRangeAABB[0].y &&
+			colliderCtrCircle.y <= colliderRangeAABB[1].y
+			)
+			return true;
+	}
+	else
+	{
+		// 
+	}
 }
 
 bool CollisionManager::CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2)

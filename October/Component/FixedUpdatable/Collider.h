@@ -44,7 +44,7 @@ protected:
 	void UpdateVertices(const glm::vec2& halfSize);
 
 public:
-	void SetScaleWithTransform(bool b) { scaleWithTransform_ = b; }
+	virtual void SetScaleWithTransform(bool) = 0;
 
 	friend class CollisionManager;
 };
