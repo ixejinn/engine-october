@@ -6,6 +6,8 @@
 CircleCollider::CircleCollider(GameObject* owner) : Collider(owner)
 {
 	type_ = CIRCLE;
+	
+	SetScaleWithTransform(true);
 }
 
 void CircleCollider::FixedUpdate()
@@ -65,7 +67,10 @@ void CircleCollider::SetScaleWithTransform(bool b)
 	scaleWithTransform_ = b;
 
 	if (b)
-		radius_ = 1.f;
+	{
+		auto scale = trans_->GetScale();
+		radius_ = glm::max(scale.x, scale.y);
+	}
 }
 
 Component* CircleCollider::CreateComponent(GameObject* owner)

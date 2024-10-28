@@ -16,6 +16,7 @@
 #include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/FixedUpdatable/Rigidbody.h"
 #include "../Component/FixedUpdatable/BoxCollider.h"
+#include "../Component/FixedUpdatable/CircleCollider.h"
 #include "../Component/Updatable/PlayerController.h"
 #include "../Component/Updatable/Gameplay/Player.h"
 #include "../Component/LateUpdatable/Sprite.h"
@@ -109,6 +110,8 @@ void Editor::Topbar()
         if (ImGui::MenuItem("New State"))
         {
             selectedGameObject_ = nullptr;
+            curStateName.clear();
+
             EmptyState* newState = new EmptyState();
             Manager::gsMgr.ChangeState(newState);
         }
@@ -183,10 +186,10 @@ void Editor::Topbar()
     if (ImGui::BeginMenu("Component"))
     {
         bool selected = (selectedGameObject_ != nullptr);
-        bool hasRb, hasBoxCol;
+        bool hasRb, hasBoxCol, hasCirCol;
         bool hasPc, hasPlayer;
         bool hasSp;
-        hasRb = hasBoxCol = false;
+        hasRb = hasBoxCol = hasCirCol = false;
         hasPc = hasPlayer = false;
         hasSp = false;
 
@@ -194,8 +197,11 @@ void Editor::Topbar()
         {
             hasRb = selectedGameObject_->HasComponent(typeid(Rigidbody));
             hasBoxCol = selectedGameObject_->HasComponent(typeid(BoxCollider));
+            hasCirCol = selectedGameObject_->HasComponent(typeid(CircleCollider));
+
             hasPc = selectedGameObject_->HasComponent(typeid(PlayerController));
             hasPlayer = selectedGameObject_->HasComponent(typeid(Player));
+
             hasSp = selectedGameObject_->HasComponent(typeid(Sprite));
         }
 
@@ -206,15 +212,16 @@ void Editor::Topbar()
 
             if (ImGui::BeginMenu("Collider", hasRb))
             {
-                if (ImGui::MenuItem("BoxCollider", NULL, false, !hasBoxCol))
+                if (ImGui::MenuItem("Box Collider", NULL, false, !hasBoxCol))
                     selectedGameObject_->AddComponent(typeid(BoxCollider));
 
-                // CircleCollider
+                if (ImGui::MenuItem("Circle Collider", NULL, false, !hasCirCol))
+                    selectedGameObject_->AddComponent(typeid(CircleCollider));
 
                 ImGui::EndMenu();
             }
 
-            if (ImGui::MenuItem("PlayerController", NULL, false, hasRb && !hasPc))
+            if (ImGui::MenuItem("Player Controller", NULL, false, hasRb && !hasPc))
                 selectedGameObject_->AddComponent(typeid(PlayerController));
 
             if (ImGui::MenuItem("Player", NULL, false, hasRb && hasSp && !hasPlayer))
@@ -238,15 +245,16 @@ void Editor::Topbar()
 
             if (ImGui::BeginMenu("Collider", hasRb))
             {
-                if (ImGui::MenuItem("BoxCollider", NULL, false, hasBoxCol))
+                if (ImGui::MenuItem("Box Collider", NULL, false, hasBoxCol))
                     selectedGameObject_->DeleteComponent(typeid(BoxCollider));
 
-                // CircleCollider
+                if (ImGui::MenuItem("Circle Collider", NULL, false, hasCirCol))
+                    selectedGameObject_->DeleteComponent(typeid(CircleCollider));
 
                 ImGui::EndMenu();
             }
 
-            if (ImGui::MenuItem("PlayerController", NULL, false, hasPc))
+            if (ImGui::MenuItem("Player Controller", NULL, false, hasPc))
                 selectedGameObject_->DeleteComponent(typeid(PlayerController));
 
             if (ImGui::MenuItem("Player", NULL, false, hasPlayer))

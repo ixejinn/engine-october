@@ -143,26 +143,28 @@ bool CollisionManager::CheckAABBOBB(Collider* aabb, BoxCollider* obb)
 
 bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
 {
-	Transform* transAABB = aabb->trans_;
-	Transform* transCircle = circle->trans_;
-
-	glm::vec2 colliderCtrAABB = transAABB->GetPosition() + aabb->center_;
-	glm::vec2 colliderCtrCircle = transCircle->GetPosition() + circle->center_;
+	glm::vec2 colliderCtrCircle = circle->trans_->GetPosition() + circle->center_;
+	float radius = circle->radius_;
 
 	glm::vec2 colliderRangeAABB[2] = { aabb->bottomLeft_, aabb->topRight_ };
 
+	// AABB를 circle collider의 반지름만큼 확장시켜
+	// circle collider의 center가 AABB의 내부에 있거나 일치하는 지를 확인하여 충돌 감지 가능
+	// 
+	// 예외: 확장된 AABB의 모서리 근처(대각선 방향)에 원이 걸쳐지는 경우, 충돌하지 않으나 위의 조건에서는 true가 됨
+	//      (확장된 AABB의 모서리는 원의 반지름보다 길어지기 때문)
+
 	// Circle collider가 AABB의 대각선 방향이 아닌 곳에 위치하는 경우
-	if (
-		(colliderCtrCircle.x >= colliderRangeAABB[0].x && colliderCtrCircle.x <= colliderRangeAABB[1].x) ||
-		(colliderCtrCircle.y >= colliderRangeAABB[0].y && colliderCtrCircle.y <= colliderRangeAABB[1].y)
-		)
+	//if (
+	//	(colliderCtrCircle.x >= colliderRangeAABB[0].x && colliderCtrCircle.x <= colliderRangeAABB[1].x) ||
+	//	(colliderCtrCircle.y >= colliderRangeAABB[0].y && colliderCtrCircle.y <= colliderRangeAABB[1].y)
+	//	)
 	{
-		// AABB를 circle collider의 반지름만큼 확장시켰을 때,
-		float radius = circle->radius_;
+		// AABB를 circle collider의 반지름만큼 확장시켰을 때
 		colliderRangeAABB[0] -= radius;
 		colliderRangeAABB[1] += radius;
 
-		// circle collider의 center가 AABB의 내부에 위치한다면 충돌 있음
+		// Circle collider의 center가 AABB의 내부에 있거나 일치하면 충돌 있음
 		if (
 			colliderCtrCircle.x >= colliderRangeAABB[0].x &&
 			colliderCtrCircle.x <= colliderRangeAABB[1].x &&
@@ -171,14 +173,33 @@ bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
 			)
 			return true;
 	}
-	else
-	{
-		// 
-	}
+	// 예외
+	//else
+	//{
+	//	glm::vec2 verticesAABB[4]
+	//	{
+	//		aabb->topRight_,
+	//		{ aabb->bottomLeft_.x, aabb->topRight_.y },
+	//		aabb->bottomLeft_,
+	//		{ aabb->topRight_.x, aabb->bottomLeft_.y }
+	//	};
+
+	//	for (int i = 0; i < 4; i++)
+	//	{
+	//		// 4개 정점과 circle collider center와의 거리가 반지름과 같거나 작으면 충돌 있음
+	//		auto test = glm::length(verticesAABB[i] - colliderCtrCircle);
+	//		if (glm::distance(verticesAABB[i], colliderCtrCircle) <= radius)
+	//			return true;
+	//	}
+	//}
+
+	return false;
 }
 
 bool CollisionManager::CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2)
 {
+	// Separating axis theorem
+	// 두 물체를 투영했을 때 겹치지 않는 축이 하나라도 있다면 충돌하지 않음
 	return CheckOBB(obb1, obb2) && CheckOBB(obb2, obb1);
 }
 
@@ -211,6 +232,8 @@ bool CollisionManager::CheckOBB(BoxCollider* obb1, BoxCollider* obb2)
 		}
 
 		minDotProducts[inext] = minDotProduct;
+		// minDotProduct가 0보다 크다면 normal 벡터와 수직이고 inext를 지나는 직선(분리축)을 기준으로
+		// obb2의 모든 정점이 obb1의 외부에 있다는 것이 됨
 	}
 
 	maxDotProduct = minDotProducts[0];
@@ -224,4 +247,14 @@ bool CollisionManager::CheckOBB(BoxCollider* obb1, BoxCollider* obb2)
 		return false;
 	else
 		return true;
+}
+
+bool CollisionManager::CheckOBBCircle(BoxCollider* obb, CircleCollider* circle)
+{
+	return false;
+}
+
+bool CollisionManager::CheckCircleCircle(CircleCollider* circle1, CircleCollider* circle2)
+{
+	return false;
 }
