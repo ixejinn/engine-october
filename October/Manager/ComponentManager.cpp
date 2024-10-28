@@ -11,6 +11,7 @@
 #include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/LateUpdatable/Sprite.h"
 #include "../Component/Updatable/PlayerController.h"
+#include "../Component/Updatable/Gameplay/Player.h"
 
 namespace Manager
 {
@@ -23,12 +24,14 @@ ComponentManager::ComponentManager()
 	nameToType_.insert({ typeid(Rigidbody).name(), typeid(Rigidbody) });
 	nameToType_.insert({ typeid(BoxCollider).name(), typeid(BoxCollider) });
 	nameToType_.insert({ typeid(PlayerController).name(), typeid(PlayerController) });
+	nameToType_.insert({ typeid(Player).name(), typeid(Player) });
 	nameToType_.insert({ typeid(Sprite).name(), typeid(Sprite) });
 
 	componentMap_.insert({ typeid(Transform), Transform::CreateComponent });
 	componentMap_.insert({ typeid(Rigidbody), Rigidbody::CreateComponent });
 	componentMap_.insert({ typeid(BoxCollider), BoxCollider::CreateComponent });
 	componentMap_.insert({ typeid(PlayerController), PlayerController::CreateComponent });
+	componentMap_.insert({ typeid(Player), Player::CreateComponent });
 	componentMap_.insert({ typeid(Sprite), Sprite::CreateComponent });
 }
 

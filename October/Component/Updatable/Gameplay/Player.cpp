@@ -1,6 +1,6 @@
 #include "Player.h"
 
-#include <GLFW/glfw3.h>
+//#include <GLFW/glfw3.h>
 #include "../../LateUpdatable/Sprite.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../Utils/imgui/imgui.h"
@@ -8,10 +8,13 @@
 Player::Player(GameObject* owner) : Component(owner)
 {
 	sp_ = static_cast<Sprite*>(owner_->GetComponent(typeid(Sprite)));
+	owner_->SetCollidable(static_cast<Collidable*>(this));
 }
 
 void Player::Update()
 {
+	if (sp_ == nullptr)
+		sp_ = static_cast<Sprite*>(owner_->GetComponent(typeid(Sprite)));
 }
 
 void Player::LoadFromJson(const json& data)
@@ -34,7 +37,8 @@ json Player::SaveToJson()
 
 void Player::OnCollision(Collision* collision)
 {
-	double timeValue = glfwGetTime();
+	static double timeValue = -10.0;
+	timeValue += 10;
 	float colorValue = float(sin(timeValue)) / 2.0f + 0.5f;
 	sp_->SetColor(0, { colorValue, colorValue, colorValue });
 	sp_->SetColor(1, { colorValue, 0, 0 });
