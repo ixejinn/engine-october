@@ -155,10 +155,10 @@ bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
 	//      (확장된 AABB의 모서리는 원의 반지름보다 길어지기 때문)
 
 	// Circle collider가 AABB의 대각선 방향이 아닌 곳에 위치하는 경우
-	//if (
-	//	(colliderCtrCircle.x >= colliderRangeAABB[0].x && colliderCtrCircle.x <= colliderRangeAABB[1].x) ||
-	//	(colliderCtrCircle.y >= colliderRangeAABB[0].y && colliderCtrCircle.y <= colliderRangeAABB[1].y)
-	//	)
+	if (
+		(colliderCtrCircle.x >= colliderRangeAABB[0].x && colliderCtrCircle.x <= colliderRangeAABB[1].x) ||
+		(colliderCtrCircle.y >= colliderRangeAABB[0].y && colliderCtrCircle.y <= colliderRangeAABB[1].y)
+		)
 	{
 		// AABB를 circle collider의 반지름만큼 확장시켰을 때
 		colliderRangeAABB[0] -= radius;
@@ -174,24 +174,23 @@ bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
 			return true;
 	}
 	// 예외
-	//else
-	//{
-	//	glm::vec2 verticesAABB[4]
-	//	{
-	//		aabb->topRight_,
-	//		{ aabb->bottomLeft_.x, aabb->topRight_.y },
-	//		aabb->bottomLeft_,
-	//		{ aabb->topRight_.x, aabb->bottomLeft_.y }
-	//	};
+	else
+	{
+		glm::vec2 verticesAABB[4]
+		{
+			aabb->topRight_,
+			{ aabb->bottomLeft_.x, aabb->topRight_.y },
+			aabb->bottomLeft_,
+			{ aabb->topRight_.x, aabb->bottomLeft_.y }
+		};
 
-	//	for (int i = 0; i < 4; i++)
-	//	{
-	//		// 4개 정점과 circle collider center와의 거리가 반지름과 같거나 작으면 충돌 있음
-	//		auto test = glm::length(verticesAABB[i] - colliderCtrCircle);
-	//		if (glm::distance(verticesAABB[i], colliderCtrCircle) <= radius)
-	//			return true;
-	//	}
-	//}
+		for (int i = 0; i < 4; i++)
+		{
+			// 4개 정점과 circle collider center와의 거리가 반지름과 같거나 작은 경우가 하나라도 있으면 충돌 있음
+			if (glm::distance(verticesAABB[i], colliderCtrCircle) <= radius)
+				return true;
+		}
+	}
 
 	return false;
 }

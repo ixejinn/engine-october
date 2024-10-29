@@ -13,8 +13,6 @@ Player::Player(GameObject* owner) : Component(owner)
 
 void Player::Update()
 {
-	if (sp_ == nullptr)
-		sp_ = static_cast<Sprite*>(owner_->GetComponent(typeid(Sprite)));
 }
 
 void Player::LoadFromJson(const json& data)
@@ -37,6 +35,9 @@ json Player::SaveToJson()
 
 void Player::OnCollision(Collision* collision)
 {
+	if (sp_ == nullptr)
+		sp_ = static_cast<Sprite*>(owner_->GetComponent(typeid(Sprite)));
+
 	static double timeValue = -10.0;
 	timeValue += 10;
 	float colorValue = float(sin(timeValue)) / 2.0f + 0.5f;

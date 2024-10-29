@@ -186,6 +186,7 @@ void Sprite::LateUpdate()
     glBindTexture(GL_TEXTURE_2D, texture_->GetData());
     glBindVertexArray(vao_);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    //glDrawElements(GL_LINES, 8, GL_UNSIGNED_INT, 0);
 }
 
 void Sprite::SetMesh()
@@ -206,6 +207,7 @@ void Sprite::SetMesh()
     unsigned int indices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
+        //0, 1, 1, 2, 2, 3, 3, 0
     };
 
     glGenVertexArrays(1, &vao_); // VAO stores the state related to vertex attribute settings

@@ -12,7 +12,7 @@ CircleCollider::CircleCollider(GameObject* owner) : Collider(owner)
 
 void CircleCollider::FixedUpdate()
 {
-	UpdateVertices(trans_->GetLocalScale() * radius_ * 0.5f);
+	UpdateVertices(trans_->GetLocalScale() * radius_);
 }
 
 void CircleCollider::LoadFromJson(const json& data)
@@ -57,7 +57,9 @@ void CircleCollider::ShowDetails()
 	ImGui::InputFloat2("##boxCollider_center", &center_[0]);
 
 	ImGui::Text("Radius");
-	ImGui::Checkbox("Radius with transform", &scaleWithTransform_);
+	static bool scaleWithTrans = true;
+	ImGui::Checkbox("Radius with transform", &scaleWithTrans);
+	SetScaleWithTransform(scaleWithTrans);
 	if (!scaleWithTransform_)
 		ImGui::DragFloat("x##CircleCollider_radius", &radius_, 0.01f);
 }
@@ -69,7 +71,7 @@ void CircleCollider::SetScaleWithTransform(bool b)
 	if (b)
 	{
 		auto scale = trans_->GetScale();
-		radius_ = glm::max(scale.x, scale.y);
+		radius_ = glm::max(scale.x, scale.y) / 2.f;
 	}
 }
 
