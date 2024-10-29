@@ -54,7 +54,7 @@ int main()
 	EmptyState* sample = new EmptyState();
 	Manager::gsMgr.ChangeState(sample);
 
-	while (!glfwWindowShouldClose(window)/* || !Manager::gsMgr.ShouldExit()*/)
+	while (!glfwWindowShouldClose(window) && !Manager::gsMgr.ShouldExit())
 	{
 		ProcessInput(window);
 
@@ -68,8 +68,6 @@ int main()
 		Manager::editor.ShowEditor();
 
 		glfwSwapBuffers(window);
-
-		bool test = Manager::gsMgr.ShouldExit();
 	}
 	// !!! 필요없어지면 지우기 !!!
 	Manager::gsMgr.ChangeState(nullptr);
