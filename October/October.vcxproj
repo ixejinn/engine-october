@@ -158,6 +158,8 @@
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Manager\SettingManager.cpp" />
+    <ClCompile Include="Profiler\Block.cpp" />
+    <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
     <ClCompile Include="Resource\Texture.cpp" />
     <ClCompile Include="State\EmptyState.cpp" />
@@ -199,6 +201,8 @@
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Manager\SettingManager.h" />
+    <ClInclude Include="Profiler\Block.h" />
+    <ClInclude Include="Profiler\Profiler.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />
     <ClInclude Include="Resource\Texture.h" />
