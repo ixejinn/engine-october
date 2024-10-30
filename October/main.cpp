@@ -54,7 +54,7 @@ int main()
 	EmptyState* sample = new EmptyState();
 	Manager::gsMgr.ChangeState(sample);
 
-	while (!glfwWindowShouldClose(window) && !Manager::gsMgr.ShouldExit())
+	while (!glfwWindowShouldClose(window)/* && !Manager::gsMgr.ShouldExit()*/)
 	{
 		ProcessInput(window);
 

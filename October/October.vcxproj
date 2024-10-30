@@ -158,8 +158,6 @@
     <ClCompile Include="Manager\ResourceManager.cpp" />
     <ClCompile Include="Manager\SerializationManager.cpp" />
     <ClCompile Include="Manager\SettingManager.cpp" />
-    <ClCompile Include="Profiler\Block.cpp" />
-    <ClCompile Include="Profiler\Profiler.cpp" />
     <ClCompile Include="Resource\Shader.cpp" />
     <ClCompile Include="Resource\Texture.cpp" />
     <ClCompile Include="State\EmptyState.cpp" />
@@ -171,6 +169,9 @@
     <ClCompile Include="Utils\imgui\imgui_stdlib.cpp" />
     <ClCompile Include="Utils\imgui\imgui_tables.cpp" />
     <ClCompile Include="Utils\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Utils\imgui\implot.cpp" />
+    <ClCompile Include="Utils\imgui\implot_demo.cpp" />
+    <ClCompile Include="Utils\imgui\implot_items.cpp" />
     <ClCompile Include="Utils\stb\stb_image.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Manager\ComponentManager.cpp" />
@@ -201,8 +202,6 @@
     <ClInclude Include="Manager\ResourceManager.h" />
     <ClInclude Include="Manager\SerializationManager.h" />
     <ClInclude Include="Manager\SettingManager.h" />
-    <ClInclude Include="Profiler\Block.h" />
-    <ClInclude Include="Profiler\Profiler.h" />
     <ClInclude Include="Resource\Resource.h" />
     <ClInclude Include="Resource\Shader.h" />
     <ClInclude Include="Resource\Texture.h" />
@@ -215,6 +214,8 @@
     <ClInclude Include="Utils\imgui\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="Utils\imgui\imgui_internal.h" />
     <ClInclude Include="Utils\imgui\imgui_stdlib.h" />
+    <ClInclude Include="Utils\imgui\implot.h" />
+    <ClInclude Include="Utils\imgui\implot_internal.h" />
     <ClInclude Include="Utils\imgui\imstb_rectpack.h" />
     <ClInclude Include="Utils\imgui\imstb_textedit.h" />
     <ClInclude Include="Utils\imgui\imstb_truetype.h" />

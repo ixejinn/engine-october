@@ -123,10 +123,13 @@
     <ClCompile Include="Component\FixedUpdatable\CircleCollider.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Profiler\Block.cpp">
+    <ClCompile Include="Utils\imgui\implot.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Profiler\Profiler.cpp">
+    <ClCompile Include="Utils\imgui\implot_demo.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\imgui\implot_items.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,10 +263,10 @@
     <ClInclude Include="Component\FixedUpdatable\CircleCollider.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Profiler\Block.h">
+    <ClInclude Include="Utils\imgui\implot.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Profiler\Profiler.h">
+    <ClInclude Include="Utils\imgui\implot_internal.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

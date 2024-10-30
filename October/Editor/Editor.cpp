@@ -7,6 +7,8 @@
 #include "../Utils/imgui/imgui.h"
 #include "../Utils/imgui/imgui_impl_glfw.h"
 #include "../Utils/imgui/imgui_impl_opengl3.h"
+#include "../Utils/imgui/implot.h"
+#include "../Utils/imgui/implot_internal.h"
 #include "../Manager/SerializationManager.h"
 #include "../Manager/GameObjectManager.h"
 #include "../Manager/GameStateManager.h"
@@ -57,6 +59,7 @@ void Editor::Init(GLFWwindow* window)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
@@ -71,7 +74,7 @@ void Editor::ShowEditor()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
+    //ImPlot::ShowDemoWindow();
     EditmodeButton();
     
     if (mode_)
@@ -93,6 +96,7 @@ void Editor::Exit()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
 }
 
