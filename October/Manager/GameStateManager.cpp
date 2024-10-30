@@ -52,6 +52,10 @@ void GameStateManager::ChangeState(State* newState)
 {
 	if (curState_)
 		curState_->Exit();
+	ClearManagers();
+
+	if (preState_)
+		delete preState_;
 
 	preState_ = curState_;
 	curState_ = newState;

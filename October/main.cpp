@@ -71,6 +71,7 @@ int main()
 	}
 	// !!! 필요없어지면 지우기 !!!
 	Manager::gsMgr.ChangeState(nullptr);
+	Manager::gsMgr.Exit();
 
 	Manager::editor.Exit();
 
