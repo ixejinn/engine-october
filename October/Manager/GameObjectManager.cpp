@@ -66,8 +66,9 @@ void GameObjectManager::DeleteObject(const std::string& name)
 
 void GameObjectManager::Clear()
 {
-	for (auto it = objects_.begin(); it != objects_.end(); )
-		objects_.erase(it++);
+	//for (auto it = objects_.begin(); it != objects_.end(); )
+	//	objects_.erase(it++);
+	objects_.clear();
 
 	noNameObject_ = 0;
 }

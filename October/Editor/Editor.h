@@ -10,8 +10,11 @@ class Editor
 private:
 	bool mode_{ false };
 
+	bool profilerActive_{ false };
+
 	bool showObjectList_{ true };
 	bool showObjectDetails_{ true };
+	bool showProfilerGraph_{ false };
 
 	GameObject* selectedGameObject_{ nullptr };
 
@@ -31,6 +34,7 @@ public:
 	}
 
 	bool GetMode() const { return mode_; }
+	bool GetProfilerActive() const { return profilerActive_; }
 
 	void ToggleMode();
 
@@ -41,5 +45,7 @@ public:
 	void Topbar();
 	void ObjectList();
 	void ObjectDetails();
+	void ProfilerGraph();
+
 	void EditmodeButton();
 };

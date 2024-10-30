@@ -1,7 +1,6 @@
 #pragma once
 #include <chrono>
 #include <deque>
-#include <vector>
 #include <map>
 #include <string>
 #include <cfloat>
@@ -9,8 +8,6 @@
 
 namespace OctProfiler
 {
-	const int MAX_PROFILED_FUNCTIONS = 20;
-
 	struct Block
 	{
 		std::string name_;
@@ -24,7 +21,6 @@ namespace OctProfiler
 		~Block();
 
 		void End();
-		void Dump() const;
 
 		double GetSeconds() const;
 
@@ -55,14 +51,14 @@ namespace OctProfiler
 			}
 		}
 
-		void Erase()
-		{
-			if (data_.size() > 0)
-			{
-				data_.shrink(0);
-				offset_ = 0;
-			}
-		}
+		//void Erase()
+		//{
+		//	if (data_.size() > 0)
+		//	{
+		//		data_.shrink(0);
+		//		offset_ = 0;
+		//	}
+		//}
 	};
 
 	struct ProfilingData
@@ -77,12 +73,18 @@ namespace OctProfiler
 		ProfilingData() : sum_(0.0), min_(0.0), max_(DBL_MAX), callCnt_(0) {}
 	};
 
+	enum ProfilerState
+	{
+		INACTIVE,
+		ACTIVE,
+		REPORT
+	};
+
 	class Profiler
 	{
 	private:
 		Block* current_{ nullptr };
 
-		std::vector<ScrollingBuffer*> graphData_{};	// 둘 다 frame 끝날 때 마다
 		std::map<std::string, ProfilingData*> reportData_{};
 
 		Profiler();
@@ -94,6 +96,10 @@ namespace OctProfiler
 		Profiler& operator =(Profiler&&) = delete;
 
 	public:
+		ProfilerState state_{ INACTIVE };
+
+		std::map<std::string, ScrollingBuffer*> graphData_{};
+
 		static Profiler& GetInstance()
 		{
 			static Profiler instance;
@@ -102,10 +108,34 @@ namespace OctProfiler
 
 		void StartBlock(const std::string& funcName);
 		void EndBlock();
-		void RecordBlock(Block* block);
+
+		void GenerateGraphData(const Block* block);
+		void RecordBlock(const Block* block);
 
 		void End();
-
-		void Clear();
 	};
 }
+
+#ifndef __FUNCTION_NAME__
+
+#ifdef WIN32
+#define __FUNCTION_NAME__ __FUNCTION__
+#else
+#define __FUNCTION_NAME__ __func__
+#endif	// WIN32
+
+#endif	// __FUNCTION_NAME__
+
+#ifdef _DEBUG
+
+#define DEBUG_PROFILER_BLOCK_START(x) OctProfiler::Profiler::GetInstance().StartBlock(x)
+#define DEBUG_PROFILER_BLOCK_END OctProfiler::Profiler::GetInstance().EndBlock()
+#define DEBUG_PROFILER_END OctProfiler::Profiler::GetInstance().End()
+
+#else	// _DEBUG
+
+#define DEBUG_PROFILER_BLOCK_START(x)	//
+#define DEBUG_PROFILER_BLOCK_END		//
+#define DEBUG_PROFILER_END				//
+
+#endif	// _DEBUG

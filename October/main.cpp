@@ -7,6 +7,7 @@
 
 #include "Manager/GameStateManager.h"
 #include "Manager/SettingManager.h"
+#include "Profiler/Profiler.h"
 #include "Editor/Editor.h"
 
 #include "State/EmptyState.h"
@@ -16,6 +17,7 @@ namespace Manager
 	extern GameStateManager& gsMgr;
 	extern SettingManager& setMgr;
 	extern Editor& editor;
+	extern OctProfiler::Profiler& profiler;
 }
 
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
@@ -60,10 +62,14 @@ int main()
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		
+		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
 
 		Manager::gsMgr.Update();
 
 		glfwPollEvents();	// Check event, Update window state, Call callback function
+
+		DEBUG_PROFILER_BLOCK_END;
 
 		Manager::editor.ShowEditor();
 

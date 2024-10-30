@@ -6,6 +6,8 @@
 #include "../Editor/Editor.h"
 #include "../Component/Component.h"
 
+#include "../Profiler/Profiler.h"
+
 #include "../Component/FixedUpdatable/Transform.h"
 #include "../Component/FixedUpdatable/Rigidbody.h"
 #include "../Component/FixedUpdatable/BoxCollider.h"
@@ -76,6 +78,8 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 
 void ComponentManager::FixedUpdate()
 {
+	DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
 	static std::chrono::duration<long, std::milli> adder{ 0 };
 	static std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
@@ -96,6 +100,8 @@ void ComponentManager::FixedUpdate()
 
 		adder -= FixedUpdatable::Step_;
 	}
+
+	DEBUG_PROFILER_BLOCK_END;
 }
 
 void ComponentManager::Update()
@@ -115,6 +121,8 @@ void ComponentManager::Update()
 
 void ComponentManager::LateUpdate()
 {
+	DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
 	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
 	{
 		if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
@@ -122,6 +130,8 @@ void ComponentManager::LateUpdate()
 
 		(*it)->LateUpdate();
 	}
+
+	DEBUG_PROFILER_BLOCK_END;
 }
 
 void ComponentManager::Clear()

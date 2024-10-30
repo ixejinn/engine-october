@@ -12,6 +12,7 @@
 #include "../Manager/SerializationManager.h"
 #include "../Manager/GameObjectManager.h"
 #include "../Manager/GameStateManager.h"
+#include "../Profiler/Profiler.h"
 #include "../GameObject/GameObject.h"
 #include "../State/EmptyState.h"
 
@@ -28,6 +29,7 @@ namespace Manager
     extern GameObjectManager& objMgr;
     extern SerializationManager& serMgr;
     extern GameStateManager& gsMgr;
+    extern OctProfiler::Profiler& profiler;
 }
 
 Editor::Editor()
@@ -74,19 +76,22 @@ void Editor::ShowEditor()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    ImPlot::ShowDemoWindow();
-    //EditmodeButton();
-    //
-    //if (mode_)
-    //{
-    //    Topbar();
+    //ImPlot::ShowDemoWindow();
+    EditmodeButton();
+    
+    if (mode_)
+    {
+        Topbar();
 
-    //    if (showObjectList_)
-    //        ObjectList();
+        if (showObjectList_)
+            ObjectList();
 
-    //    if (showObjectDetails_)
-    //        ObjectDetails();
-    //}
+        if (showObjectDetails_)
+            ObjectDetails();
+
+        if (showProfilerGraph_)
+            ProfilerGraph();
+    }
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -239,7 +244,7 @@ void Editor::Topbar()
        
         if (ImGui::BeginMenu("Delete...", selected))
         {
-            if (ImGui::MenuItem("Rigidbody", NULL, false, hasRb))
+            if (ImGui::MenuItem("Rigidbody", NULL, false, hasRb && !hasBoxCol && !hasCirCol && !hasPc && !hasPlayer))
             {
                 selectedGameObject_->DeleteComponent(typeid(Rigidbody));
 
@@ -264,7 +269,7 @@ void Editor::Topbar()
             if (ImGui::MenuItem("Player", NULL, false, hasPlayer))
                 selectedGameObject_->DeleteComponent(typeid(Player));
 
-            if (ImGui::MenuItem("Sprite", NULL, false, hasSp))
+            if (ImGui::MenuItem("Sprite", NULL, false, hasSp && !hasPlayer))
                 selectedGameObject_->DeleteComponent(typeid(Sprite));
 
             ImGui::EndMenu();
@@ -276,6 +281,13 @@ void Editor::Topbar()
     {
         ImGui::MenuItem("GameObject List", NULL, &showObjectList_);
         ImGui::MenuItem("GameObject Details", NULL, &showObjectDetails_);
+        if (ImGui::MenuItem("Profiler Graph", NULL, &showProfilerGraph_))
+        {
+            if (Manager::profiler.state_ == OctProfiler::INACTIVE)
+                Manager::profiler.state_ = OctProfiler::ACTIVE;
+            else if (Manager::profiler.state_ == OctProfiler::ACTIVE)
+                Manager::profiler.state_ = OctProfiler::REPORT;
+        }
         ImGui::EndMenu();
     }
 
@@ -368,6 +380,27 @@ void Editor::ObjectDetails()
     }
 
     ImGui::End();
+}
+
+void Editor::ProfilerGraph()
+{
+    static float t = 0;
+    t += ImGui::GetIO().DeltaTime;
+    static float history = 10.0f;
+    static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
+
+    if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1, 150)))
+    {
+        ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+        ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
+        ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
+
+        for (const auto& pair : Manager::profiler.graphData_)
+            ImPlot::PlotLine(pair.first.c_str(), &pair.second->data_[0].x, &pair.second->data_[0].y, pair.second->data_.size(), 0, pair.second->offset_, 2 * sizeof(float));
+
+        ImPlot::EndPlot();
+    }
 }
 
 void Editor::EditmodeButton()

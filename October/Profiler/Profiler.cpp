@@ -1,17 +1,14 @@
 #include "Profiler.h"
 
-namespace Manager
-{
-	extern OctProfiler::Profiler& profiler;
-}
+#include <iostream>
 
-OctProfiler::Profiler::Profiler()
-{
-	graphData_.reserve(MAX_PROFILED_FUNCTIONS);
-}
+OctProfiler::Profiler::Profiler() {}
 
 void OctProfiler::Profiler::StartBlock(const std::string& funcName)
 {
+	if (state_ == INACTIVE)
+		return;
+
 	if (!current_)
 		current_ = new Block(funcName);	// Root
 	else
@@ -20,23 +17,43 @@ void OctProfiler::Profiler::StartBlock(const std::string& funcName)
 
 void OctProfiler::Profiler::EndBlock()
 {
+	if (state_ == INACTIVE)
+		return;
+
 	// Stop counting time on current block
 	current_->End();
 
 	// Go 1 step back
 	Block* parent = current_->parent_;
 
-	// If no parent, Push current to fullyFinishedBlock
+	// If no parent, Record children blocks
 	if (!parent)
-		;
+	{
+		for (const auto* b : current_->children_)
+		{
+			GenerateGraphData(b);
+			RecordBlock(b);
+		}
+	}
 
 	current_ = parent;
 }
 
-void OctProfiler::Profiler::RecordBlock(Block* block)
+void OctProfiler::Profiler::GenerateGraphData(const Block* block)
 {
-	if (reportData_.find(block->name_) != reportData_.end())
-		ProfilingData* newData = new ProfilingData();
+	if (graphData_.find(block->name_) == graphData_.end())
+		graphData_[block->name_] = new ScrollingBuffer();
+
+	ScrollingBuffer* scrollingBuf = graphData_[block->name_];
+	static float t = 0;
+	t += ImGui::GetIO().DeltaTime;
+	scrollingBuf->AddPoint(t, block->GetSeconds());
+}
+
+void OctProfiler::Profiler::RecordBlock(const Block* block)
+{
+	if (reportData_.find(block->name_) == reportData_.end())
+		reportData_[block->name_] = new ProfilingData();
 
 	ProfilingData* blockData = reportData_[block->name_];
 	blockData->callCnt_++;
@@ -50,10 +67,31 @@ void OctProfiler::Profiler::RecordBlock(Block* block)
 
 void OctProfiler::Profiler::End()
 {
-}
+	if (state_ != REPORT)
+		return;
+	state_ = INACTIVE;
 
-void OctProfiler::Profiler::Clear()
-{
+	for (auto it = reportData_.begin(); it != reportData_.end(); ++it)
+	{
+		ProfilingData* data = it->second;
+
+		std::cout << "\n"
+			<< "========== " << it->first << " ==========\n"
+			<< " call count: " << data->callCnt_
+			<< " execution time"
+			<< "   average: " << data->sum_ / data->callCnt_
+			<< "   min    : " << data->min_
+			<< "   max    : " << data->max_ << std::endl;
+
+		delete data;
+	}
+	reportData_.clear();
+
+	for (auto it = graphData_.begin(); it != graphData_.end(); ++it)
+		delete it->second;
+	graphData_.clear();
+
+	current_ = nullptr;
 }
 
 OctProfiler::Block::Block(const std::string& funcName, Block* parent) : name_(funcName), parent_(parent)
@@ -75,7 +113,14 @@ void OctProfiler::Block::End()
 	end = std::chrono::steady_clock::now();
 }
 
-void OctProfiler::Block::Dump() const
+double OctProfiler::Block::GetSeconds() const
 {
-	
+	return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+}
+
+OctProfiler::Block* OctProfiler::Block::AddChild(const std::string& childFuncName)
+{
+	Block* newBlock = new Block(childFuncName, this);
+	children_.push_back(newBlock);
+	return newBlock;
 }
