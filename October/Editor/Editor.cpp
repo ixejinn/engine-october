@@ -74,19 +74,19 @@ void Editor::ShowEditor()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    //ImPlot::ShowDemoWindow();
-    EditmodeButton();
-    
-    if (mode_)
-    {
-        Topbar();
+    ImPlot::ShowDemoWindow();
+    //EditmodeButton();
+    //
+    //if (mode_)
+    //{
+    //    Topbar();
 
-        if (showObjectList_)
-            ObjectList();
+    //    if (showObjectList_)
+    //        ObjectList();
 
-        if (showObjectDetails_)
-            ObjectDetails();
-    }
+    //    if (showObjectDetails_)
+    //        ObjectDetails();
+    //}
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

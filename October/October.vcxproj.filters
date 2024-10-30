@@ -132,6 +132,9 @@
     <ClCompile Include="Utils\imgui\implot_items.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Profiler\Profiler.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Manager\GameStateManager.h">
@@ -267,6 +270,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Utils\imgui\implot_internal.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler\Profiler.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

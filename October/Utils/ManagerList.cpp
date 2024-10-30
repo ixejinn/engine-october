@@ -8,6 +8,8 @@
 
 #include "../Editor/Editor.h"
 
+#include "../Profiler/Profiler.h"
+
 namespace Manager
 {
 	ResourceManager& rscMgr = ResourceManager::GetInstance();
@@ -24,4 +26,6 @@ namespace Manager
 
 	SettingManager& setMgr = SettingManager::GetInstance();
 	Editor& editor = Editor::GetInstance();
+
+	OctProfiler::Profiler& profiler = OctProfiler::Profiler::GetInstance();
 }
