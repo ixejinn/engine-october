@@ -13,8 +13,8 @@ namespace OctProfiler
 	struct Block
 	{
 		std::string name_;
-		std::chrono::steady_clock::time_point start;
-		std::chrono::steady_clock::time_point end;
+		std::chrono::steady_clock::time_point start_;
+		std::chrono::steady_clock::time_point end_;
 
 		std::deque<Block*> children_;
 		Block* parent_;
@@ -78,7 +78,10 @@ namespace OctProfiler
 	class Profiler
 	{
 	private:
+		bool profilerStart_{ true };
 		Block* current_{ nullptr };
+
+		int scrollingBufferMaxSize_{ 300 };
 
 		std::map<std::string, ProfilingData*> reportData_{};
 
@@ -93,7 +96,10 @@ namespace OctProfiler
 	public:
 		bool active_{ false };
 
+		std::chrono::steady_clock::time_point rootStart_;
+
 		std::map<std::string, ScrollingBuffer*> graphData_{};
+		float mainExecutionTime{ 0.f };	// milliseconds
 
 		static Profiler& GetInstance()
 		{
@@ -106,6 +112,8 @@ namespace OctProfiler
 
 		void GenerateGraphData(const Block* block);
 		void RecordBlock(const Block* block);
+
+		int GetScrollingBufferMaxSize() const { return scrollingBufferMaxSize_; }
 
 		void End();
 	};

@@ -9,6 +9,12 @@ void OctProfiler::Profiler::StartBlock(const std::string& funcName)
 	if (!active_)
 		return;
 
+	if (profilerStart_)
+	{
+		rootStart_ = std::chrono::steady_clock::now();
+		profilerStart_ = false;
+	}
+
 	if (!current_)
 		current_ = new Block(funcName);	// Root
 	else
@@ -34,6 +40,10 @@ void OctProfiler::Profiler::EndBlock()
 			GenerateGraphData(b);
 			RecordBlock(b);
 		}
+
+		GenerateGraphData(current_);
+		RecordBlock(current_);
+		mainExecutionTime = current_->GetSeconds() * 0.001f;
 	}
 
 	current_ = parent;
@@ -42,11 +52,10 @@ void OctProfiler::Profiler::EndBlock()
 void OctProfiler::Profiler::GenerateGraphData(const Block* block)
 {
 	if (graphData_.find(block->name_) == graphData_.end())
-		graphData_[block->name_] = new ScrollingBuffer();
+		graphData_[block->name_] = new ScrollingBuffer(scrollingBufferMaxSize_);
 
 	ScrollingBuffer* scrollingBuf = graphData_[block->name_];
-	static float t = 0;
-	t += ImGui::GetIO().DeltaTime;
+	float t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - rootStart_).count();
 	scrollingBuf->AddPoint(t, block->GetSeconds());
 }
 
@@ -87,13 +96,14 @@ void OctProfiler::Profiler::End()
 		delete it->second;
 	graphData_.clear();
 
+	profilerStart_ = true;
 	current_ = nullptr;
 	active_ = false;
 }
 
 OctProfiler::Block::Block(const std::string& funcName, Block* parent) : name_(funcName), parent_(parent)
 {
-	start = std::chrono::steady_clock::now();
+	start_ = std::chrono::steady_clock::now();
 }
 
 OctProfiler::Block::~Block()
@@ -107,12 +117,12 @@ OctProfiler::Block::~Block()
 
 void OctProfiler::Block::End()
 {
-	end = std::chrono::steady_clock::now();
+	end_ = std::chrono::steady_clock::now();
 }
 
 double OctProfiler::Block::GetSeconds() const
 {
-	return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+	return std::chrono::duration_cast<std::chrono::microseconds>(end_ - start_).count();
 }
 
 OctProfiler::Block* OctProfiler::Block::AddChild(const std::string& childFuncName)

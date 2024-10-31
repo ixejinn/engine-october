@@ -1,6 +1,7 @@
 #include "Editor.h"
 
 #include <filesystem>
+#include <chrono>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
@@ -281,13 +282,6 @@ void Editor::Topbar()
     {
         ImGui::MenuItem("GameObject List", NULL, &showObjectList_);
         ImGui::MenuItem("GameObject Details", NULL, &showObjectDetails_);
-        //if (ImGui::MenuItem("Profiler Graph", NULL, &showProfilerGraph_))
-        //{
-        //    if (Manager::profiler.state_ == OctProfiler::INACTIVE)
-        //        Manager::profiler.state_ = OctProfiler::ACTIVE;
-        //    else if (Manager::profiler.state_ == OctProfiler::ACTIVE)
-        //        Manager::profiler.state_ = OctProfiler::REPORT;
-        //}
         ImGui::EndMenu();
     }
 
@@ -384,23 +378,31 @@ void Editor::ObjectDetails()
 
 void Editor::ProfilerGraph()
 {
-    static float t = 0;
-    t += ImGui::GetIO().DeltaTime;
-    static float history = 10.0f;
+    float t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - Manager::profiler.rootStart_).count();
+    static float history = Manager::profiler.GetScrollingBufferMaxSize() / 60.f * 1000;
     static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
 
-    if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1, 150)))
+    ImGui::SetNextWindowSize(ImVec2(1000, 180), ImGuiCond_Appearing);
+
+    ImGui::Begin("Execution Timeline", 0, ImGuiWindowFlags_NoScrollbar);
+
+    if (ImPlot::BeginPlot("##ProfilerGraph", ImVec2(-1, 130)))
     {
-        //ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+        ImPlot::SetupAxes(nullptr, "micro seconds", flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
         ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 20000);
         ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
 
         for (const auto& pair : Manager::profiler.graphData_)
+        {
             ImPlot::PlotLine(pair.first.c_str(), &pair.second->data_[0].x, &pair.second->data_[0].y, pair.second->data_.size(), 0, pair.second->offset_, 2 * sizeof(float));
+        }
 
         ImPlot::EndPlot();
     }
+    
+    ImGui::Text("%f ms (60FPS = 16.6666ms)", Manager::profiler.mainExecutionTime);
+    ImGui::End();
 }
 
 void Editor::EditmodeButton()

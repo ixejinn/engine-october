@@ -81,8 +81,6 @@ void ComponentManager::FixedUpdate()
 	static std::chrono::duration<long, std::milli> adder{ 0 };
 	static std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
-	
-
 	std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
 	adder += std::chrono::duration_cast<std::chrono::milliseconds>(cur - start);
 	if (adder >= FixedUpdatable::Step_)
@@ -91,6 +89,7 @@ void ComponentManager::FixedUpdate()
 	while (adder >= FixedUpdatable::Step_)
 	{
 		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{
 			if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
@@ -100,12 +99,15 @@ void ComponentManager::FixedUpdate()
 		}
 
 		adder -= FixedUpdatable::Step_;
+
 		DEBUG_PROFILER_BLOCK_END;
 	}
 }
 
 void ComponentManager::Update()
 {
+	DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
 	if (!Manager::editor.GetMode())
 	{
 		for (auto it = updComponents_.begin(); it != updComponents_.end(); ++it)
@@ -117,6 +119,8 @@ void ComponentManager::Update()
 		}
 		skipUpdate_ = false;
 	}
+
+	DEBUG_PROFILER_BLOCK_END;
 }
 
 void ComponentManager::LateUpdate()
