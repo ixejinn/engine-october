@@ -88,9 +88,6 @@ void Editor::ShowEditor()
 
         if (showObjectDetails_)
             ObjectDetails();
-
-        if (showProfilerGraph_)
-            ProfilerGraph();
     }
 
     ImGui::Render();
@@ -281,13 +278,13 @@ void Editor::Topbar()
     {
         ImGui::MenuItem("GameObject List", NULL, &showObjectList_);
         ImGui::MenuItem("GameObject Details", NULL, &showObjectDetails_);
-        if (ImGui::MenuItem("Profiler Graph", NULL, &showProfilerGraph_))
-        {
-            if (Manager::profiler.state_ == OctProfiler::INACTIVE)
-                Manager::profiler.state_ = OctProfiler::ACTIVE;
-            else if (Manager::profiler.state_ == OctProfiler::ACTIVE)
-                Manager::profiler.state_ = OctProfiler::REPORT;
-        }
+        //if (ImGui::MenuItem("Profiler Graph", NULL, &showProfilerGraph_))
+        //{
+        //    if (Manager::profiler.state_ == OctProfiler::INACTIVE)
+        //        Manager::profiler.state_ = OctProfiler::ACTIVE;
+        //    else if (Manager::profiler.state_ == OctProfiler::ACTIVE)
+        //        Manager::profiler.state_ = OctProfiler::REPORT;
+        //}
         ImGui::EndMenu();
     }
 
@@ -382,7 +379,7 @@ void Editor::ObjectDetails()
     ImGui::End();
 }
 
-void Editor::ProfilerGraph()
+void ProfilerGraph()
 {
     static float t = 0;
     t += ImGui::GetIO().DeltaTime;

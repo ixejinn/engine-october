@@ -6,6 +6,8 @@
 #include <cfloat>
 #include "../Utils/imgui/imgui.h"
 
+#define PROFILER_ACTIVE
+
 namespace OctProfiler
 {
 	struct Block
@@ -70,14 +72,7 @@ namespace OctProfiler
 
 		int callCnt_;
 
-		ProfilingData() : sum_(0.0), min_(0.0), max_(DBL_MAX), callCnt_(0) {}
-	};
-
-	enum ProfilerState
-	{
-		INACTIVE,
-		ACTIVE,
-		REPORT
+		ProfilingData() : sum_(0.0), min_(DBL_MAX), max_(0.0), callCnt_(0) {}
 	};
 
 	class Profiler
@@ -96,7 +91,7 @@ namespace OctProfiler
 		Profiler& operator =(Profiler&&) = delete;
 
 	public:
-		ProfilerState state_{ INACTIVE };
+		bool active_{ false };
 
 		std::map<std::string, ScrollingBuffer*> graphData_{};
 
@@ -126,7 +121,7 @@ namespace OctProfiler
 
 #endif	// __FUNCTION_NAME__
 
-#ifdef _DEBUG
+#ifdef PROFILER_ACTIVE
 
 #define DEBUG_PROFILER_BLOCK_START(x) OctProfiler::Profiler::GetInstance().StartBlock(x)
 #define DEBUG_PROFILER_BLOCK_END OctProfiler::Profiler::GetInstance().EndBlock()

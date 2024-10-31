@@ -60,20 +60,20 @@ int main()
 	{
 		ProcessInput(window);
 
+		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-		
-		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
 
 		Manager::gsMgr.Update();
 
 		glfwPollEvents();	// Check event, Update window state, Call callback function
 
-		DEBUG_PROFILER_BLOCK_END;
-
 		Manager::editor.ShowEditor();
 
 		glfwSwapBuffers(window);
+
+		DEBUG_PROFILER_BLOCK_END;
 	}
 	// !!! 필요없어지면 지우기 !!!
 	Manager::gsMgr.ChangeState(nullptr);
@@ -89,6 +89,20 @@ void ProcessInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+
+	static bool profilerKeyPressed = false;
+	auto profilerKeyState = glfwGetKey(window, GLFW_KEY_P);
+	if (profilerKeyState == GLFW_PRESS && !profilerKeyPressed)
+	{
+		if (Manager::profiler.active_)
+			DEBUG_PROFILER_END;
+		else
+			Manager::profiler.active_ = true;
+
+		profilerKeyPressed = true;
+	}
+	else if (profilerKeyState == GLFW_RELEASE)
+		profilerKeyPressed = false;
 }
 
 void FramebufferSizeCallback(GLFWwindow* window, int width, int height)

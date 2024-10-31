@@ -6,7 +6,7 @@ OctProfiler::Profiler::Profiler() {}
 
 void OctProfiler::Profiler::StartBlock(const std::string& funcName)
 {
-	if (state_ == INACTIVE)
+	if (!active_)
 		return;
 
 	if (!current_)
@@ -17,7 +17,7 @@ void OctProfiler::Profiler::StartBlock(const std::string& funcName)
 
 void OctProfiler::Profiler::EndBlock()
 {
-	if (state_ == INACTIVE)
+	if (!active_)
 		return;
 
 	// Stop counting time on current block
@@ -67,18 +67,14 @@ void OctProfiler::Profiler::RecordBlock(const Block* block)
 
 void OctProfiler::Profiler::End()
 {
-	if (state_ != REPORT)
-		return;
-	state_ = INACTIVE;
-
 	for (auto it = reportData_.begin(); it != reportData_.end(); ++it)
 	{
 		ProfilingData* data = it->second;
 
 		std::cout << "\n"
 			<< "========== " << it->first << " ==========\n"
-			<< " call count: " << data->callCnt_
-			<< " execution time"
+			<< " call count: " << data->callCnt_ << "\n"
+			<< " execution time(microseconds)"
 			<< "   average: " << data->sum_ / data->callCnt_
 			<< "   min    : " << data->min_
 			<< "   max    : " << data->max_ << std::endl;
@@ -92,6 +88,7 @@ void OctProfiler::Profiler::End()
 	graphData_.clear();
 
 	current_ = nullptr;
+	active_ = false;
 }
 
 OctProfiler::Block::Block(const std::string& funcName, Block* parent) : name_(funcName), parent_(parent)
@@ -115,7 +112,7 @@ void OctProfiler::Block::End()
 
 double OctProfiler::Block::GetSeconds() const
 {
-	return std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+	return std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 }
 
 OctProfiler::Block* OctProfiler::Block::AddChild(const std::string& childFuncName)

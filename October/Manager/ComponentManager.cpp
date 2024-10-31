@@ -78,10 +78,10 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 
 void ComponentManager::FixedUpdate()
 {
-	DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
-
 	static std::chrono::duration<long, std::milli> adder{ 0 };
 	static std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+
+	
 
 	std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
 	adder += std::chrono::duration_cast<std::chrono::milliseconds>(cur - start);
@@ -90,6 +90,7 @@ void ComponentManager::FixedUpdate()
 
 	while (adder >= FixedUpdatable::Step_)
 	{
+		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{
 			if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
@@ -99,9 +100,8 @@ void ComponentManager::FixedUpdate()
 		}
 
 		adder -= FixedUpdatable::Step_;
+		DEBUG_PROFILER_BLOCK_END;
 	}
-
-	DEBUG_PROFILER_BLOCK_END;
 }
 
 void ComponentManager::Update()
