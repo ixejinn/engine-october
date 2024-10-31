@@ -30,8 +30,11 @@ void CircleCollider::LoadFromJson(const json& data)
 		it = compData->find("scaleWithTransform");
 		scaleWithTransform_ = it->begin().value();
 
-		it = compData->find("radius");
-		radius_ = it->begin().value();
+		if (!scaleWithTransform_)
+		{
+			it = compData->find("radius");
+			radius_ = it->begin().value();
+		}
 	}
 }
 
@@ -43,7 +46,8 @@ json CircleCollider::SaveToJson()
 	compData["layer"] = layer_;
 	compData["center"] = { center_.x, center_.y };
 	compData["scaleWithTransform"] = scaleWithTransform_;
-	compData["radius"] = radius_;
+	if (!scaleWithTransform_)
+		compData["radius"] = radius_;
 
 	data["compData"] = compData;
 	return data;
