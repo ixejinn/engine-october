@@ -132,13 +132,9 @@ bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 
 bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)
 {
-	if (aabb1->topRight_.x > aabb2->bottomLeft_.x &&
-		aabb1->bottomLeft_.x < aabb2->topRight_.x &&
-		aabb1->topRight_.y > aabb2->bottomLeft_.y &&
-		aabb1->bottomLeft_.y < aabb2->topRight_.y)
-		return true;
-	else
-		return false;
+	if (aabb1->maxVertex_.x < aabb2->minVertex_.x || aabb1->minVertex_.x > aabb2->maxVertex_.x) return false;
+	if (aabb1->maxVertex_.y < aabb2->minVertex_.y || aabb1->minVertex_.y > aabb2->maxVertex_.y) return false;
+	return true;
 }
 
 bool CollisionManager::CheckAABBOBB(Collider* aabb, BoxCollider* obb)
@@ -151,7 +147,7 @@ bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
 	glm::vec2 colliderCtrCircle = circle->trans_->GetPosition() + circle->center_;
 	float radius = circle->radius_;
 
-	glm::vec2 colliderRangeAABB[2] = { aabb->bottomLeft_, aabb->topRight_ };
+	glm::vec2 colliderRangeAABB[2] = { aabb->minVertex_, aabb->maxVertex_ };
 
 	// AABB를 circle collider의 반지름만큼 확장시켜
 	// circle collider의 center가 AABB의 내부에 있거나 일치하는 지를 확인하여 충돌 감지 가능
@@ -183,10 +179,10 @@ bool CollisionManager::CheckAABBCircle(Collider* aabb, CircleCollider* circle)
 	{
 		glm::vec2 verticesAABB[4]
 		{
-			aabb->topRight_,
-			{ aabb->bottomLeft_.x, aabb->topRight_.y },
-			aabb->bottomLeft_,
-			{ aabb->topRight_.x, aabb->bottomLeft_.y }
+			aabb->maxVertex_,
+			{ aabb->minVertex_.x, aabb->maxVertex_.y },
+			aabb->minVertex_,
+			{ aabb->maxVertex_.x, aabb->minVertex_.y }
 		};
 
 		for (int i = 0; i < 4; i++)
@@ -260,5 +256,9 @@ bool CollisionManager::CheckOBBCircle(BoxCollider* obb, CircleCollider* circle)
 
 bool CollisionManager::CheckCircleCircle(CircleCollider* circle1, CircleCollider* circle2)
 {
-	return false;
+	float sumRadius = circle1->radius_ + circle2->radius_;
+	glm::vec2 diff = (circle1->trans_->GetPosition() + circle1->center_) - (circle2->trans_->GetPosition() + circle2->center_);
+
+	float squaredDist = diff.x * diff.x + diff.y * diff.y;
+	return sumRadius * sumRadius >= squaredDist;
 }

@@ -33,8 +33,8 @@ protected:
 
 	bool scaleWithTransform_{ true };
 	glm::vec2 vertices_[4]{};
-	glm::vec2 bottomLeft_{};
-	glm::vec2 topRight_{};
+	glm::vec2 minVertex_{};
+	glm::vec2 maxVertex_{};
 
 	Transform* trans_{ nullptr };
 

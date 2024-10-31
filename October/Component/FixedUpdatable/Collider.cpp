@@ -29,12 +29,12 @@ void Collider::UpdateVertices(const glm::vec2& halfSize)
 	for (int i = 0; i < 4; i++)
 		vertices_[i] = transformMatrix * glm::vec4(vertices_[i], 0.f, 1.f);
 
-	bottomLeft_ = topRight_ = vertices_[0];
+	minVertex_ = maxVertex_ = vertices_[0];
 	for (const auto& v : vertices_)
 	{
-		bottomLeft_.x = glm::min(bottomLeft_.x, v.x);
-		bottomLeft_.y = glm::min(bottomLeft_.y, v.y);
-		topRight_.x = glm::max(topRight_.x, v.x);
-		topRight_.y = glm::max(topRight_.y, v.y);
+		minVertex_.x = glm::min(minVertex_.x, v.x);
+		minVertex_.y = glm::min(minVertex_.y, v.y);
+		maxVertex_.x = glm::max(maxVertex_.x, v.x);
+		maxVertex_.y = glm::max(maxVertex_.y, v.y);
 	}
 }
