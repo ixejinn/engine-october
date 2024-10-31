@@ -74,7 +74,7 @@ void CircleCollider::SetScaleWithTransform(bool b)
 
 	if (b)
 	{
-		auto scale = trans_->GetScale();
+		glm::vec2 scale = trans_->GetScale();
 		radius_ = glm::max(scale.x, scale.y) / 2.f;
 	}
 }

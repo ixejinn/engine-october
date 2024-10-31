@@ -65,7 +65,6 @@ void Transform::ShowDetails()
     ImGui::SeparatorText("Transform");
 
     ImGui::Text("Position");
-    //ImGui::InputFloat2("##position", &position_[0]);
     ImGui::DragFloat("x##transform_position", &position_[0], 0.01f);
     ImGui::DragFloat("y##transform_position", &position_[1], 0.01f);
 

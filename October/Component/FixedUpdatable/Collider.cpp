@@ -30,11 +30,11 @@ void Collider::UpdateVertices(const glm::vec2& halfSize)
 		vertices_[i] = transformMatrix * glm::vec4(vertices_[i], 0.f, 1.f);
 
 	bottomLeft_ = topRight_ = vertices_[0];
-	for (int i = 1; i < 4; i++)
+	for (const auto& v : vertices_)
 	{
-		bottomLeft_.x = glm::min(bottomLeft_.x, vertices_[i].x);
-		bottomLeft_.y = glm::min(bottomLeft_.y, vertices_[i].y);
-		topRight_.x = glm::max(topRight_.x, vertices_[i].x);
-		topRight_.y = glm::max(topRight_.y, vertices_[i].y);
+		bottomLeft_.x = glm::min(bottomLeft_.x, v.x);
+		bottomLeft_.y = glm::min(bottomLeft_.y, v.y);
+		topRight_.x = glm::max(topRight_.x, v.x);
+		topRight_.y = glm::max(topRight_.y, v.y);
 	}
 }
