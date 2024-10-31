@@ -42,6 +42,7 @@ public:
 	void Topbar();
 	void ObjectList();
 	void ObjectDetails();
+	void ProfilerGraph();
 
 	void EditmodeButton();
 };

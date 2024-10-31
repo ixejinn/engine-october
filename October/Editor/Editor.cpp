@@ -90,6 +90,9 @@ void Editor::ShowEditor()
             ObjectDetails();
     }
 
+    if (Manager::profiler.active_)
+        ProfilerGraph();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -379,7 +382,7 @@ void Editor::ObjectDetails()
     ImGui::End();
 }
 
-void ProfilerGraph()
+void Editor::ProfilerGraph()
 {
     static float t = 0;
     t += ImGui::GetIO().DeltaTime;
@@ -388,9 +391,9 @@ void ProfilerGraph()
 
     if (ImPlot::BeginPlot("##Scrolling", ImVec2(-1, 150)))
     {
-        ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
+        //ImPlot::SetupAxes(nullptr, nullptr, flags, flags);
         ImPlot::SetupAxisLimits(ImAxis_X1, t - history, t, ImGuiCond_Always);
-        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 1);
+        ImPlot::SetupAxisLimits(ImAxis_Y1, 0, 20000);
         ImPlot::SetNextFillStyle(IMPLOT_AUTO_COL, 0.5f);
 
         for (const auto& pair : Manager::profiler.graphData_)
