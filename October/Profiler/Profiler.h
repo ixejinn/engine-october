@@ -24,7 +24,7 @@ namespace OctProfiler
 
 		void End();
 
-		double GetSeconds() const;
+		float GetSeconds() const;
 
 		Block* AddChild(const std::string& childFuncName);
 	};

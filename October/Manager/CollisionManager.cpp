@@ -124,10 +124,8 @@ bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 		return CheckCircleCircle(static_cast<CircleCollider*>(colA), static_cast<CircleCollider*>(colB));
 		break;
 	}
-
-	default:
-		return false;
 	}
+	return false;
 }
 
 bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)

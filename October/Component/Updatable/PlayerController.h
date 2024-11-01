@@ -3,6 +3,7 @@
 
 #include "../Component.h"
 #include "Updatable.h"
+#include "../../Utils/Utils.h"
 
 class Rigidbody;
 
@@ -22,11 +23,18 @@ private:
 
 	void Update() override;
 
+	// @brief Convert GLFW_KEY to ImGuiKey only for arrow, number and alphabet keys
+	//static ImGuiKey GetImGuiKey(unsigned int GLFWkey);
+
 public:
 	void LoadFromJson(const json& data) override;
 	json SaveToJson() override;
 
 	void ShowDetails() override;
+
+	// @brief Key order is LEFT, RIGHT, UP, DOWN
+	void SetMoveKeys(const unsigned int* keys);
+	void SetMoveKey(Direction dir, unsigned int key);
 
 	static Component* CreateComponent(GameObject* owner);
 };

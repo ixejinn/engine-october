@@ -4,7 +4,7 @@
 #include "../Updatable.h"
 
 class Sprite;
-class Collision;
+struct Collision;
 
 class Player : public Component, public Collidable, public Updatable
 {

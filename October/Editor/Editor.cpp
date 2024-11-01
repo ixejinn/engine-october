@@ -74,6 +74,8 @@ void Editor::Init(GLFWwindow* window)
 
 void Editor::ShowEditor()
 {
+    DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -96,6 +98,8 @@ void Editor::ShowEditor()
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+    DEBUG_PROFILER_BLOCK_END;
 }
 
 void Editor::Exit()
@@ -378,7 +382,7 @@ void Editor::ObjectDetails()
 
 void Editor::ProfilerGraph()
 {
-    float t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - Manager::profiler.rootStart_).count();
+    float t = float(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - Manager::profiler.rootStart_).count());
     static float history = Manager::profiler.GetScrollingBufferMaxSize() / 60.f * 1000;
     static ImPlotAxisFlags flags = ImPlotAxisFlags_NoTickLabels;
 
@@ -401,7 +405,7 @@ void Editor::ProfilerGraph()
         ImPlot::EndPlot();
     }
     
-    ImGui::Text("%f ms (60FPS = 16.6666ms)", Manager::profiler.mainExecutionTime);
+    ImGui::Text("%.3f ms/frame (60 FPS = 16.666 ms)", Manager::profiler.mainExecutionTime);
     ImGui::End();
 }
 

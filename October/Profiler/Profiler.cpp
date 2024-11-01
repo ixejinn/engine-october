@@ -55,7 +55,7 @@ void OctProfiler::Profiler::GenerateGraphData(const Block* block)
 		graphData_[block->name_] = new ScrollingBuffer(scrollingBufferMaxSize_);
 
 	ScrollingBuffer* scrollingBuf = graphData_[block->name_];
-	float t = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - rootStart_).count();
+	float t = float(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - rootStart_).count());
 	scrollingBuf->AddPoint(t, block->GetSeconds());
 }
 
@@ -120,9 +120,9 @@ void OctProfiler::Block::End()
 	end_ = std::chrono::steady_clock::now();
 }
 
-double OctProfiler::Block::GetSeconds() const
+float OctProfiler::Block::GetSeconds() const
 {
-	return std::chrono::duration_cast<std::chrono::microseconds>(end_ - start_).count();
+	return float(std::chrono::duration_cast<std::chrono::microseconds>(end_ - start_).count());
 }
 
 OctProfiler::Block* OctProfiler::Block::AddChild(const std::string& childFuncName)
