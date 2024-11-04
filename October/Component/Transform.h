@@ -2,10 +2,9 @@
 #include <glm/vec2.hpp>
 #include <glm/mat4x4.hpp>
 
-#include "../Component.h"
-#include "FixedUpdatable.h"
+#include "Component.h"
 
-class Transform : public Component, public FixedUpdatable
+class Transform : public Component
 {
 private:
 	glm::vec2 position_{ 0.f, 0.f };
@@ -17,10 +16,11 @@ private:
 
 	Transform(GameObject* owner);
 
-	void FixedUpdate() override;
+public:
+	~Transform();
+
 	void UpdateMatrix();
 
-public:
 	void LoadFromJson(const json& data) override;
 	json SaveToJson() override;
 

@@ -27,7 +27,7 @@
     <ClCompile Include="Manager\ComponentManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Component\FixedUpdatable\Transform.cpp">
+    <ClCompile Include="Component\Transform.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Utils\ManagerList.cpp">
@@ -96,7 +96,7 @@
     <ClCompile Include="Resource\Texture.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="Component\FixedUpdatable\Rigidbody.cpp">
+    <ClCompile Include="Component\Rigidbody.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Component\Updatable\PlayerController.cpp">
@@ -149,7 +149,7 @@
     <ClInclude Include="Manager\ComponentManager.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Component\FixedUpdatable\Transform.h">
+    <ClInclude Include="Component\Transform.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Component\Component.h">
@@ -233,7 +233,7 @@
     <ClInclude Include="Component\EditmodeUpdatable.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Component\FixedUpdatable\Rigidbody.h">
+    <ClInclude Include="Component\Rigidbody.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Component\Updatable\PlayerController.h">

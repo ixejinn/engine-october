@@ -144,8 +144,8 @@
     <ClCompile Include="Component\FixedUpdatable\CircleCollider.cpp" />
     <ClCompile Include="Component\FixedUpdatable\Collider.cpp" />
     <ClCompile Include="Component\FixedUpdatable\FixedUpdatable.cpp" />
-    <ClCompile Include="Component\FixedUpdatable\Rigidbody.cpp" />
-    <ClCompile Include="Component\FixedUpdatable\Transform.cpp" />
+    <ClCompile Include="Component\Rigidbody.cpp" />
+    <ClCompile Include="Component\Transform.cpp" />
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
     <ClCompile Include="Component\Updatable\Gameplay\Player.cpp" />
@@ -190,8 +190,8 @@
     <ClInclude Include="Component\FixedUpdatable\CircleCollider.h" />
     <ClInclude Include="Component\FixedUpdatable\Collider.h" />
     <ClInclude Include="Component\FixedUpdatable\FixedUpdatable.h" />
-    <ClInclude Include="Component\FixedUpdatable\Rigidbody.h" />
-    <ClInclude Include="Component\FixedUpdatable\Transform.h" />
+    <ClInclude Include="Component\Rigidbody.h" />
+    <ClInclude Include="Component\Transform.h" />
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="Component\Updatable\Gameplay\Player.h" />

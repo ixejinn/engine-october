@@ -1,7 +1,7 @@
 #include "PlayerController.h"
 
 #include <glm/glm.hpp>
-#include "../FixedUpdatable/Rigidbody.h"
+#include "../Rigidbody.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Manager/SettingManager.h"
 #include "../../Utils/imgui/imgui.h"

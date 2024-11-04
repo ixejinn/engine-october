@@ -8,8 +8,8 @@
 
 #include "../Profiler/Profiler.h"
 
-#include "../Component/FixedUpdatable/Transform.h"
-#include "../Component/FixedUpdatable/Rigidbody.h"
+#include "../Component/Transform.h"
+#include "../Component/Rigidbody.h"
 #include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/FixedUpdatable/CircleCollider.h"
 #include "../Component/LateUpdatable/Sprite.h"
@@ -62,46 +62,48 @@ Component* ComponentManager::CreateComponent(std::type_index compType, GameObjec
 
 	Component* newComp = componentMap_[compType](owner);
 
-	FixedUpdatable* fixedComp = nullptr;
-	Updatable* updComp = nullptr;
-	LateUpdatable* lateComp = nullptr;
+	if (compType == typeid(Transform))
+		transforms_.push_back(static_cast<Transform*>(newComp));
+	else if (compType == typeid(Rigidbody))
+		rigidbodies_.push_back(static_cast<Rigidbody*>(newComp));
+	else
+	{
+		FixedUpdatable* fixedComp = nullptr;
+		Updatable* updComp = nullptr;
+		LateUpdatable* lateComp = nullptr;
 
-	if (fixedComp = dynamic_cast<FixedUpdatable*>(newComp))
-		fixedComponents_.push_back(fixedComp);
-	else if (updComp = dynamic_cast<Updatable*>(newComp))
-		updComponents_.push_back(updComp);
-	else if (lateComp = dynamic_cast<LateUpdatable*>(newComp))
-		lateComponents_.push_back(lateComp);
+		if (fixedComp = dynamic_cast<FixedUpdatable*>(newComp))
+			fixedComponents_.push_back(fixedComp);
+		else if (updComp = dynamic_cast<Updatable*>(newComp))
+			updComponents_.push_back(updComp);
+		else if (lateComp = dynamic_cast<LateUpdatable*>(newComp))
+			lateComponents_.push_back(lateComp);
+	}
 
 	return newComp;
 }
 
 void ComponentManager::FixedUpdate()
 {
-	static std::chrono::duration<long, std::milli> adder{ 0 };
-	static std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
-
-	std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
-	adder += std::chrono::duration_cast<std::chrono::milliseconds>(cur - start);
-	if (adder >= FixedUpdatable::Step_)
-		start = cur;
-
-	while (adder >= FixedUpdatable::Step_)
+	for (auto& comp : fixedComponents_)
 	{
-		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+		if (Manager::editor.GetMode() && !comp->updateInEditmode_)
+			continue;
 
-		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
-		{
-			if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
-				continue;
-
-			(*it)->FixedUpdate();
-		}
-
-		adder -= FixedUpdatable::Step_;
-
-		DEBUG_PROFILER_BLOCK_END;
+		comp->FixedUpdate();
 	}
+}
+
+void ComponentManager::RigidbodyUpdate()
+{
+	for (auto& rb : rigidbodies_)
+		rb->Update();
+}
+
+void ComponentManager::TransformUpdate()
+{
+	for (auto& trans : transforms_)
+		trans->UpdateMatrix();
 }
 
 void ComponentManager::Update()
@@ -141,6 +143,8 @@ void ComponentManager::LateUpdate()
 void ComponentManager::Clear()
 {
 	fixedComponents_.clear();
+	rigidbodies_.clear();
+	transforms_.clear();
 	updComponents_.clear();
 	lateComponents_.clear();
 }

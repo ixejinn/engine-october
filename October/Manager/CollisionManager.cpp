@@ -3,7 +3,7 @@
 #include <queue>
 #include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/FixedUpdatable/CircleCollider.h"
-#include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/Transform.h"
 #include "../Component/Collidable.h"
 #include "../GameObject/GameObject.h"
 #include "../Collision/Collision.h"
@@ -17,8 +17,6 @@ CollisionManager::CollisionManager()
 void CollisionManager::CheckAllCollisions()
 {
 	static std::queue<std::pair<Collider*, Collider*>> colliderPairs{};
-
-	DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
 
 	for (auto it1 = colliders_.begin(); it1 != colliders_.end(); ++it1)
 	{
@@ -54,8 +52,6 @@ void CollisionManager::CheckAllCollisions()
 
 		colliderPairs.pop();
 	}
-
-	DEBUG_PROFILER_BLOCK_END;
 }
 
 void CollisionManager::AddCollider(Collider* col)

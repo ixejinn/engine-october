@@ -1,6 +1,6 @@
 #include "BoxCollider.h"
 
-#include "Transform.h"
+#include "../Transform.h"
 #include "../../Utils/imgui/imgui.h"
 
 BoxCollider::BoxCollider(GameObject* owner) : Collider(owner)

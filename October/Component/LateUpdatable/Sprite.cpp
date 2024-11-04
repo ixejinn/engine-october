@@ -10,7 +10,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../FixedUpdatable/Transform.h"
+#include "../Transform.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Manager/ResourceManager.h"
 #include "../../Utils/stb/stb_image.h"

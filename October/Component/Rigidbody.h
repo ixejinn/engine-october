@@ -1,12 +1,11 @@
 #pragma once
 #include <glm/vec2.hpp>
 
-#include "../Component.h"
-#include "FixedUpdatable.h"
+#include "Component.h"
 
 class Transform;
 
-class Rigidbody : public Component, public FixedUpdatable
+class Rigidbody : public Component
 {
 private:
 	float mass_{ 1.f };
@@ -21,11 +20,13 @@ private:
 
 	Rigidbody(GameObject* owner);
 
-	void FixedUpdate() override;
-
 	bool CheckEpsilon(float val, float epsilon = 0.00001f);
 
 public:
+	~Rigidbody();
+
+	void Update();
+
 	void LoadFromJson(const json& data) override;
 	json SaveToJson() override;
 

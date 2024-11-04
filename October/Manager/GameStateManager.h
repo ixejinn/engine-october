@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 
 class State;
 
@@ -17,6 +18,8 @@ private:
 	GameStateManager& operator =(GameStateManager&&) = delete;
 
 public:
+	const std::chrono::duration<long, std::milli> Step_{ 20 };
+
 	static GameStateManager& GetInstance()
 	{
 		static GameStateManager instance;
@@ -28,6 +31,8 @@ public:
 	void Exit();
 
 	void ChangeState(State* newState);
+
+	void PhysicsUpdate();
 
 	void ClearManagers();
 

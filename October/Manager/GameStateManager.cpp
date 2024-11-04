@@ -6,6 +6,7 @@
 #include "../Manager/GameObjectManager.h"
 #include "../Manager/CollisionManager.h"
 #include "../Editor/Editor.h"
+#include "../Profiler/Profiler.h"
 
 namespace Manager
 {
@@ -26,9 +27,7 @@ void GameStateManager::Update()
 	if (curState_)
 	{
 		// Physics
-		Manager::compMgr.FixedUpdate();
-		if (!Manager::editor.GetMode())
-			Manager::colMgr.CheckAllCollisions();
+		PhysicsUpdate();
 
 		// Game logic
 		curState_->Update();
@@ -62,6 +61,36 @@ void GameStateManager::ChangeState(State* newState)
 
 	if (curState_)
 		curState_->Init();
+}
+
+void GameStateManager::PhysicsUpdate()
+{
+	static std::chrono::duration<long, std::milli> adder{ 0 };
+	static std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+
+	std::chrono::system_clock::time_point cur = std::chrono::system_clock::now();
+	adder += std::chrono::duration_cast<std::chrono::milliseconds>(cur - start);
+	if (adder >= Step_)
+		start = cur;
+
+	while (adder >= Step_)
+	{
+		DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
+
+		Manager::compMgr.FixedUpdate();
+
+		if (!Manager::editor.GetMode())
+		{
+			Manager::colMgr.CheckAllCollisions();
+			Manager::compMgr.RigidbodyUpdate();
+		}
+		
+		Manager::compMgr.TransformUpdate();
+
+		adder -= Step_;
+
+		DEBUG_PROFILER_BLOCK_END;
+	}
 }
 
 void GameStateManager::ClearManagers()

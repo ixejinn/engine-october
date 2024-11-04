@@ -11,11 +11,16 @@
 #include "../GameObject/GameObject.h"
 
 class Component;
+class Rigidbody;
+class Transform;
 
 class ComponentManager
 {
 private:
 	std::list<FixedUpdatable*> fixedComponents_{};
+	std::list<Rigidbody*> rigidbodies_{};
+	std::list<Transform*> transforms_{};
+
 	std::list<Updatable*> updComponents_{};
 	std::list<LateUpdatable*> lateComponents_{};
 
@@ -44,6 +49,9 @@ public:
 	void SetSkipUpdate() { skipUpdate_ = true; }
 
 	void FixedUpdate();
+	void RigidbodyUpdate();
+	void TransformUpdate();
+
 	void Update();
 	void LateUpdate();
 

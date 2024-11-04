@@ -1,6 +1,6 @@
 #include "Collider.h"
 
-#include "Transform.h"
+#include "../Transform.h"
 #include "../../GameObject/GameObject.h"
 #include "../../Manager/CollisionManager.h"
 

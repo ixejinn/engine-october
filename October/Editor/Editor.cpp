@@ -17,8 +17,8 @@
 #include "../GameObject/GameObject.h"
 #include "../State/EmptyState.h"
 
-#include "../Component/FixedUpdatable/Transform.h"
-#include "../Component/FixedUpdatable/Rigidbody.h"
+#include "../Component/Transform.h"
+#include "../Component/Rigidbody.h"
 #include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/FixedUpdatable/CircleCollider.h"
 #include "../Component/Updatable/PlayerController.h"

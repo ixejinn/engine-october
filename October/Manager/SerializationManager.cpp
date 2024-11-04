@@ -8,7 +8,7 @@
 #include "../Serializer/ComponentSerializer.h"
 #include "../GameObject/GameObject.h"
 #include "../Component/Component.h"
-#include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/Transform.h"
 
 namespace Manager
 {

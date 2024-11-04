@@ -1,6 +1,6 @@
 #include "CircleCollider.h"
 
-#include "Transform.h"
+#include "../Transform.h"
 #include "../../Utils/imgui/imgui.h"
 
 CircleCollider::CircleCollider(GameObject* owner) : Collider(owner)

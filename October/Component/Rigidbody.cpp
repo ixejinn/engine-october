@@ -1,17 +1,34 @@
 #include "Rigidbody.h"
 
 #include "Transform.h"
-#include "../../GameObject/GameObject.h"
-#include "../../Utils/imgui/imgui.h"
+#include "../Manager/GameStateManager.h"
+#include "../GameObject/GameObject.h"
+#include "../Utils/imgui/imgui.h"
+
+namespace Manager
+{
+	extern GameStateManager& gsMgr;
+}
 
 Rigidbody::Rigidbody(GameObject* owner) : Component(owner)
 {
 	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 }
 
-void Rigidbody::FixedUpdate()
+bool Rigidbody::CheckEpsilon(float val, float epsilon)
 {
-	static const float dt = FixedUpdatable::Step_.count() * 0.001f;
+	if (val < -epsilon || val > epsilon)
+		return false;
+	return true;
+}
+
+Rigidbody::~Rigidbody()
+{
+}
+
+void Rigidbody::Update()
+{
+	static const float dt = Manager::gsMgr.Step_.count() * 0.001f;
 
 	force_ += -drag_ * velocity_;
 
@@ -29,13 +46,6 @@ void Rigidbody::FixedUpdate()
 	if (CheckEpsilon(pos.y))
 		pos.y = 0;
 	trans_->SetPosition(pos);
-}
-
-bool Rigidbody::CheckEpsilon(float val, float epsilon)
-{
-	if (val < -epsilon || val > epsilon)
-		return false;
-	return true;
 }
 
 void Rigidbody::LoadFromJson(const json& data)

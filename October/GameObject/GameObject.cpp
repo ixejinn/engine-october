@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../Manager/ComponentManager.h"
 #include "../Component/Component.h"
-#include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/Transform.h"
 
 namespace Manager
 {

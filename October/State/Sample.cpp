@@ -6,7 +6,7 @@
 #include "../Manager/SerializationManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Component/LateUpdatable/Sprite.h"
-#include "../Component/FixedUpdatable/Transform.h"
+#include "../Component/Transform.h"
 
 namespace Manager
 {
