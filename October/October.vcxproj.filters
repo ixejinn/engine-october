@@ -135,6 +135,12 @@
     <ClCompile Include="Profiler\Profiler.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Collision\Manifold.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision\Collision.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Manager\GameStateManager.h">
@@ -273,6 +279,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Profiler\Profiler.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision\Manifold.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

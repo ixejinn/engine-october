@@ -16,7 +16,8 @@ public:
 	{
 		AABB,
 		OBB,
-		CIRCLE
+		CIRCLE,
+		ColliderTypeCnt
 	};
 
 protected:
