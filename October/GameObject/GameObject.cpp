@@ -50,6 +50,11 @@ void GameObject::SetName(const std::string& newName)
     name_ = newName;
 }
 
+void GameObject::SetMainComponent(Component* comp)
+{
+    mainComp_ = comp;
+}
+
 void GameObject::SetCollidable(Collidable* collidable)
 {
     if (collidable_ != nullptr)

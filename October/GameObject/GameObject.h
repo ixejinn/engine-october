@@ -35,6 +35,7 @@ public:
 	bool HasComponent(std::type_index compType);
 
 	void SetName(const std::string& newName);
+	void SetMainComponent(Component* comp);
 	void SetCollidable(Collidable* collidable);
 
 	void DeleteComponent(std::type_index type);
