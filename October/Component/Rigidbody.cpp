@@ -1,5 +1,7 @@
 #include "Rigidbody.h"
 
+#include <iostream>
+#include <glm/glm.hpp>
 #include "Transform.h"
 #include "../Manager/GameStateManager.h"
 #include "../GameObject/GameObject.h"
@@ -30,21 +32,24 @@ void Rigidbody::Update()
 {
 	static const float dt = Manager::gsMgr.Step_.count() * 0.001f;
 
+	// Linear drag
 	force_ += -drag_ * velocity_;
 
+	// Acceleration
 	velocity_.x += force_.x / mass_ * dt;
 	velocity_.y += force_.y / mass_ * dt;
 	force_ = { 0.f, 0.f };
+
+	if (CheckEpsilon(velocity_.x))
+		velocity_.x = 0.f;
+	if (CheckEpsilon(velocity_.y))
+		velocity_.y = 0.f;
 
 	if (trans_ == nullptr)	//// delete if load order is modified
 		trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 	const glm::vec2 prePos = trans_->GetPosition();
 
 	glm::vec2 pos = prePos + velocity_ * dt;
-	if (CheckEpsilon(pos.x))
-		pos.x = 0;
-	if (CheckEpsilon(pos.y))
-		pos.y = 0;
 	trans_->SetPosition(pos);
 }
 

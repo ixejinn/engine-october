@@ -3,7 +3,7 @@
 #include <iostream>
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "../../Utils/imgui/imgui.h"
+#include "../Utils/imgui/imgui.h"
 
 Transform::Transform(GameObject* owner) : Component(owner) {}
 
@@ -115,6 +115,11 @@ void Transform::SetFlip()
 {
     scale_.x *= -1;
     UpdateMatrix();
+}
+
+void Transform::AddRotation(const float& rot)
+{
+    rotation_ += rot;
 }
 
 Component* Transform::CreateComponent(GameObject* owner)

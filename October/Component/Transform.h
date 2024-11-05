@@ -40,5 +40,7 @@ public:
 	void SetRotation(const float& rot);
 	void SetFlip();
 
+	void AddRotation(const float& rot);
+
 	static Component* CreateComponent(GameObject* owner);
 };
