@@ -3,7 +3,7 @@
 
 #include "../Component.h"
 #include "Updatable.h"
-#include "../../Utils/Utils.h"
+#include "../../Utils/Direction.h"
 
 class Rigidbody;
 

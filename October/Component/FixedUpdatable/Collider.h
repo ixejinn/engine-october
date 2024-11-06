@@ -45,5 +45,7 @@ protected:
 public:
 	virtual void SetScaleWithTransform(bool) = 0;
 
+	ColliderType GetType() const { return type_; }
+
 	friend class CollisionManager;
 };

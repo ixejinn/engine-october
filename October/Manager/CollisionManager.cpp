@@ -1,22 +1,23 @@
 #include "CollisionManager.h"
 
-#include <queue>
+#include <deque>
 #include "../Component/FixedUpdatable/BoxCollider.h"
 #include "../Component/FixedUpdatable/CircleCollider.h"
 #include "../Component/Transform.h"
 #include "../Component/Collidable.h"
 #include "../GameObject/GameObject.h"
 #include "../Collision/Collision.h"
+#include "../Collision/Manifold.h"
 #include "../Profiler/Profiler.h"
 
 CollisionManager::CollisionManager()
 {
-	layerCollisionMatrix_[0] |= 1 << 31;	// default setting for layer collision
+	layerCollisionMatrix_[0] |= 1 << 31;	// default layer
 }
 
 void CollisionManager::CheckAllCollisions()
 {
-	static std::queue<std::pair<Collider*, Collider*>> colliderPairs{};
+	static std::deque<Manifold> manifolds{};
 
 	for (auto it1 = colliders_.begin(); it1 != colliders_.end(); ++it1)
 	{
@@ -24,34 +25,27 @@ void CollisionManager::CheckAllCollisions()
 
 		for (; it2 != colliders_.end(); ++it2)
 		{
-			if ((*it1)->owner_->active_ && (*it2)->owner_->active_ &&
-				CheckCollision(*it1, *it2))
-				colliderPairs.push({ *it1, *it2 });
+			Manifold manifold(*it1, *it2);
+
+			if (
+				(*it1)->owner_ != (*it2)->owner_ &&
+				(*it1)->owner_->active_ && (*it2)->owner_->active_ &&
+				CheckLayerCollisionMatrix(*it1, *it2) &&
+				AABBtoAABB(*it1, *it2) &&
+				manifold.Solve()
+				)
+				manifolds.emplace_back(manifold);
 		}
 	}
 
-	while (!colliderPairs.empty())
+	while (!manifolds.empty())
 	{
-		std::pair<Collider*, Collider*> colliderPair = colliderPairs.front();
+		Manifold& manifold = manifolds.front();
 
-		Collidable* first = nullptr;
-		Collidable* second = nullptr;
+		manifold.ApplyImpulse();
+		manifold.CorrectPosition();
 
-		if (first = colliderPair.first->owner_->GetCollidable())
-		{
-			Collision* collision1 = new Collision();
-			first->OnCollision(collision1);
-			delete collision1;
-		}
-
-		if (second = colliderPair.second->owner_->GetCollidable())
-		{
-			Collision* collision2 = new Collision();
-			second->OnCollision(collision2);
-			delete collision2;
-		}
-
-		colliderPairs.pop();
+		manifolds.pop_front();
 	}
 }
 
@@ -62,70 +56,15 @@ void CollisionManager::AddCollider(Collider* col)
 
 void CollisionManager::Clear()
 {
-	for (auto it = colliders_.begin(); it != colliders_.end(); )
-		colliders_.erase(it++);
+	colliders_.clear();
 }
 
-bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
+bool CollisionManager::CheckLayerCollisionMatrix(Collider* col1, Collider* col2) const
 {
-	if (col1->owner_ == col2->owner_)
-		return false;
-
-	if (!(layerCollisionMatrix_[col1->layer_] & 1 << (31 - col2->layer_)))
-		return false;
-
-	if (!CheckAABBAABB(col1, col2))
-		return false;
-
-	//if (col1->type_ == Collider::AABB && col2->type_ == Collider::AABB)
-	//	return true;
-
-	//Collider* colA = col1;
-	//Collider* colB = col2;
-	//if (col1->type_ > col2->type_)
-	//{
-	//	colA = col2;
-	//	colB = col1;
-	//}
-
-	//switch (colA->type_)
-	//{
-	//case Collider::AABB:
-	//{
-	//	switch (colB->type_)
-	//	{
-	//	case Collider::OBB:
-	//		return CheckAABBOBB(colA, static_cast<BoxCollider*>(colB));
-
-	//	case Collider::CIRCLE:
-	//		return CheckAABBCircle(colA, static_cast<CircleCollider*>(colB));
-	//	}
-	//	break;
-	//}
-
-	//case Collider::OBB:
-	//{
-	//	switch (colB->type_)
-	//	{
-	//	case Collider::OBB:
-	//		return CheckOBBOBB(static_cast<BoxCollider*>(colA), static_cast<BoxCollider*>(colB));
-
-	//	case Collider::CIRCLE:
-	//		return CheckOBBCircle(static_cast<BoxCollider*>(colA), static_cast<CircleCollider*>(colB));
-	//	}
-	//	break;
-	//}
-
-	//case Collider::CIRCLE:
-	//{
-	//	return CheckCircleCircle(static_cast<CircleCollider*>(colA), static_cast<CircleCollider*>(colB));
-	//	break;
-	//}
-	//}
-	return false;
+	return layerCollisionMatrix_[col1->layer_] & 1 << (31 - col2->layer_);
 }
 
-bool CollisionManager::CheckAABBAABB(Collider* aabb1, Collider* aabb2)
+bool CollisionManager::AABBtoAABB(Collider* aabb1, Collider* aabb2)
 {
 	if (aabb1->maxVertex_.x < aabb2->minVertex_.x || aabb1->minVertex_.x > aabb2->maxVertex_.x) return false;
 	if (aabb1->maxVertex_.y < aabb2->minVertex_.y || aabb1->minVertex_.y > aabb2->maxVertex_.y) return false;

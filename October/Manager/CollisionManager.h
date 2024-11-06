@@ -11,10 +11,10 @@ private:
 	std::list<Collider*> colliders_{};
 
 	unsigned int layerCollisionMatrix_[32]{ 0, };
-		
-	bool CheckCollision(Collider* col1, Collider* col2);
+	bool CheckLayerCollisionMatrix(Collider* col1, Collider* col2) const;
 
-	bool CheckAABBAABB(Collider* aabb1, Collider* aabb2);
+	bool AABBtoAABB(Collider* aabb1, Collider* aabb2);
+
 	bool CheckAABBOBB(Collider* aabb, BoxCollider* obb);
 	bool CheckAABBCircle(Collider* aabb, CircleCollider* circle);
 	bool CheckOBBOBB(BoxCollider* obb1, BoxCollider* obb2);

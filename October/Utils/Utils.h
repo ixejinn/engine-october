@@ -1,10 +1,3 @@
 #pragma once
 
-enum Direction
-{
-	LEFT,
-	RIGHT,
-	UP,
-	DOWN,
-	STOP
-};
+bool CheckEpsilon(float val, float epsilon = 0.00001f);

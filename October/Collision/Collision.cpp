@@ -79,7 +79,8 @@ int Clip(const glm::vec2& normal, float c, glm::vec2* incFace)
 	if (d1 * d2 < 0.f)
 	{
 		float alpha = d1 / (d1 - d2);
-		out[sp] = incFace[0] + alpha * (incFace[1] - incFace[0]);
+		if (sp < 2)
+			out[sp] = incFace[0] + alpha * (incFace[1] - incFace[0]);
 		++sp;
 	}
 

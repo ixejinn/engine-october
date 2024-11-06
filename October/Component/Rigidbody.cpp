@@ -5,6 +5,7 @@
 #include "Transform.h"
 #include "../Manager/GameStateManager.h"
 #include "../GameObject/GameObject.h"
+#include "../Utils/Utils.h"
 #include "../Utils/imgui/imgui.h"
 
 namespace Manager
@@ -15,13 +16,6 @@ namespace Manager
 Rigidbody::Rigidbody(GameObject* owner) : Component(owner)
 {
 	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
-}
-
-bool Rigidbody::CheckEpsilon(float val, float epsilon)
-{
-	if (val < -epsilon || val > epsilon)
-		return false;
-	return true;
 }
 
 Rigidbody::~Rigidbody()
@@ -92,6 +86,11 @@ void Rigidbody::ShowDetails()
 
 	ImGui::Text("Drag");
 	ImGui::InputFloat("##drag", &drag_, 1.f, 1.0f, "%.2f");
+}
+
+void Rigidbody::SetVelocity(const glm::vec2& velocity)
+{
+	velocity_ = velocity;
 }
 
 void Rigidbody::AddForce(const glm::vec2& f)
