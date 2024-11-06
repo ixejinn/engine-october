@@ -42,7 +42,7 @@ void CollisionManager::CheckAllCollisions()
 	{
 		Manifold& manifold = manifolds.front();
 
-		manifold.ApplyImpulse();
+		//manifold.ApplyImpulse();
 		manifold.CorrectPosition();
 
 		manifolds.pop_front();

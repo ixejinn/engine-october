@@ -81,11 +81,28 @@ void Rigidbody::ShowDetails()
 {
 	ImGui::SeparatorText("Rigidbody");
 
-	ImGui::Text("Mass");
-	ImGui::InputFloat("##mass", &mass_, 1.f, 1.0f, "%.2f");
+	float mass{mass_};
+	ImGui::Text("Mass (Infinite mass: 0)");
+	ImGui::InputFloat("##mass", &mass, 1.f, 1.0f, "%.2f");
+	if (mass != mass_)
+		SetMass(mass);
 
 	ImGui::Text("Drag");
 	ImGui::InputFloat("##drag", &drag_, 1.f, 1.0f, "%.2f");
+}
+
+void Rigidbody::SetMass(float mass)
+{
+	if (CheckEpsilon(mass))	// Infinite mass
+	{
+		mass_ = 0.f;
+		invMass_ = 0.f;
+	}
+	else
+	{
+		mass_ = mass;
+		invMass_ = 1 / mass_;
+	}
 }
 
 void Rigidbody::SetVelocity(const glm::vec2& velocity)
@@ -95,14 +112,18 @@ void Rigidbody::SetVelocity(const glm::vec2& velocity)
 
 void Rigidbody::AddForce(const glm::vec2& f)
 {
-	force_.x += f.x;
-	force_.y += f.y;
+	force_ += f;
 }
 
 void Rigidbody::AddForce(const float& fx, const float& fy)
 {
 	force_.x += fx;
 	force_.y += fy;
+}
+
+void Rigidbody::AddVelocity(const glm::vec2& velocity)
+{
+	velocity_ += velocity;
 }
 
 Component* Rigidbody::CreateComponent(GameObject* owner)

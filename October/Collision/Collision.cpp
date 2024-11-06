@@ -94,12 +94,11 @@ bool ConvextoConvex(Manifold* m)
 {
 	unsigned int faceIdx1;
 	double penetration1 = FindAxisLeastPenetration(&faceIdx1, static_cast<BoxCollider*>(m->col1_), static_cast<BoxCollider*>(m->col2_));
-	if (penetration1 >= 0)
-		return false;
 
 	unsigned int faceIdx2;
 	double penetration2 = FindAxisLeastPenetration(&faceIdx2, static_cast<BoxCollider*>(m->col2_), static_cast<BoxCollider*>(m->col1_));
-	if (penetration2 >= 0)
+	
+	if (penetration1 >= 0 && penetration2 >= 0)
 		return false;
 
 	BoxCollider* reference{ nullptr };
@@ -168,8 +167,6 @@ bool ConvextoConvex(Manifold* m)
 	
 	m->contactCnt_ = cp;
 	return cp > 0;
-
-	return true;
 }
 
 bool ConvextoCircle(Manifold* m)

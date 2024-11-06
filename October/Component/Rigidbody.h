@@ -9,6 +9,8 @@ class Rigidbody : public Component
 {
 private:
 	float mass_{ 1.f };
+	float invMass_{ 1.f };
+
 	float drag_{ 0.f };
 	float restitution_{ 0.5f };
 
@@ -30,12 +32,16 @@ public:
 	void ShowDetails() override;
 	
 	float GetMass() const { return mass_; }
+	float GetInvMass() const { return invMass_; }
 	float GetRestitution() const { return restitution_; }
+	const glm::vec2& GetVelocity() const { return velocity_; }
 
+	void SetMass(float mass = 0.f);
 	void SetVelocity(const glm::vec2& velocity);
 
 	void AddForce(const glm::vec2& f);
 	void AddForce(const float& fx, const float& fy);
+	void AddVelocity(const glm::vec2& velocity);
 
 	static Component* CreateComponent(GameObject* owner);
 };
