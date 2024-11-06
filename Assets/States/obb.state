@@ -6,10 +6,10 @@
         "type": "class Transform",
         "compData": {
           "position": [
-            -1.2100000381469727,
-            0.0
+            -1.4600000381469727,
+            0.8899999856948853
           ],
-          "rotation": 0.0,
+          "rotation": -44.0,
           "scale": [
             1.0,
             1.0
@@ -21,14 +21,20 @@
         }
       },
       {
-        "type": "class CircleCollider",
+        "type": "class BoxCollider",
         "compData": {
+          "type": 1,
           "layer": 0,
+          "trigger": true,
           "center": [
             0.0,
             0.0
           ],
-          "scaleWithTransform": true
+          "scaleWithTransform": true,
+          "scale": [
+            1.0,
+            1.0
+          ]
         }
       },
       {
@@ -51,21 +57,21 @@
             0.0
           ],
           "colors": [
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0,
-            0.0
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
           ],
           "alpha": 1.0,
-          "textureName": "Assets/Images/PlanetTexture.png"
+          "textureName": "Assets/Images/IMG_4035.JPEG"
         }
       }
     ]
@@ -80,7 +86,7 @@
             0.0,
             0.0
           ],
-          "rotation": 0.0,
+          "rotation": 11.0,
           "scale": [
             1.0,
             1.0
@@ -92,14 +98,20 @@
         }
       },
       {
-        "type": "class CircleCollider",
+        "type": "class BoxCollider",
         "compData": {
+          "type": 1,
           "layer": 0,
+          "trigger": true,
           "center": [
             0.0,
             0.0
           ],
-          "scaleWithTransform": true
+          "scaleWithTransform": true,
+          "scale": [
+            1.0,
+            1.0
+          ]
         }
       },
       {
@@ -117,14 +129,14 @@
             87,
             83
           ],
-          "speed": 6.0
+          "speed": 10.0
         }
       },
       {
         "type": "class Rigidbody",
         "compData": {
           "mass": 1.0,
-          "drag": 4.0,
+          "drag": 5.0,
           "velocity": [
             0.0,
             0.0
@@ -154,7 +166,7 @@
             1.0
           ],
           "alpha": 1.0,
-          "textureName": "Assets/Images/PlanetTexture.png"
+          "textureName": ""
         }
       }
     ]
