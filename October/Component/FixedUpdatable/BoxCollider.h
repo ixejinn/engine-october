@@ -4,6 +4,7 @@
 class BoxCollider : public Collider
 {
 private:
+	glm::vec2 normals_[4]{};
 	glm::vec2 scale_{};
 
 	BoxCollider(GameObject* owner);
@@ -18,7 +19,8 @@ public:
 
 	void SetScaleWithTransform(bool b) override;
 
-	void SetColliderType(ColliderType type);
+	const glm::vec2& GetVertex(unsigned int idx) const { return vertices_[idx]; }
+	const glm::vec2& GetNormal(unsigned int idx) const { return normals_[idx]; }
 
 	static Component* CreateComponent(GameObject* owner);
 

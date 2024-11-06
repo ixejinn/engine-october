@@ -4,11 +4,4 @@
 #include "../Component/Rigidbody.h"
 #include "../GameObject/GameObject.h"
 
-Manifold::Manifold(GameObject* obj1, GameObject* obj2)
-{
-	tf1_ = static_cast<Transform*>(obj1->GetComponent(typeid(Transform)));
-	tf2_ = static_cast<Transform*>(obj2->GetComponent(typeid(Transform)));
-
-	rb1_ = static_cast<Rigidbody*>(obj1->GetComponent(typeid(Rigidbody)));
-	rb2_ = static_cast<Rigidbody*>(obj2->GetComponent(typeid(Rigidbody)));
-}
+Manifold::Manifold(Collider* col1, Collider* col2) : col1_(col1), col2_(col2) {}

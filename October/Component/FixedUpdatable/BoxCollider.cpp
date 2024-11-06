@@ -5,12 +5,23 @@
 
 BoxCollider::BoxCollider(GameObject* owner) : Collider(owner)
 {
+    type_ = CONVEX;
+
+    normals_[0] = { 0.f, 1.f };
+    normals_[1] = { -1.f, 0.f };
+    normals_[2] = { 0.f, -1.f };
+    normals_[3] = { 1.f, 0.f };
+
     scale_ = trans_->GetScale();
 }
 
 void BoxCollider::FixedUpdate()
 {
 	UpdateVertices(trans_->GetLocalScale() * scale_ * 0.5f);
+
+    glm::mat4 transformMatrix = trans_->GetMatrix();
+    for (int i = 0; i < 4; i++)
+        normals_[i] = glm::normalize(transformMatrix * glm::vec4(normals_[i], 0.f, 1.f));
 }
 
 void BoxCollider::LoadFromJson(const json& data)
@@ -56,18 +67,6 @@ void BoxCollider::ShowDetails()
 {
     ImGui::SeparatorText("BoxCollider");
 
-    ImGui::Text("Collider type");
-    if (ImGui::BeginCombo("##boxCollider_type", typeToString_[type_].c_str()))
-    {
-        if (ImGui::MenuItem(typeToString_[AABB].c_str()))
-            type_ = AABB;
-
-        if (ImGui::MenuItem(typeToString_[OBB].c_str()))
-            type_ = OBB;
-
-        ImGui::EndCombo();
-    }
-
     ImGui::Text("Center");
     ImGui::InputFloat2("##boxCollider_center", &center_[0]);
 
@@ -86,13 +85,6 @@ void BoxCollider::SetScaleWithTransform(bool b)
 
     if (b)
         scale_.x = scale_.y = 1.f;
-}
-
-void BoxCollider::SetColliderType(ColliderType type)
-{
-    if (type != AABB && type != OBB)
-        type = AABB;
-    type_ = type;
 }
 
 Component* BoxCollider::CreateComponent(GameObject* owner)

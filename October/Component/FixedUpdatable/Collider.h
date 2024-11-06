@@ -14,17 +14,15 @@ class Collider : public Component, public FixedUpdatable
 public:
 	enum ColliderType
 	{
-		AABB,
-		OBB,
+		CONVEX,
 		CIRCLE,
 		ColliderTypeCnt
 	};
 
 protected:
-	ColliderType type_{ AABB };
+	ColliderType type_{ CONVEX };
 	std::map<ColliderType, std::string> typeToString_{
-		{ AABB, "AABB" },
-		{ OBB, "OBB" },
+		{ CONVEX, "CONVEX" },
 		{ CIRCLE, "CIRCLE" }
 	};
 	

@@ -21,6 +21,7 @@ void CollisionManager::CheckAllCollisions()
 	for (auto it1 = colliders_.begin(); it1 != colliders_.end(); ++it1)
 	{
 		auto it2 = std::next(it1);
+
 		for (; it2 != colliders_.end(); ++it2)
 		{
 			if ((*it1)->owner_->active_ && (*it2)->owner_->active_ &&
@@ -76,51 +77,51 @@ bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)
 	if (!CheckAABBAABB(col1, col2))
 		return false;
 
-	if (col1->type_ == Collider::AABB && col2->type_ == Collider::AABB)
-		return true;
+	//if (col1->type_ == Collider::AABB && col2->type_ == Collider::AABB)
+	//	return true;
 
-	Collider* colA = col1;
-	Collider* colB = col2;
-	if (col1->type_ > col2->type_)
-	{
-		colA = col2;
-		colB = col1;
-	}
+	//Collider* colA = col1;
+	//Collider* colB = col2;
+	//if (col1->type_ > col2->type_)
+	//{
+	//	colA = col2;
+	//	colB = col1;
+	//}
 
-	switch (colA->type_)
-	{
-	case Collider::AABB:
-	{
-		switch (colB->type_)
-		{
-		case Collider::OBB:
-			return CheckAABBOBB(colA, static_cast<BoxCollider*>(colB));
+	//switch (colA->type_)
+	//{
+	//case Collider::AABB:
+	//{
+	//	switch (colB->type_)
+	//	{
+	//	case Collider::OBB:
+	//		return CheckAABBOBB(colA, static_cast<BoxCollider*>(colB));
 
-		case Collider::CIRCLE:
-			return CheckAABBCircle(colA, static_cast<CircleCollider*>(colB));
-		}
-		break;
-	}
+	//	case Collider::CIRCLE:
+	//		return CheckAABBCircle(colA, static_cast<CircleCollider*>(colB));
+	//	}
+	//	break;
+	//}
 
-	case Collider::OBB:
-	{
-		switch (colB->type_)
-		{
-		case Collider::OBB:
-			return CheckOBBOBB(static_cast<BoxCollider*>(colA), static_cast<BoxCollider*>(colB));
+	//case Collider::OBB:
+	//{
+	//	switch (colB->type_)
+	//	{
+	//	case Collider::OBB:
+	//		return CheckOBBOBB(static_cast<BoxCollider*>(colA), static_cast<BoxCollider*>(colB));
 
-		case Collider::CIRCLE:
-			return CheckOBBCircle(static_cast<BoxCollider*>(colA), static_cast<CircleCollider*>(colB));
-		}
-		break;
-	}
+	//	case Collider::CIRCLE:
+	//		return CheckOBBCircle(static_cast<BoxCollider*>(colA), static_cast<CircleCollider*>(colB));
+	//	}
+	//	break;
+	//}
 
-	case Collider::CIRCLE:
-	{
-		return CheckCircleCircle(static_cast<CircleCollider*>(colA), static_cast<CircleCollider*>(colB));
-		break;
-	}
-	}
+	//case Collider::CIRCLE:
+	//{
+	//	return CheckCircleCircle(static_cast<CircleCollider*>(colA), static_cast<CircleCollider*>(colB));
+	//	break;
+	//}
+	//}
 	return false;
 }
 

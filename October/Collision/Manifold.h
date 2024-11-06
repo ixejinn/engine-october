@@ -1,17 +1,12 @@
 #pragma once
 #include <glm/vec2.hpp>
 
-class Transform;
-class Rigidbody;
-class GameObject;
+class Collider;
 
 struct Manifold
 {
-	Transform* tf1_;
-	Transform* tf2_;
-
-	Rigidbody* rb1_;
-	Rigidbody* rb2_;
+	Collider* col1_;
+	Collider* col2_;
 
 	glm::vec2 normal_;
 	double penetration_;
@@ -21,5 +16,5 @@ struct Manifold
 
 	double e_;
 
-	Manifold(GameObject* obj1, GameObject* obj2);
+	Manifold(Collider* col1, Collider* col2);
 };
