@@ -28,6 +28,7 @@ public:
 	Component* GetComponent(std::type_index compType);
 
 	const std::map<std::type_index, std::unique_ptr<Component>>& GetAllComponents() const { return components_; }
+	int GetComponentNum() const { return int(components_.size()); }
 	const std::string& GetName() const { return name_; }
 	Component* GetMainComp() const { return mainComp_; }
 	Collidable* GetCollidable() const { return collidable_; }
@@ -38,6 +39,7 @@ public:
 	void SetMainComponent(Component* comp);
 	void SetCollidable(Collidable* collidable);
 
+	void InitializeComponent();
 	void DeleteComponent(std::type_index type);
 
 	friend class GameObjectManager;

@@ -59,6 +59,7 @@ public:
 	// @param idx is vertex of rectangle
 	// (0 up right, 1 down right, 2 down left, 3 up left)
 	void SetColor(const unsigned int& idx, const glm::vec3& color);
+	// @param alpha is a value between 0 and 1, with values closer to 1 becoming more opaque
 	void SetAlpha(const float& alpha);
 	void SetFragmentShader(const std::string& name);
 	void SetTexture(const std::string& name);

@@ -4,11 +4,18 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Utils/imgui/imgui.h"
+#include "../Manager/ComponentManager.h"
+
+namespace Manager
+{
+    extern ComponentManager& compMgr;
+}
 
 Transform::Transform(GameObject* owner) : Component(owner) {}
 
 Transform::~Transform()
 {
+    Manager::compMgr.DeleteComponent(this);
 }
 
 void Transform::UpdateMatrix()

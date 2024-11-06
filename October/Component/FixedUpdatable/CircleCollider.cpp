@@ -6,8 +6,6 @@
 CircleCollider::CircleCollider(GameObject* owner) : Collider(owner)
 {
 	type_ = CIRCLE;
-	
-	SetScaleWithTransform(true);
 }
 
 void CircleCollider::FixedUpdate()
@@ -22,6 +20,9 @@ void CircleCollider::LoadFromJson(const json& data)
 	{
 		auto it = compData->find("layer");
 		layer_ = it->begin().value();
+
+		it = compData->find("trigger");
+		trigger_ = it->begin().value();
 
 		it = compData->find("center");
 		center_.x = it->begin().value();
@@ -44,6 +45,7 @@ json CircleCollider::SaveToJson()
 	data["type"] = typeid(CircleCollider).name();
 
 	compData["layer"] = layer_;
+	compData["trigger"] = trigger_;
 	compData["center"] = { center_.x, center_.y };
 	compData["scaleWithTransform"] = scaleWithTransform_;
 	if (!scaleWithTransform_)
@@ -57,26 +59,25 @@ void CircleCollider::ShowDetails()
 {
 	ImGui::SeparatorText("CircleCollider");
 
+	ImGui::Text("Trigger");
+	ImGui::Checkbox("##circleCollider_trigger", &trigger_);
+
 	ImGui::Text("Center");
-	ImGui::InputFloat2("##boxCollider_center", &center_[0]);
+	ImGui::InputFloat2("##circleCollider_center", &center_[0]);
 
 	ImGui::Text("Radius");
-	static bool scaleWithTrans = true;
-	ImGui::Checkbox("Radius with transform", &scaleWithTrans);
-	SetScaleWithTransform(scaleWithTrans);
-	if (!scaleWithTransform_)
-		ImGui::DragFloat("x##CircleCollider_radius", &radius_, 0.01f);
+	ImGui::Checkbox("Radius with transform", &scaleWithTransform_);
+	if (scaleWithTransform_)
+		SetRadius(true);
+	else
+		ImGui::DragFloat("x##circleCollider_radius", &radius_, 0.01f);
 }
 
-void CircleCollider::SetScaleWithTransform(bool b)
+void CircleCollider::SetRadius(bool withTransform, float radius)
 {
-	scaleWithTransform_ = b;
+	scaleWithTransform_ = withTransform;
 
-	if (b)
-	{
-		glm::vec2 scale = trans_->GetScale();
-		radius_ = glm::max(scale.x, scale.y) / 2.f;
-	}
+	radius_ = radius;
 }
 
 Component* CircleCollider::CreateComponent(GameObject* owner)

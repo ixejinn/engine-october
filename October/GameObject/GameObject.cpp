@@ -63,6 +63,23 @@ void GameObject::SetCollidable(Collidable* collidable)
     collidable_ = collidable;
 }
 
+void GameObject::InitializeComponent()
+{
+    mainComp_ = nullptr;
+    collidable_ = nullptr;
+
+    for (auto it = components_.begin(); it != components_.end(); )
+    {
+        if (it->first == typeid(Transform))
+        {
+            it++;
+            continue;
+        }
+
+        components_.erase(it++);
+    }
+}
+
 void GameObject::DeleteComponent(std::type_index compType)
 {
     components_.erase(compType);

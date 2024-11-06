@@ -23,6 +23,8 @@
 #include "../Component/FixedUpdatable/CircleCollider.h"
 #include "../Component/Updatable/PlayerController.h"
 #include "../Component/Updatable/Gameplay/Player.h"
+#include "../Component/Updatable/Gameplay/Wall.h"
+#include "../Component/Updatable/Gameplay/Bomb.h"
 #include "../Component/LateUpdatable/Sprite.h"
 
 namespace Manager
@@ -221,6 +223,22 @@ void Editor::Topbar()
 
         if (ImGui::BeginMenu("Add...", selected))
         {
+            if (ImGui::BeginMenu("Wall"))
+            {
+                if (ImGui::MenuItem("Basic Wall", NULL, false))
+                    selectedGameObject_->AddComponent(typeid(Wall));
+
+                if (ImGui::MenuItem("Breakable Wall", NULL, false))
+                    selectedGameObject_->AddComponent(typeid(BreakableWall));
+
+                if (ImGui::MenuItem("Bomb", NULL, false))
+                    selectedGameObject_->AddComponent(typeid(Bomb));
+
+                ImGui::EndMenu();
+            }
+
+            ImGui::Separator();
+
             if (ImGui::MenuItem("Rigidbody", NULL, false, !hasRb))
                 selectedGameObject_->AddComponent(typeid(Rigidbody));
 

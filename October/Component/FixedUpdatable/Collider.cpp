@@ -18,6 +18,11 @@ Collider::Collider(GameObject* owner) : Component(owner)
 	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 }
 
+Collider::~Collider()
+{
+	Manager::colMgr.DeleteCollider(this);
+}
+
 void Collider::UpdateVertices(const glm::vec2& halfSize)
 {
 	vertices_[0] = { center_.x + halfSize.x, center_.y + halfSize.y };
@@ -37,4 +42,9 @@ void Collider::UpdateVertices(const glm::vec2& halfSize)
 		maxVertex_.x = glm::max(maxVertex_.x, v.x);
 		maxVertex_.y = glm::max(maxVertex_.y, v.y);
 	}
+}
+
+void Collider::SetTrigger(bool b)
+{
+	trigger_ = b;
 }

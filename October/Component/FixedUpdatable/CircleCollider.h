@@ -4,7 +4,7 @@
 class CircleCollider : public Collider
 {
 private:
-	float radius_{};
+	float radius_{ 0.5f };	// Relative with Transform's scale
 
 	CircleCollider(GameObject* owner);
 
@@ -16,7 +16,7 @@ public:
 
 	void ShowDetails() override;
 
-	void SetScaleWithTransform(bool b) override;
+	void SetRadius(bool withTransform, float radius = 0.5f);
 
 	static Component* CreateComponent(GameObject* owner);
 

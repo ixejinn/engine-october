@@ -4,12 +4,14 @@
 #include <glm/glm.hpp>
 #include "Transform.h"
 #include "../Manager/GameStateManager.h"
+#include "../Manager/ComponentManager.h"
 #include "../GameObject/GameObject.h"
 #include "../Utils/imgui/imgui.h"
 
 namespace Manager
 {
 	extern GameStateManager& gsMgr;
+	extern ComponentManager& compMgr;
 }
 
 Rigidbody::Rigidbody(GameObject* owner) : Component(owner)
@@ -26,6 +28,7 @@ bool Rigidbody::CheckEpsilon(float val, float epsilon)
 
 Rigidbody::~Rigidbody()
 {
+	Manager::compMgr.DeleteComponent(this);
 }
 
 void Rigidbody::Update()

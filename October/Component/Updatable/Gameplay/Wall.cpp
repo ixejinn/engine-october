@@ -9,6 +9,9 @@
 
 BaseWall::BaseWall(GameObject* owner) : Component(owner)
 {
+	if (owner_->GetComponentNum() >= 1)
+		owner_->InitializeComponent();
+
 	owner_->AddComponent(typeid(Sprite));
 	owner_->AddComponent(typeid(Rigidbody));
 	owner_->AddComponent(typeid(BoxCollider));

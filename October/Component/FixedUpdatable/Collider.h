@@ -28,7 +28,8 @@ protected:
 		{ CIRCLE, "CIRCLE" }
 	};
 	
-	int layer_ = 0;	// 수정 필요.. 아마 enum
+	int layer_{ 0 };	// 수정 필요.. 아마 enum
+	bool trigger_{ true };
 
 	glm::vec2 center_{ 0.f, 0.f };
 
@@ -40,12 +41,12 @@ protected:
 	Transform* trans_{ nullptr };
 
 	Collider(GameObject* owner);
-	virtual ~Collider() = default;
+	virtual ~Collider();
 
 	void UpdateVertices(const glm::vec2& halfSize);
 
 public:
-	virtual void SetScaleWithTransform(bool) = 0;
+	void SetTrigger(bool b);
 
 	friend class CollisionManager;
 };

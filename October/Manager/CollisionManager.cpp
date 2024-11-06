@@ -59,10 +59,21 @@ void CollisionManager::AddCollider(Collider* col)
 	colliders_.emplace_back(col);
 }
 
+void CollisionManager::DeleteCollider(Collider* col)
+{
+	for (auto it = colliders_.begin(); it != colliders_.end(); ++it)
+	{
+		if (*it == col)
+		{
+			colliders_.erase(it);
+			return;
+		}
+	}
+}
+
 void CollisionManager::Clear()
 {
-	for (auto it = colliders_.begin(); it != colliders_.end(); )
-		colliders_.erase(it++);
+	colliders_.clear();
 }
 
 bool CollisionManager::CheckCollision(Collider* col1, Collider* col2)

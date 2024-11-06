@@ -24,6 +24,9 @@ void BoxCollider::LoadFromJson(const json& data)
         it = compData->find("layer");
         layer_ = it->begin().value();
 
+        it = compData->find("trigger");
+        trigger_ = it->begin().value();
+
         it = compData->find("center");
         center_.x = it->begin().value();
         center_.y = (it->begin() + 1).value();
@@ -44,6 +47,7 @@ json BoxCollider::SaveToJson()
 
     compData["type"] = type_;
     compData["layer"] = layer_;
+    compData["trigger"] = trigger_;
     compData["center"] = { center_.x, center_.y };
     compData["scaleWithTransform"] = scaleWithTransform_;
     compData["scale"] = { scale_.x, scale_.y };
@@ -68,6 +72,9 @@ void BoxCollider::ShowDetails()
         ImGui::EndCombo();
     }
 
+    ImGui::Text("Trigger");
+    ImGui::Checkbox("##boxCollider_trigger", &trigger_);
+
     ImGui::Text("Center");
     ImGui::InputFloat2("##boxCollider_center", &center_[0]);
 
@@ -80,12 +87,11 @@ void BoxCollider::ShowDetails()
     }
 }
 
-void BoxCollider::SetScaleWithTransform(bool b)
+void BoxCollider::SetScale(bool withTransform, glm::vec2 scale)
 {
-    scaleWithTransform_ = b;
+    scaleWithTransform_ = withTransform;
 
-    if (b)
-        scale_.x = scale_.y = 1.f;
+    scale_ = scale;
 }
 
 void BoxCollider::SetColliderType(ColliderType type)

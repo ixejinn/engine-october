@@ -4,7 +4,7 @@
 class BoxCollider : public Collider
 {
 private:
-	glm::vec2 scale_{};
+	glm::vec2 scale_{ 1.f, 1.f };	// Relative with Transform's scale
 
 	BoxCollider(GameObject* owner);
 
@@ -16,7 +16,7 @@ public:
 
 	void ShowDetails() override;
 
-	void SetScaleWithTransform(bool b) override;
+	void SetScale(bool withTransform, glm::vec2 scale = { 1.f, 1.f });
 
 	void SetColliderType(ColliderType type);
 

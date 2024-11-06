@@ -40,6 +40,7 @@ public:
 	void CheckAllCollisions();
 
 	void AddCollider(Collider* col);
+	void DeleteCollider(Collider* col);
 
 	void Clear();
 };

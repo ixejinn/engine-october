@@ -4,6 +4,8 @@
 #include <list>
 #include <type_traits>	// std::is_same
 
+#include "../Component/Transform.h"
+#include "../Component/Rigidbody.h"
 #include "../Component/FixedUpdatable/FixedUpdatable.h"
 #include "../Component/Updatable/Updatable.h"
 #include "../Component/LateUpdatable/LateUpdatable.h"
@@ -11,8 +13,6 @@
 #include "../GameObject/GameObject.h"
 
 class Component;
-class Rigidbody;
-class Transform;
 
 class ComponentManager
 {
@@ -67,7 +67,29 @@ public:
 template<typename T>
 inline void ComponentManager::DeleteComponent(T* comp)
 {
-	if constexpr (std::is_same<T, FixedUpdatable>::value)
+	if constexpr (std::is_same<T, Transform>::value)
+	{
+		for (auto it = transforms_.begin(); it != transforms_.end(); ++it)
+		{
+			if (*it == comp)
+			{
+				transforms_.erase(it);
+				return;
+			}
+		}
+	}
+	else if constexpr (std::is_same<T, Rigidbody>::value)
+	{
+		for (auto it = rigidbodies_.begin(); it != rigidbodies_.end(); ++it)
+		{
+			if (*it == comp)
+			{
+				rigidbodies_.erase(it);
+				return;
+			}
+		}
+	}
+	else if constexpr (std::is_same<T, FixedUpdatable>::value)
 	{
 		for (auto it = fixedComponents_.begin(); it != fixedComponents_.end(); ++it)
 		{

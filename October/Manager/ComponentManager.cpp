@@ -14,7 +14,10 @@
 #include "../Component/FixedUpdatable/CircleCollider.h"
 #include "../Component/LateUpdatable/Sprite.h"
 #include "../Component/Updatable/PlayerController.h"
+
 #include "../Component/Updatable/Gameplay/Player.h"
+#include "../Component/Updatable/Gameplay/Wall.h"
+#include "../Component/Updatable/Gameplay/Bomb.h"
 
 namespace Manager
 {
@@ -30,6 +33,9 @@ ComponentManager::ComponentManager()
 
 	nameToType_.insert({ typeid(PlayerController).name(), typeid(PlayerController) });
 	nameToType_.insert({ typeid(Player).name(), typeid(Player) });
+	nameToType_.insert({ typeid(Wall).name(), typeid(Wall) });
+	nameToType_.insert({ typeid(BreakableWall).name(), typeid(BreakableWall) });
+	nameToType_.insert({ typeid(Bomb).name(), typeid(Bomb) });
 
 	nameToType_.insert({ typeid(Sprite).name(), typeid(Sprite) });
 
@@ -40,6 +46,9 @@ ComponentManager::ComponentManager()
 
 	componentMap_.insert({ typeid(PlayerController), PlayerController::CreateComponent });
 	componentMap_.insert({ typeid(Player), Player::CreateComponent });
+	componentMap_.insert({ typeid(Wall), Wall::CreateComponent });
+	componentMap_.insert({ typeid(BreakableWall), BreakableWall::CreateComponent });
+	componentMap_.insert({ typeid(Bomb), Bomb::CreateComponent });
 
 	componentMap_.insert({ typeid(Sprite), Sprite::CreateComponent });
 }
