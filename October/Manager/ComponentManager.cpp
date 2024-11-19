@@ -96,7 +96,8 @@ void ComponentManager::FixedUpdate()
 {
 	for (auto& comp : fixedComponents_)
 	{
-		if (Manager::editor.GetMode() && !comp->updateInEditmode_)
+		if (!comp->owner_->active_ ||
+			(Manager::editor.GetMode() && !comp->updateInEditmode_))
 			continue;
 
 		comp->FixedUpdate();
@@ -121,9 +122,12 @@ void ComponentManager::Update()
 
 	if (!Manager::editor.GetMode())
 	{
-		for (auto it = updComponents_.begin(); it != updComponents_.end(); ++it)
+		for (auto& comp : updComponents_)
 		{
-			(*it)->Update();
+			if (!comp->owner_->active_)
+				continue;
+
+			comp->Update();
 
 			if (skipUpdate_)
 				break;
@@ -138,12 +142,13 @@ void ComponentManager::LateUpdate()
 {
 	DEBUG_PROFILER_BLOCK_START(__FUNCTION_NAME__);
 
-	for (auto it = lateComponents_.begin(); it != lateComponents_.end(); ++it)
+	for (auto& comp : lateComponents_)
 	{
-		if (Manager::editor.GetMode() && !(*it)->updateInEditmode_)
+		if (!comp->owner_->active_ ||
+			(Manager::editor.GetMode() && !comp->updateInEditmode_))
 			continue;
 
-		(*it)->LateUpdate();
+		comp->LateUpdate();
 	}
 
 	DEBUG_PROFILER_BLOCK_END;
