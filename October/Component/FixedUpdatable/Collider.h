@@ -3,13 +3,12 @@
 #include <map>
 #include <string>
 
-#include "../Component.h"
 #include "FixedUpdatable.h"
 #include "../../Utils/Utils.h"
 
 class Transform;
 
-class Collider : public Component, public FixedUpdatable
+class Collider : public FixedUpdatable
 {
 public:
 	enum ColliderType

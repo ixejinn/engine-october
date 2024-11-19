@@ -7,7 +7,7 @@
 #include "../../FixedUpdatable/BoxCollider.h"
 #include "../../../Utils/imgui/imgui.h"
 
-BaseWall::BaseWall(GameObject* owner) : Component(owner)
+BaseWall::BaseWall(GameObject* owner) : Updatable(owner)
 {
 	if (owner_->GetComponentNum() >= 1)
 		owner_->InitializeComponent();

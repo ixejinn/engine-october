@@ -23,7 +23,7 @@ namespace Manager
     extern ResourceManager& rscMgr;
 }
 
-Sprite::Sprite(GameObject* owner) : Component(owner)
+Sprite::Sprite(GameObject* owner) : LateUpdatable(owner)
 {
     updateInEditmode_ = true;
 

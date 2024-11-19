@@ -1,14 +1,13 @@
 #pragma once
 #include <chrono>
-#include "../../Component.h"
-#include "../../Collidable.h"
 #include "../Updatable.h"
+#include "../../Collidable.h"
 
 class Transform;
 class Sprite;
 class CircleCollider;
 
-class Bomb : public Component, public Collidable, public Updatable
+class Bomb : public Updatable, public Collidable
 {
 private:
 	std::chrono::system_clock::time_point start_{};

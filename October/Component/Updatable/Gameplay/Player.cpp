@@ -5,7 +5,7 @@
 #include "../../../GameObject/GameObject.h"
 #include "../../../Utils/imgui/imgui.h"
 
-Player::Player(GameObject* owner) : Component(owner)
+Player::Player(GameObject* owner) : Updatable(owner)
 {
 	sp_ = static_cast<Sprite*>(owner_->GetComponent(typeid(Sprite)));
 	owner_->SetCollidable(static_cast<Collidable*>(this));

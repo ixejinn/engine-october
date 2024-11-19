@@ -4,14 +4,13 @@
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <string>
-#include "../Component.h"
 #include "LateUpdatable.h"
 
 class Transform;
 class Shader;
 class Texture;
 
-class Sprite : public Component, public LateUpdatable
+class Sprite : public LateUpdatable
 {
 public:
 	enum AnchorPoint

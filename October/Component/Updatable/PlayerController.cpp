@@ -6,7 +6,7 @@
 #include "../../Manager/SettingManager.h"
 #include "../../Utils/imgui/imgui.h"
 
-PlayerController::PlayerController(GameObject* owner) : Component(owner)
+PlayerController::PlayerController(GameObject* owner) : Updatable(owner)
 {
 	rb_ = static_cast<Rigidbody*>(owner_->GetComponent(typeid(Rigidbody)));
 }

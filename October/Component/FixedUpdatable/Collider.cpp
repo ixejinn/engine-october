@@ -9,7 +9,7 @@ namespace Manager
 	extern CollisionManager& colMgr;
 }
 
-Collider::Collider(GameObject* owner) : Component(owner)
+Collider::Collider(GameObject* owner) : FixedUpdatable(owner)
 {
 	updateInEditmode_ = true;
 

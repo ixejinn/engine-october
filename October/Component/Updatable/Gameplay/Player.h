@@ -1,12 +1,11 @@
 #pragma once
-#include "../../Component.h"
-#include "../../Collidable.h"
 #include "../Updatable.h"
+#include "../../Collidable.h"
 
 class Sprite;
 struct Collision;
 
-class Player : public Component, public Collidable, public Updatable
+class Player : public Updatable, public Collidable
 {
 private:
 	Sprite* sp_{ nullptr };

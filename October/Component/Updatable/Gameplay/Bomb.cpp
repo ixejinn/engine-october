@@ -7,7 +7,7 @@
 #include "../../../GameObject/GameObject.h"
 #include "../../../Utils/imgui/imgui.h"
 
-Bomb::Bomb(GameObject* owner) : Component(owner)
+Bomb::Bomb(GameObject* owner) : Updatable(owner)
 {
 	//owner_->active_ = false;
 

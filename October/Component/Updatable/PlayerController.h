@@ -1,13 +1,12 @@
 #pragma once
 #include <GLFW/glfw3.h>
 
-#include "../Component.h"
 #include "Updatable.h"
 #include "../../Utils/Utils.h"
 
 class Rigidbody;
 
-class PlayerController : public Component, public Updatable
+class PlayerController : public Updatable
 {
 private:
 	bool vertical_{ true };

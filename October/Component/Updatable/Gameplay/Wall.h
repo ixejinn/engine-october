@@ -1,9 +1,8 @@
 #pragma once
-#include "../../Component.h"
 #include "../../Collidable.h"
 #include "../Updatable.h"
 
-class BaseWall : public Component, public Updatable
+class BaseWall : public Updatable
 {
 protected:
 	BaseWall(GameObject* owner);
