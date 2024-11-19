@@ -9,8 +9,6 @@
 
 Bomb::Bomb(GameObject* owner) : Updatable(owner)
 {
-	//owner_->active_ = false;
-
 	if (owner_->GetComponentNum() >= 1)
 		owner_->InitializeComponent();
 
@@ -23,8 +21,8 @@ Bomb::Bomb(GameObject* owner) : Updatable(owner)
 	col_ = static_cast<CircleCollider*>(owner_->GetComponent(typeid(CircleCollider)));
 	col_->SetTrigger(false);
 
-	// test 끝나면 지우기
-	Activate();
+	//owner_->active_ = false;
+	Activate();	// 나중에 빼기
 }
 
 void Bomb::Update()
@@ -95,7 +93,6 @@ void Bomb::Activate()
 	state_ = BOMB;
 	start_ = std::chrono::system_clock::now();
 
-	trans_->SetScale(trans_->GetScale() / explosionScale_);
 	sp_->SetAlpha(1.f);
 	col_->SetTrigger(false);
 }
@@ -114,6 +111,7 @@ void Bomb::Inactivate()
 {
 	owner_->active_ = false;
 
+	trans_->SetScale(trans_->GetScale() / explosionScale_);
 	// Release memory pool
 }
 

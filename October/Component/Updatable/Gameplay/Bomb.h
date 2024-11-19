@@ -17,7 +17,7 @@ private:
 	enum BombState{ BOMB, EXPLOSION };
 	BombState state_{ BOMB };
 
-	float explosionScale_{ 1.5f };	// Relative with Transform's scale
+	float explosionScale_{ 5.f };	// Relative with Transform's scale
 
 	Transform* trans_{ nullptr };
 	Sprite* sp_{ nullptr };

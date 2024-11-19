@@ -1,0 +1,82 @@
+[
+  {
+    "object": "bomb",
+    "components": [
+      {
+        "type": "class Transform",
+        "compData": {
+          "position": [
+            0.0,
+            0.0
+          ],
+          "rotation": 0.0,
+          "scale": [
+            0.20000000298023224,
+            0.20000000298023224
+          ],
+          "localScale": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      {
+        "type": "class Bomb",
+        "compData": {
+          "delayBeforeExplosion": 5000,
+          "explosionTime": 1000,
+          "explosionScale": 5.0
+        }
+      },
+      {
+        "type": "class CircleCollider",
+        "compData": {
+          "layer": 0,
+          "trigger": false,
+          "center": [
+            0.0,
+            0.0
+          ],
+          "scaleWithTransform": true
+        }
+      },
+      {
+        "type": "class Rigidbody",
+        "compData": {
+          "mass": 1.0,
+          "drag": 0.0,
+          "velocity": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      {
+        "type": "class Sprite",
+        "compData": {
+          "anchor": 0,
+          "localPosition": [
+            0.0,
+            0.0
+          ],
+          "colors": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "alpha": 1.0,
+          "textureName": ""
+        }
+      }
+    ]
+  }
+]

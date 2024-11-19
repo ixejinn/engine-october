@@ -231,11 +231,11 @@ void Editor::Topbar()
                 if (ImGui::MenuItem("Breakable Wall", NULL, false))
                     selectedGameObject_->AddComponent(typeid(BreakableWall));
 
-                if (ImGui::MenuItem("Bomb", NULL, false))
-                    selectedGameObject_->AddComponent(typeid(Bomb));
-
                 ImGui::EndMenu();
             }
+
+            if (ImGui::MenuItem("Bomb", NULL, false))
+                selectedGameObject_->AddComponent(typeid(Bomb));
 
             ImGui::Separator();
 
