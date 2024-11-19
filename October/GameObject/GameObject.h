@@ -3,6 +3,7 @@
 #include <typeindex>	// std::type_index
 #include <memory>
 #include <string>
+#include <glm/vec2.hpp>
 
 class Component;
 class Collidable;

@@ -32,6 +32,7 @@ public:
 
 	void AddForce(const glm::vec2& f);
 	void AddForce(const float& fx, const float& fy);
+	void ResetMotion();
 
 	static Component* CreateComponent(GameObject* owner);
 };

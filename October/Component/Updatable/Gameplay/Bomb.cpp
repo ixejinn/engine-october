@@ -21,7 +21,6 @@ Bomb::Bomb(GameObject* owner) : Updatable(owner)
 	col_ = static_cast<CircleCollider*>(owner_->GetComponent(typeid(CircleCollider)));
 	col_->SetTrigger(false);
 
-	//owner_->active_ = false;
 	Activate();	// ³ªÁß¿¡ »©±â
 }
 

@@ -109,6 +109,15 @@ void Rigidbody::AddForce(const float& fx, const float& fy)
 	force_.y += fy;
 }
 
+void Rigidbody::ResetMotion()
+{
+	force_.x = 0;
+	force_.y = 0;
+
+	velocity_.x = 0;
+	velocity_.y = 0;
+}
+
 Component* Rigidbody::CreateComponent(GameObject* owner)
 {
 	Rigidbody* newComp = new Rigidbody(owner);
