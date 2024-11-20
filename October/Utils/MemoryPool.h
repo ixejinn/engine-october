@@ -27,7 +27,7 @@ private:
 	int maxNum_{ 0 };
 
 public:
-	MemoryPool(int maxNum, std::string name);
+	MemoryPool(int maxNum);
 	~MemoryPool();
 
 	T* Spawn(const glm::vec2& pos);
@@ -37,11 +37,11 @@ public:
 };
 
 template <typename T>
-inline MemoryPool<T>::MemoryPool(int maxNum, std::string name) : maxNum_(maxNum)
+inline MemoryPool<T>::MemoryPool(int maxNum) : maxNum_(maxNum)
 {
 	for (int i = 0; i < maxNum_; i++)
 	{
-		GameObject* obj = Manager::objMgr.CreateObject(name + std::to_string(i));
+		GameObject* obj = Manager::objMgr.CreateObject();
 		obj->AddComponent(typeid(T));
 		obj->active_ = false;
 

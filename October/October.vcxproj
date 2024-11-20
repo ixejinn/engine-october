@@ -151,7 +151,9 @@
     <ClCompile Include="Component\LateUpdatable\LateUpdatable.cpp" />
     <ClCompile Include="Component\LateUpdatable\Sprite.cpp" />
     <ClCompile Include="Component\Updatable\Gameplay\Bomb.cpp" />
+    <ClCompile Include="Component\Updatable\Gameplay\Bullet.cpp" />
     <ClCompile Include="Component\Updatable\Gameplay\Player.cpp" />
+    <ClCompile Include="Component\Updatable\Gameplay\Tank.cpp" />
     <ClCompile Include="Component\Updatable\Gameplay\Wall.cpp" />
     <ClCompile Include="Component\Updatable\PlayerController.cpp" />
     <ClCompile Include="Component\Updatable\Updatable.cpp" />
@@ -200,7 +202,9 @@
     <ClInclude Include="Component\LateUpdatable\LateUpdatable.h" />
     <ClInclude Include="Component\LateUpdatable\Sprite.h" />
     <ClInclude Include="Component\Updatable\Gameplay\Bomb.h" />
+    <ClInclude Include="Component\Updatable\Gameplay\Bullet.h" />
     <ClInclude Include="Component\Updatable\Gameplay\Player.h" />
+    <ClInclude Include="Component\Updatable\Gameplay\Tank.h" />
     <ClInclude Include="Component\Updatable\Gameplay\Wall.h" />
     <ClInclude Include="Component\Updatable\PlayerController.h" />
     <ClInclude Include="Component\Updatable\Updatable.h" />

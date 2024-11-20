@@ -2,8 +2,8 @@
 
 #include "../../Transform.h"
 #include "../../Rigidbody.h"
-#include "../../LateUpdatable/Sprite.h"
 #include "../../FixedUpdatable/CircleCollider.h"
+#include "../../LateUpdatable/Sprite.h"
 #include "../../../GameObject/GameObject.h"
 #include "../../../Utils/imgui/imgui.h"
 
@@ -12,14 +12,16 @@ Bomb::Bomb(GameObject* owner) : Updatable(owner)
 	if (owner_->GetComponentNum() >= 1)
 		owner_->InitializeComponent();
 
-	owner_->AddComponent(typeid(Sprite));
 	owner_->AddComponent(typeid(Rigidbody));
 	owner_->AddComponent(typeid(CircleCollider));
+	owner_->AddComponent(typeid(Sprite));
 
 	trans_ = static_cast<Transform*>(owner_->GetComponent(typeid(Transform)));
 	sp_ = static_cast<Sprite*>(owner_->GetComponent(typeid(Sprite)));
 	col_ = static_cast<CircleCollider*>(owner_->GetComponent(typeid(CircleCollider)));
 	col_->SetTrigger(false);
+
+	// 텍스처 넣어줘야 함
 
 	Activate();	// 나중에 빼기
 }
