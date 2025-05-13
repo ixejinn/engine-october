@@ -11,7 +11,7 @@
 
 namespace Manager
 {
-	GameObjectManager& objMgr;
+	extern GameObjectManager& objMgr;
 }
 
 /*
